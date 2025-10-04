@@ -41,6 +41,9 @@ phpunit.xml*
 /languages/*.mo
 /languages/*.json
 
+# Local build assets for WP.org (screenshots, banners)
+assets-wp/
+
 # -----------------------------------------------------------------------------
 # Logs & temp
 # -----------------------------------------------------------------------------
