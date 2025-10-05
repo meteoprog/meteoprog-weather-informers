@@ -33,6 +33,11 @@ phpunit.xml*
 .idea/
 *.local.yml
 
+# Optional extra exclusions
+/vendor/
+/assets/test/
+/.editorconfig
+
 # -----------------------------------------------------------------------------
 # Translation sources
 # -----------------------------------------------------------------------------
