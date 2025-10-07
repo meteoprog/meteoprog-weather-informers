@@ -43,7 +43,7 @@ class Meteoprog_Informers_Widget extends WP_Widget {
 	public function widget( $args, $instance ) {
 		echo $args['before_widget'];
 
-		// Sanitize informer ID (whether from instance or default option)
+		// Sanitize informer ID (whether from instance or default option).
 		$id = ! empty( $instance['id'] )
 			? sanitize_text_field( $instance['id'] )
 			: get_option( 'meteoprog_default_informer_id', '' );
@@ -56,7 +56,7 @@ class Meteoprog_Informers_Widget extends WP_Widget {
 				: null;
 
 			if ( $frontend ) {
-				// Build and output informer HTML
+				// Build and output informer HTML.
 				echo $frontend->build_html( $id );
 			} else {
 				echo '<!-- Meteoprog informer: frontend instance not available -->';
@@ -104,7 +104,7 @@ add_action(
 	'widgets_init',
 	function () {
 
-		// Do not enqueue inside Elementor editor
+		// Do not enqueue inside Elementor editor.
 		if ( function_exists( 'meteoprog_is_elementor_editor_mode' ) && meteoprog_is_elementor_editor_mode() ) {
 			return;
 		}

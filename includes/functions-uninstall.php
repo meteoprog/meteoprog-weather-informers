@@ -82,7 +82,7 @@ function meteoprog_render_remove_data_page() {
  */
 function meteoprog_informers_on_uninstall() {
 	global $wpdb;
-	// Delete only transients related to informers cache
+	// Delete only transients related to informers cache.
 	$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_meteoprog_informers_cache_%'" );
 	$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_timeout_meteoprog_informers_cache_%'" );
 }
@@ -91,11 +91,11 @@ function meteoprog_informers_on_uninstall() {
 function meteoprog_delete_all_plugin_data() {
 	global $wpdb;
 
-	// Delete plugin options
+	// Delete plugin options.
 	delete_option( 'meteoprog_api_key' );
 	delete_option( 'meteoprog_default_informer_id' );
 
-	// Delete plugin transients
+	// Delete plugin transients.
 	$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_meteoprog_informers_cache_%'" );
 	$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_timeout_meteoprog_informers_cache_%'" );
 }

@@ -18,15 +18,55 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class Meteoprog_Informers_Block
+ *
+ * Registers a dynamic Gutenberg block for Meteoprog informers, provides an editor
+ * integration, and exposes a REST endpoint for listing informers.
+ */
 class Meteoprog_Informers_Block {
 
-	const REST_NAMESPACE       = 'meteoprog/v1';
-	const REST_ROUTE_INFORMERS = '/informers';
-	const BLOCK_NAME           = 'meteoprog/informer';
+	/**
+	 * REST API namespace.
+	 *
+	 * @var string
+	 */
+	const REST_NAMESPACE = 'meteoprog/v1';
 
+	/**
+	 * REST route for informers.
+	 *
+	 * @var string
+	 */
+	const REST_ROUTE_INFORMERS = '/informers';
+
+	/**
+	 * Block name (namespace/name).
+	 *
+	 * @var string
+	 */
+	const BLOCK_NAME = 'meteoprog/informer';
+
+	/**
+	 * Frontend renderer instance.
+	 *
+	 * @var Meteoprog_Informers_Frontend
+	 */
 	private $frontend;
+
+	/**
+	 * API wrapper instance.
+	 *
+	 * @var Meteoprog_Informers_API
+	 */
 	private $api;
 
+	/**
+	 * Constructor.
+	 *
+	 * @param Meteoprog_Informers_Frontend $frontend Frontend renderer.
+	 * @param Meteoprog_Informers_API      $api      API wrapper.
+	 */
 	public function __construct( $frontend, $api ) {
 		$this->frontend = $frontend;
 		$this->api      = $api;
@@ -58,7 +98,7 @@ class Meteoprog_Informers_Block {
 			return;
 		}
 
-		// Guard against duplicate registration
+		// Guard against duplicate registration.
 		if ( class_exists( 'WP_Block_Type_Registry' ) ) {
 			$registry = WP_Block_Type_Registry::get_instance();
 			if ( $registry && method_exists( $registry, 'is_registered' ) ) {
@@ -102,57 +142,58 @@ class Meteoprog_Informers_Block {
 	 * @return string HTML for block output.
 	 */
 	public function render_block( $atts ) {
-		// Sanitize block attribute
+		// Sanitize block attribute.
 		$id = isset( $atts['id'] ) ? sanitize_text_field( $atts['id'] ) : '';
 
-		// Fallback to default if attribute not set
-		if ( empty( $id ) ) {
+		// Fallback to default if attribute not set.
+		if ( '' === $id ) {
 			$id = $this->get_default_informer_id();
 		}
 
-		// Warning if still empty
-		if ( $id === '' ) {
-			return '<div style="color:#a00;font-size:13px;">⚠ ' .
+		// Warning if still empty.
+		if ( '' === $id ) {
+			return '<div style="color:#a00;font-size:13px;">&#x26A0; ' .
 				esc_html__( 'No informer selected.', 'meteoprog-weather-informers' ) .
 				'</div>';
 		}
 
-		// Final render (Gutenberg + frontend)
+		// Final render (Gutenberg + frontend).
 		return $this->frontend->build_html( $id, true );
 	}
 
 	/**
 	 * Get and cache the default informer ID.
 	 *
-	 * @return string
+	 * @return string Default informer ID (or empty string).
 	 */
 	private function get_default_informer_id() {
 		static $default_id = null;
-		if ( $default_id === null ) {
+		if ( null === $default_id ) {
 			$default_id = get_option( 'meteoprog_default_informer_id', '' );
 		}
 		return $default_id;
 	}
 
-
 	/**
 	 * Enqueue JS/CSS for Gutenberg editor.
 	 *
 	 * Skips execution in non-admin contexts, CLI, or if Gutenberg is unavailable.
+	 *
+	 * @return void
 	 */
 	public function enqueue_editor() {
 
-		// Skip if Gutenberg API is not available (e.g., WP 4.9)
+		// Skip if Gutenberg API is not available (e.g., WP 4.9).
 		if ( ! function_exists( 'register_block_type' ) ) {
 			return;
 		}
 
-		// Avoid fatal in CLI, REST, or if not in admin
+		// Avoid fatal in CLI, REST, or if not in admin.
 		if ( ! is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
 			return;
 		}
 
-		// Prevent double enqueue in case of multiple calls
+		// Prevent double enqueue in case of multiple calls.
 		static $enqueued = false;
 		if ( $enqueued ) {
 			return;
@@ -163,7 +204,7 @@ class Meteoprog_Informers_Block {
 			return;
 		}
 
-		// Only enqueue in block editor
+		// Only enqueue in block editor.
 		$current_screen = get_current_screen();
 		if ( ! $current_screen || ( method_exists( $current_screen, 'is_block_editor' ) && ! $current_screen->is_block_editor() ) ) {
 			return;
@@ -177,17 +218,17 @@ class Meteoprog_Informers_Block {
 		$js_url   = $base_url . 'assets/block/js/block.js';
 		$css_url  = $base_url . 'assets/block/css/block-editor.css';
 
-		// Build dependency array dynamically
+		// Build dependency array dynamically.
 		$deps = array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-api-fetch', 'wp-i18n' );
 
-		// Prefer modern 'wp-block-editor'; fallback to legacy 'wp-editor' if needed
+		// Prefer modern 'wp-block-editor'; fallback to legacy 'wp-editor' if needed.
 		if ( wp_script_is( 'wp-block-editor', 'registered' ) ) {
 			$deps[] = 'wp-block-editor';
 		} elseif ( wp_script_is( 'wp-editor', 'registered' ) ) {
 			$deps[] = 'wp-editor';
 		}
 
-		// Register the block script
+		// Register the block script.
 		wp_register_script(
 			'meteoprog-block',
 			$js_url,
@@ -196,7 +237,7 @@ class Meteoprog_Informers_Block {
 			true
 		);
 
-		// Pass default informer ID to the block
+		// Pass default informer ID to the block.
 		wp_localize_script(
 			'meteoprog-block',
 			'MeteoprogSettings',
@@ -207,7 +248,7 @@ class Meteoprog_Informers_Block {
 
 		wp_enqueue_script( 'meteoprog-block' );
 
-		// Load translations if available
+		// Load translations if available.
 		if ( function_exists( 'wp_set_script_translations' ) ) {
 			wp_set_script_translations(
 				'meteoprog-block',
@@ -216,7 +257,7 @@ class Meteoprog_Informers_Block {
 			);
 		}
 
-		// Enqueue editor CSS
+		// Enqueue editor CSS.
 		wp_enqueue_style(
 			'meteoprog-block-editor',
 			$css_url,
@@ -226,9 +267,11 @@ class Meteoprog_Informers_Block {
 	}
 
 	/**
-	 * Register REST endpoint: /wp-json/meteoprog/v1/informers
+	 * Register REST endpoint: /wp-json/meteoprog/v1/informers.
 	 *
-	 * REST API was introduced in WP 4.7 (safe for WP >= 4.9)
+	 * REST API was introduced in WP 4.7 (safe for WP >= 4.9).
+	 *
+	 * @return void
 	 */
 	public function rest() {
 		if ( did_action( 'rest_api_init' ) && isset( $GLOBALS['wp_rest_server'] ) ) {

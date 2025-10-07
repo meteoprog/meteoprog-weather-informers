@@ -46,7 +46,7 @@ add_action(
 
 				$id = sanitize_text_field( $atts['id'] );
 
-				// Admin preview (SU Live Preview / editors) → static box, no loader.js
+				// Admin preview (SU Live Preview / editors) → static box, no loader.js.
 				if ( is_admin() ) {
 					ob_start();
 
@@ -113,7 +113,7 @@ add_action(
 					return ob_get_clean();
 				}
 
-				// Frontend render — loader.js
+				// Frontend render — loader.js.
 				return $frontend->build_html( $id );
 			}
 		);
@@ -128,7 +128,7 @@ add_filter(
 	'su/data/shortcodes',
 	function ( $shortcodes ) {
 
-		// Build <select> values
+		// Build <select> values.
 		$values     = array();
 		$values[''] = __( 'Default widget (from settings)', 'meteoprog-weather-informers' );
 
@@ -160,7 +160,7 @@ add_filter(
 			}
 		}
 
-		// Select when list is available, otherwise text input
+		// Select when list is available, otherwise text input.
 		$id_attr = $has_list
 		? array(
 			'type'    => 'select',
@@ -176,7 +176,7 @@ add_filter(
 			'desc'    => __( 'Enter informer ID (or leave empty to use default).', 'meteoprog-weather-informers' ),
 		);
 
-		// Key without "su_": SU will insert [su_meteoprog_informer ...]
+		// Key without "su_": SU will insert [su_meteoprog_informer ...].
 		$shortcodes['meteoprog_informer'] = array(
 			'name'        => __( 'Meteoprog Weather', 'meteoprog-weather-informers' ),
 			'type'        => 'other',

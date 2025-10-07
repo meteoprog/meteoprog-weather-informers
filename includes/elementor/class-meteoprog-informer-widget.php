@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// Bail out if Elementor is not loaded
+// Bail out if Elementor is not loaded.
 if ( ! class_exists( '\Elementor\Widget_Base' ) ) {
 	return;
 }
@@ -97,12 +97,12 @@ class Meteoprog_Informer_Elementor_Widget extends \Elementor\Widget_Base {
 			)
 		);
 
-		// Default select option
+		// Default select option.
 		$options = array(
 			'' => __( 'Default widget (from settings)', 'meteoprog-weather-informers' ),
 		);
 
-		// Load informer list safely (avoid fatal errors during editor AJAX calls)
+		// Load informer list safely (avoid fatal errors during editor AJAX calls).
 		$informers = array();
 		if ( $this->api && method_exists( $this->api, 'get_informers' ) ) {
 			try {
@@ -114,7 +114,7 @@ class Meteoprog_Informer_Elementor_Widget extends \Elementor\Widget_Base {
 
 		$site_host = strtolower( wp_parse_url( home_url(), PHP_URL_HOST ) );
 
-		// Build dropdown options
+		// Build dropdown options.
 		if ( is_array( $informers ) ) {
 			foreach ( $informers as $inf ) {
 				if ( isset( $inf['informer_id'] ) ) {
@@ -133,7 +133,7 @@ class Meteoprog_Informer_Elementor_Widget extends \Elementor\Widget_Base {
 
 		$default_id = get_option( 'meteoprog_default_informer_id', '' );
 
-		// Register control in Elementor panel
+		// Register control in Elementor panel.
 		$this->add_control(
 			'informer_id',
 			array(
@@ -157,12 +157,12 @@ class Meteoprog_Informer_Elementor_Widget extends \Elementor\Widget_Base {
 		$settings = $this->get_settings_for_display();
 		$id       = isset( $settings['informer_id'] ) ? sanitize_text_field( $settings['informer_id'] ) : '';
 
-		// Fallback to global default informer ID
+		// Fallback to global default informer ID.
 		if ( ! $id ) {
 			$id = get_option( 'meteoprog_default_informer_id', '' );
 		}
 
-		// No informer selected → render static placeholder (no error)
+		// No informer selected → render static placeholder (no error).
 		if ( ! $id ) {
 			if ( function_exists( 'meteoprog_is_elementor_editor_mode' ) && meteoprog_is_elementor_editor_mode() ) {
 				echo '<div class="meteoprog-block-editor">';
@@ -175,7 +175,7 @@ class Meteoprog_Informer_Elementor_Widget extends \Elementor\Widget_Base {
 			return;
 		}
 
-		// Domain check for preview badge
+		// Domain check for preview badge.
 		$site_host   = strtolower( wp_parse_url( home_url(), PHP_URL_HOST ) );
 		$domain_host = '';
 		$match       = false;
@@ -202,12 +202,12 @@ class Meteoprog_Informer_Elementor_Widget extends \Elementor\Widget_Base {
 			$match    = false;
 		}
 
-		// Editor mode → show static preview box (no loader.js)
+		// Editor mode → show static preview box (no loader.js).
 		if ( function_exists( 'meteoprog_is_elementor_editor_mode' ) && meteoprog_is_elementor_editor_mode() ) {
 			echo '<div class="meteoprog-block-editor">';
 			echo '  <div style="border:1px solid #dcdcde;border-radius:6px;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.05);padding:16px;text-align:center;">';
 
-			// Header with inline SVG icon + title
+			// Header with inline SVG icon + title.
 			echo '      <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;">';
 			echo '          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="#007acc" style="vertical-align:middle;">';
 			echo '              <path d="M6 19a4 4 0 0 1 0-8 5.5 5.5 0 0 1 10.74-1.62A4.5 4.5 0 1 1 18 19H6z"/>';
@@ -215,23 +215,23 @@ class Meteoprog_Informer_Elementor_Widget extends \Elementor\Widget_Base {
 			echo '          <strong>' . esc_html__( 'Meteoprog Weather Informer', 'meteoprog-weather-informers' ) . '</strong>';
 			echo '      </div>';
 
-			// Informer ID or default preview
+			// Informer ID or default preview.
 			if ( ! $id ) {
-				// No ID selected → default preview
+				// No ID selected → default preview.
 				echo '  <div style="margin-bottom:6px;font-weight:bold;">' .
 					esc_html__( 'No informer selected — default preview', 'meteoprog-weather-informers' ) .
 					'</div>';
 			} else {
-				// Selected informer ID
+				// Selected informer ID.
 				echo '  <div style="font-family:monospace;font-size:13px;color:#555;margin-bottom:6px;">' . esc_html( $id ) . '</div>';
 			}
 
-			// Info line
+			// Info line.
 			echo '      <div style="font-size:12px;color:#666;margin-bottom:10px;">' .
 				esc_html__( 'Preview is visible only on frontend', 'meteoprog-weather-informers' ) .
 				'</div>';
 
-			// Domain status badge
+			// Domain status badge.
 			if ( $id && $domain_host ) {
 				$status_text  = $match ? __( 'Domain OK', 'meteoprog-weather-informers' ) : __( 'Domain mismatch', 'meteoprog-weather-informers' );
 				$status_color = $match ? '#46b450' : '#dc3232';
@@ -246,7 +246,7 @@ class Meteoprog_Informer_Elementor_Widget extends \Elementor\Widget_Base {
 			return;
 		}
 
-		// Frontend render — uses loader.js for real informer
+		// Frontend render — uses loader.js for real informer.
 		if ( $this->frontend && method_exists( $this->frontend, 'build_html' ) ) {
 			echo $this->frontend->build_html( $id, true );
 		}

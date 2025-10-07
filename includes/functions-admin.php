@@ -23,9 +23,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function meteoprog_plugin_action_links( $links ) {
 	$settings_url = admin_url( 'options-general.php?page=meteoprog-informers' );
-	$remove_url   = admin_url( 'tools.php?page=meteoprog-remove-data' ); // IMPORTANT: tools.php as parent
+	$remove_url   = admin_url( 'tools.php?page=meteoprog-remove-data' ); // IMPORTANT: tools.php as parent.
 
-	// Guard against null for PHP 8.1+ (esc_url expects string)
+	// Guard against null for PHP 8.1+ (esc_url expects string).
 	$settings_url = is_string( $settings_url ) ? $settings_url : '';
 	$remove_url   = is_string( $remove_url ) ? $remove_url : '';
 
@@ -47,7 +47,7 @@ function meteoprog_plugin_action_links( $links ) {
  */
 function meteoprog_add_remove_data_page() {
 	add_submenu_page(
-		'tools.php', // real parent to avoid header/title deprecations
+		'tools.php', // real parent to avoid header/title deprecations.
 		__( 'Remove Meteoprog Plugin Data', 'meteoprog-weather-informers' ),
 		__( 'Remove Meteoprog Plugin Data', 'meteoprog-weather-informers' ),
 		'manage_options',

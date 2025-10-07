@@ -18,9 +18,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-/**
- *
- */
 class Meteoprog_Informers_Admin {
 	private $api;
 	private $frontend;
@@ -51,7 +48,7 @@ class Meteoprog_Informers_Admin {
 	 * @param $hook
 	 */
 	public function enqueue_assets( $hook ) {
-		// Only load on our settings page (matches both "settings_page" and "options-general_page" patterns)
+		// Only load on our settings page (matches both "settings_page" and "options-general_page" patterns).
 
 		if ( false === strpos( $hook, 'settings_page_meteoprog-informers' )
 		&& false === strpos( $hook, 'options-general_page_meteoprog-informers' ) ) {
@@ -61,7 +58,7 @@ class Meteoprog_Informers_Admin {
 		$base_path = plugin_dir_path( __DIR__ );
 		$base_url  = plugin_dir_url( __DIR__ );
 
-		// CSS
+		// CSS.
 		$css_file = 'assets/admin/css/admin.css';
 		$css_path = $base_path . $css_file;
 		wp_enqueue_style(
@@ -71,12 +68,12 @@ class Meteoprog_Informers_Admin {
 			file_exists( $css_path ) ? filemtime( $css_path ) : METEOPROG_PLUGIN_VERSION
 		);
 
-		// JS
+		// JS.
 		$js_file = 'assets/admin/js/admin.js';
 		$js_path = $base_path . $js_file;
 
 		$deps = array();
-		// Only add wp-i18n if it exists (WP >= 5.0)
+		// Only add wp-i18n if it exists (WP >= 5.0).
 		if ( wp_script_is( 'wp-i18n', 'registered' ) ) {
 			$deps[] = 'wp-i18n';
 		}
@@ -89,7 +86,7 @@ class Meteoprog_Informers_Admin {
 			true
 		);
 
-		// Translations (WP >= 5.0)
+		// Translations (WP >= 5.0).
 		if ( function_exists( 'wp_set_script_translations' ) ) {
 			wp_set_script_translations(
 				'meteoprog-admin',
@@ -145,20 +142,20 @@ class Meteoprog_Informers_Admin {
 			? sanitize_text_field( wp_unslash( $_POST[ $this->opt_api_key ] ) )
 			: '';
 
-		// Do nothing if the user submitted the masked value
+		// Do nothing if the user submitted the masked value.
 		if ( strpos( $new_key, '****' ) !== false ) {
 			wp_safe_redirect( admin_url( 'options-general.php?page=meteoprog-informers&saved=1' ) );
 			exit;
 		}
 
-		// Validate the new key using the API
+		// Validate the new key using the API.
 		if ( ! $this->api->validate_key( $new_key ) ) {
-			// Keep old key, show error
+			// Keep old key, show error.
 			wp_safe_redirect( admin_url( 'options-general.php?page=meteoprog-informers&error=invalid_key' ) );
 			exit;
 		}
 
-		// Valid key, save it
+		// Valid key, save it.
 		update_option( $this->opt_api_key, $new_key );
 		wp_safe_redirect( admin_url( 'options-general.php?page=meteoprog-informers&saved=1' ) );
 		exit;
