@@ -52,15 +52,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<tbody>
 	<?php
 	foreach ( $informers as $inf ) :
-		$iid          = isset( $inf['informer_id'] ) ? $inf['informer_id'] : '';
-		$domain       = ! empty( $inf['domain'] ) ? $inf['domain'] : '';
-		$active       = isset( $inf['active'] ) ? (int) $inf['active'] : 0;
-		$shortcode    = '[meteoprog_informer id="' . $iid . '"]';
-		$placeholder  = '{meteoprog_informer_' . $iid . '}';
-		$icon         = $active ? '🟢' : '🔴';
-		$domain_host  = $domain ? parse_url( $domain, PHP_URL_HOST ) : '';
-		$match        = $domain_host && $current_host && $domain_host === $current_host;
-		$domain_label = $match
+		$iid             = isset( $inf['informer_id'] ) ? $inf['informer_id'] : '';
+		$informer_domain = ! empty( $inf['domain'] ) ? $inf['domain'] : '';
+		$active          = isset( $inf['active'] ) ? (int) $inf['active'] : 0;
+		$shortcode       = '[meteoprog_informer id="' . $iid . '"]';
+		$placeholder     = '{meteoprog_informer_' . $iid . '}';
+		$icon            = $active ? '🟢' : '🔴';
+		$domain_host     = $informer_domain ? wp_parse_url( $informer_domain, PHP_URL_HOST ) : '';
+		$match           = $domain_host && $current_host && $domain_host === $current_host;
+		$domain_label    = $match
 			? '<span style="color:green;font-weight:bold;">' . esc_html__( '✔ Domain OK', 'meteoprog-weather-informers' ) . '</span>'
 			: '<span style="color:red;font-weight:bold;">' . esc_html__( '✖ Domain mismatch', 'meteoprog-weather-informers' ) . '</span>';
 		?>
@@ -86,7 +86,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</div>
 				<div class="meteoprog-domain">
 					<strong><?php esc_html_e( 'Domain:', 'meteoprog-weather-informers' ); ?></strong>
-					<?php echo esc_html( $domain ); ?> — <?php echo wp_kses_post( $domain_label ); ?>
+					<?php echo esc_html( $informer_domain ); ?> — <?php echo wp_kses_post( $domain_label ); ?>
 				</div>
 			</td>
 

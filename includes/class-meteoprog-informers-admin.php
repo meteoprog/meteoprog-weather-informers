@@ -224,7 +224,7 @@ class Meteoprog_Informers_Admin {
 		$informers    = $this->api->get_informers();
 		$default_id   = get_option( $this->opt_default_id, '' );
 		$masked_key   = function_exists( 'meteoprog_mask_string' ) ? meteoprog_mask_string( $api_key ) : $api_key;
-		$current_host = parse_url( home_url(), PHP_URL_HOST );
+		$current_host = wp_parse_url( home_url(), PHP_URL_HOST );
 
 		$refreshed = ! empty( $_GET['refreshed'] );
 		$saved     = ! empty( $_GET['saved'] );

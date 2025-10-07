@@ -50,7 +50,7 @@ add_action(
 				if ( is_admin() ) {
 					ob_start();
 
-					$site_host   = strtolower( parse_url( home_url(), PHP_URL_HOST ) );
+					$site_host   = strtolower( wp_parse_url( home_url(), PHP_URL_HOST ) );
 					$domain_host = '';
 					$match       = false;
 
@@ -133,7 +133,7 @@ add_filter(
 		$values[''] = __( 'Default widget (from settings)', 'meteoprog-weather-informers' );
 
 		$api       = isset( $GLOBALS['meteoprog_weather_informers_api'] ) ? $GLOBALS['meteoprog_weather_informers_api'] : null;
-		$site_host = strtolower( parse_url( home_url(), PHP_URL_HOST ) );
+		$site_host = strtolower( wp_parse_url( home_url(), PHP_URL_HOST ) );
 		$has_list  = false;
 
 		if ( $api && method_exists( $api, 'get_informers' ) ) {
@@ -144,13 +144,13 @@ add_filter(
 						if ( empty( $inf['informer_id'] ) ) {
 							continue;
 						}
-						$id          = (string) $inf['informer_id'];
-						$domain      = isset( $inf['domain'] ) ? $inf['domain'] : __( 'No domain', 'meteoprog-weather-informers' );
-						$domain_host = function_exists( 'meteoprog_host_from_url' ) ? meteoprog_host_from_url( $domain ) : $domain;
-						$masked      = function_exists( 'meteoprog_mask_string' ) ? meteoprog_mask_string( $id ) : $id;
-						$match       = ( $domain_host === $site_host );
+						$id              = (string) $inf['informer_id'];
+						$informer_domain = isset( $inf['domain'] ) ? $inf['domain'] : __( 'No domain', 'meteoprog-weather-informers' );
+						$domain_host     = function_exists( 'meteoprog_host_from_url' ) ? meteoprog_host_from_url( $informer_domain ) : $informer_domain;
+						$masked          = function_exists( 'meteoprog_mask_string' ) ? meteoprog_mask_string( $id ) : $id;
+						$match           = ( $domain_host === $site_host );
 
-						$label         = $domain . ' — ' . $masked . ' [' . ( $match ? __( 'OK', 'meteoprog-weather-informers' ) : __( 'Domain mismatch', 'meteoprog-weather-informers' ) ) . ']';
+						$label         = $informer_domain . ' — ' . $masked . ' [' . ( $match ? __( 'OK', 'meteoprog-weather-informers' ) : __( 'Domain mismatch', 'meteoprog-weather-informers' ) ) . ']';
 						$values[ $id ] = $label;
 						$has_list      = true;
 					}

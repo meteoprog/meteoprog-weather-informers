@@ -112,20 +112,20 @@ class Meteoprog_Informer_Elementor_Widget extends \Elementor\Widget_Base {
 			}
 		}
 
-		$site_host = strtolower( parse_url( home_url(), PHP_URL_HOST ) );
+		$site_host = strtolower( wp_parse_url( home_url(), PHP_URL_HOST ) );
 
 		// Build dropdown options
 		if ( is_array( $informers ) ) {
 			foreach ( $informers as $inf ) {
 				if ( isset( $inf['informer_id'] ) ) {
-					$domain      = isset( $inf['domain'] ) ? $inf['domain'] : __( 'No domain', 'meteoprog-weather-informers' );
-					$domain_host = meteoprog_host_from_url( $domain );
-					$match       = ( $domain_host === $site_host );
+					$informer_domain = isset( $inf['domain'] ) ? $inf['domain'] : __( 'No domain', 'meteoprog-weather-informers' );
+					$domain_host     = meteoprog_host_from_url( $informer_domain );
+					$match           = ( $domain_host === $site_host );
 
 					$id     = $inf['informer_id'];
 					$masked = meteoprog_mask_string( $id );
 
-					$label          = $domain . ' — ' . $masked . ' [' . ( $match ? __( 'OK', 'meteoprog-weather-informers' ) : __( 'Domain mismatch', 'meteoprog-weather-informers' ) ) . ']';
+					$label          = $informer_domain . ' — ' . $masked . ' [' . ( $match ? __( 'OK', 'meteoprog-weather-informers' ) : __( 'Domain mismatch', 'meteoprog-weather-informers' ) ) . ']';
 					$options[ $id ] = $label;
 				}
 			}
@@ -176,7 +176,7 @@ class Meteoprog_Informer_Elementor_Widget extends \Elementor\Widget_Base {
 		}
 
 		// Domain check for preview badge
-		$site_host   = strtolower( parse_url( home_url(), PHP_URL_HOST ) );
+		$site_host   = strtolower( wp_parse_url( home_url(), PHP_URL_HOST ) );
 		$domain_host = '';
 		$match       = false;
 

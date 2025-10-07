@@ -174,11 +174,11 @@ class Meteoprog_Informers_API {
 			return array();
 		}
 
-		$domain = parse_url( home_url(), PHP_URL_HOST );
-		if ( ! $domain ) {
-			$domain = home_url();
+		$informer_domain = wp_parse_url( home_url(), PHP_URL_HOST );
+		if ( ! $informer_domain ) {
+			$informer_domain = home_url();
 		}
-		$domain = strtolower( $domain );
+		$informer_domain = strtolower( $informer_domain );
 
 		$response = wp_remote_get(
 			$this->api_url,
@@ -187,7 +187,7 @@ class Meteoprog_Informers_API {
 				'headers' => array(
 					'Authorization' => 'Bearer ' . $api_key,
 					'Accept'        => 'application/json',
-					'X-Site-Domain' => $domain,
+					'X-Site-Domain' => $informer_domain,
 					'User-Agent'    => $this->get_user_agent(),
 				),
 			)
