@@ -92,9 +92,9 @@ class Meteoprog_Informers_Frontend {
 
 		/**
 		 * Replace placeholders like {meteoprog_informer_UUID} or {meteoprog_informer}.
-	 *
-	 * @param string $content Post content.
-	 * @return string Filtered content.
+		 *
+		 * @param string $content Post content.
+		 * @return string Filtered content.
 		 */
 	public function replace_placeholders( $content ) {
 		return preg_replace_callback(
@@ -140,7 +140,7 @@ class Meteoprog_Informers_Frontend {
 		}
 
 		$html .= "<script>window.meteoprogDataLayer.push({id:\"$id_js\"});</script>\n";
-		$html .= "<div id=\"" . esc_attr( $div_id ) . "\"></div>\n";
+		$html .= '<div id="' . esc_attr( $div_id ) . "\"></div>\n";
 
 		return $html;
 	}

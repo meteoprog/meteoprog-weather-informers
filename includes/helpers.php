@@ -19,20 +19,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! function_exists( 'meteoprog_mask_string' ) ) {
-/**
- * Mask part of a string with a fixed number of mask characters.
- *
+	/**
+	 * Mask part of a string with a fixed number of mask characters.
+	 *
 	 * Original: 550e8400-e29b-41d4-a716-446655440000
 	 * Masked:   550e********400000
- *
+	 *
 	 * @param string $key        Original string.
 	 * @param int    $from_start Number of visible characters at the start.
 	 * @param int    $before_end Number of visible characters at the end.
 	 * @param int    $between    Number of mask characters to insert between.
 	 * @param string $mask       Mask character.
- *
- * @return string Masked string.
- */
+	 *
+	 * @return string Masked string.
+	 */
 	function meteoprog_mask_string( $key, $from_start = 4, $before_end = 6, $between = 8, $mask = '*' ) {
 		$key = (string) $key;
 		$len = strlen( $key );
@@ -51,13 +51,13 @@ if ( ! function_exists( 'meteoprog_mask_string' ) ) {
 }
 
 if ( ! function_exists( 'meteoprog_clear_cache' ) ) {
-/**
- * Clear informers cache globally.
- *
+	/**
+	 * Clear informers cache globally.
+	 *
 	 * Wrapper around Meteoprog_Informers_API::clear_cache().
- *
- * @return void
- */
+	 *
+	 * @return void
+	 */
 	function meteoprog_clear_cache() {
 		if ( class_exists( 'Meteoprog_Informers_API' ) ) {
 			$api = new Meteoprog_Informers_API();
@@ -67,18 +67,18 @@ if ( ! function_exists( 'meteoprog_clear_cache' ) ) {
 }
 
 if ( ! function_exists( 'meteoprog_is_elementor_editor_mode' ) ) {
-/**
- * Detect if Elementor editor is currently active.
- *
- * Supports old and new Elementor versions:
+	/**
+	 * Detect if Elementor editor is currently active.
+	 *
+	 * Supports old and new Elementor versions:
 	 * - Modern (3.5+): editor->is_edit_mode().
 	 * - Mid (3.0+): ELEMENTOR_EDITOR constant.
 	 * - Legacy (2.x): elementor-preview param.
 	 * - Classic: action=elementor (post.php?post=X&action=elementor).
 	 * - Fallback: preview->is_preview_mode().
- *
- * @return bool
- */
+	 *
+	 * @return bool
+	 */
 	function meteoprog_is_elementor_editor_mode() {
 
 		// Modern check (Elementor 3.5+).
@@ -121,15 +121,15 @@ if ( ! function_exists( 'meteoprog_is_elementor_editor_mode' ) ) {
 }
 
 if ( ! function_exists( 'meteoprog_host_from_url' ) ) {
-/**
- * Extract hostname from a URL or plain domain string.
- *
- * Uses wp_parse_url() for safety and falls back to regex for bare domains.
- * Compatible with PHP 5.6+.
- *
- * @param string $url URL or domain string.
- * @return string Hostname in lowercase, or empty string on failure.
- */
+	/**
+	 * Extract hostname from a URL or plain domain string.
+	 *
+	 * Uses wp_parse_url() for safety and falls back to regex for bare domains.
+	 * Compatible with PHP 5.6+.
+	 *
+	 * @param string $url URL or domain string.
+	 * @return string Hostname in lowercase, or empty string on failure.
+	 */
 	function meteoprog_host_from_url( $url ) {
 		if ( ! $url ) {
 			return '';

@@ -37,7 +37,7 @@ function meteoprog_register_privacy_policy() {
 		"• Privacy Policy: https://billing.meteoprog.com/p/privacy_policy\n" .
 		"• User Agreement: https://billing.meteoprog.com/p/user_agreement\n" .
 		"• Legal Information: https://billing.meteoprog.com/p/legal_information\n" .
-		"• Refund Policy: https://billing.meteoprog.com/p/refund_policy",
+		'• Refund Policy: https://billing.meteoprog.com/p/refund_policy',
 		'meteoprog-weather-informers'
 	);
 
