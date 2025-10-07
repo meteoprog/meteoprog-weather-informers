@@ -19,13 +19,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<hr class="meteoprog-admin-promo__divider">
 
 	<p class="meteoprog-admin-promo__text">
-		<?php _e( 'Enjoying Meteoprog Weather Widgets?', 'meteoprog-weather-informers' ); ?><br>
+		<?php esc_html_e( 'Enjoying Meteoprog Weather Widgets?', 'meteoprog-weather-informers' ); ?><br>
 		<a href="https://wordpress.org/support/plugin/meteoprog-weather-informers/reviews/?filter=5"
 			target="_blank"
 			rel="noopener noreferrer"
 			class="meteoprog-admin-promo__link">
-			⭐ <?php _e( 'Give us a ★★★★★ rating', 'meteoprog-weather-informers' ); ?>
+			⭐ <?php esc_html_e( 'Give us a ★★★★★ rating', 'meteoprog-weather-informers' ); ?>
 		</a>
-		<?php _e( 'on WordPress.org — it really helps us!', 'meteoprog-weather-informers' ); ?>
+		<?php esc_html_e( 'on WordPress.org — it really helps us!', 'meteoprog-weather-informers' ); ?>
 	</p>
 </div>

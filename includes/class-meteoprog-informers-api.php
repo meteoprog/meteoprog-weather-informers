@@ -19,37 +19,59 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Meteoprog_Informers_API {
-	private $api_url     = 'https://billing.meteoprog.com/api/informers';
+
+	/**
+	 * Meteoprog API endpoint URL.
+	 *
+	 * @var string
+	 */
+	private $api_url = 'https://billing.meteoprog.com/api/informers';
+
+	/**
+	 * Option key for storing API key.
+	 *
+	 * @var string
+	 */
 	private $opt_api_key = 'meteoprog_api_key';
 
-	// Debug mode: force load informers from hardcoded array instead of HTTP requests.
+	/**
+	 * Debug mode: force load informers from hardcoded array instead of HTTP requests.
+	 *
+	 * @var bool
+	 */
 	private $debug = false;
 
+	/**
+	 * Constructor.
+	 *
+	 * Initializes debug mode and applies filters.
+	 */
 	public function __construct() {
 
-		// Enable debug mode if METEOPROG_DEBUG is defined
+		// Enable debug mode if METEOPROG_DEBUG is defined.
 		if ( defined( 'METEOPROG_DEBUG' ) && METEOPROG_DEBUG ) {
 			$this->debug = true;
 		}
 
-		// If METEOPROG_DEBUG_API_KEY is defined, force real API requests
+		// If METEOPROG_DEBUG_API_KEY is defined, force real API requests.
 		if ( defined( 'METEOPROG_DEBUG_API_KEY' ) && METEOPROG_DEBUG_API_KEY ) {
 
-			// Store the key in WP options so fetch_from_api() can use it
+			// Store the key in WP options so fetch_from_api() can use it.
 			update_option( $this->opt_api_key, METEOPROG_DEBUG_API_KEY );
 
-			// Disable debug mode to allow real HTTP requests
+			// Disable debug mode to allow real HTTP requests.
 			$this->debug = false;
 		}
 
-		// Allow overriding debug mode via filter if needed
+		// Allow overriding debug mode via filter if needed.
 		$this->debug = apply_filters( 'meteoprog_debug_mode', $this->debug );
 	}
 
 	/**
 	 * Get list of informers.
+	 *
 	 * Uses cache (WordPress transients) to avoid too many API requests.
-	 * In debug mode it loads informers from a hardcoded array instead of calling the API
+	 * In debug mode it loads informers from a hardcoded array instead of calling the API.
 	 *
 	 * @return array List of informers.
 	 */
@@ -57,15 +79,15 @@ class Meteoprog_Informers_API {
 		$cached = get_transient( $this->cache_key() );
 
 		// When debug mode is enabled, ignore cache and use hardcoded array.
-		if ( $this->debug ) {
+		if ( true === $this->debug ) {
 			$cached = false;
 		}
 
-		if ( $cached !== false ) {
+		if ( false !== $cached ) {
 			return $cached;
 		}
 
-		if ( $this->debug ) {
+		if ( true === $this->debug ) {
 			$list = $this->load_from_array();
 		} else {
 			$list = $this->fetch_from_api();
@@ -125,7 +147,6 @@ class Meteoprog_Informers_API {
 		);
 	}
 
-
 	/**
 	 * Build custom User-Agent string for API requests.
 	 * It includes plugin version for easier tracking and debugging on the API side.
@@ -134,7 +155,7 @@ class Meteoprog_Informers_API {
 	 */
 	private function get_user_agent() {
 		static $ua = null;
-		if ( $ua !== null ) {
+		if ( null !== $ua ) {
 			return $ua;
 		}
 
@@ -197,7 +218,7 @@ class Meteoprog_Informers_API {
 			return array();
 		}
 
-		if ( wp_remote_retrieve_response_code( $response ) !== 200 ) {
+		if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
 			return array();
 		}
 
@@ -231,8 +252,7 @@ class Meteoprog_Informers_API {
 	 * @return bool True if valid, false otherwise.
 	 */
 	public function validate_key( $key ) {
-
-		if ( $this->debug ) {
+		if ( true === $this->debug ) {
 			$result = $this->load_from_array();
 		} else {
 			$result = $this->fetch_from_api( $key );

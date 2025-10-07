@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<div class="api-key-row">
 		<label for="<?php echo esc_attr( $this->opt_api_key ); ?>">
-			<?php _e( 'API Key', 'meteoprog-weather-informers' ); ?>
+			<?php esc_html_e( 'API Key', 'meteoprog-weather-informers' ); ?>
 			<span class="dashicons dashicons-editor-help"
 				title="<?php echo esc_attr( __( 'Important: The widget API key is different from the Meteoprog Weather API key. Use the key from billing.meteoprog.com.', 'meteoprog-weather-informers' ) ); ?>"
 				aria-label="<?php esc_attr_e( 'Help', 'meteoprog-weather-informers' ); ?>">
@@ -50,12 +50,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 		);
 		?>
 		" class="button button-secondary" rel="noopener noreferrer">
-			<?php _e( 'Refresh list', 'meteoprog-weather-informers' ); ?>
+			<?php esc_html_e( 'Refresh list', 'meteoprog-weather-informers' ); ?>
 		</a>
 	</div>
 
 	<p id="meteoprog-api-key-description" class="description">
-		<?php _e( 'Enter your Meteoprog Widget API key. You can find it in your account on billing.meteoprog.com. This key is required to load and manage your widgets.', 'meteoprog-weather-informers' ); ?>
+		<?php esc_html_e( 'Enter your Meteoprog Widget API key. You can find it in your account on billing.meteoprog.com. This key is required to load and manage your widgets.', 'meteoprog-weather-informers' ); ?>
 	</p>
 </form>
 <hr>

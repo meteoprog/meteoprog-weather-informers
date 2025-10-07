@@ -16,27 +16,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 ?>
 <div class="wrap meteoprog-admin">
-	<h1><?php _e( 'Meteoprog Weather Widget', 'meteoprog-weather-informers' ); ?></h1>
+	<h1><?php esc_html_e( 'Meteoprog Weather Widget', 'meteoprog-weather-informers' ); ?></h1>
 
 	<?php if ( $error === 'invalid_key' ) : ?>
 		<div class="notice notice-error is-dismissible">
-			<p><?php _e( 'Invalid API key. Please check and try again.', 'meteoprog-weather-informers' ); ?></p>
+			<p><?php esc_html_e( 'Invalid API key. Please check and try again.', 'meteoprog-weather-informers' ); ?></p>
 		</div>
 	<?php elseif ( $error === 'refresh_failed' ) : ?>
 		<div class="notice notice-error is-dismissible">
-			<p><?php _e( 'Failed to refresh informer list. Check API key or network.', 'meteoprog-weather-informers' ); ?></p>
+			<p><?php esc_html_e( 'Failed to refresh informer list. Check API key or network.', 'meteoprog-weather-informers' ); ?></p>
 		</div>
 	<?php endif; ?>
 
 	<?php if ( ! empty( $refreshed ) ) : ?>
 		<div class="notice notice-success is-dismissible">
-			<p><?php _e( 'Informer list has been refreshed successfully.', 'meteoprog-weather-informers' ); ?></p>
+			<p><?php esc_html_e( 'Informer list has been refreshed successfully.', 'meteoprog-weather-informers' ); ?></p>
 		</div>
 	<?php endif; ?>
 
 	<?php if ( ! empty( $saved ) ) : ?>
 		<div class="notice notice-success is-dismissible">
-			<p><?php _e( 'Settings have been saved successfully.', 'meteoprog-weather-informers' ); ?></p>
+			<p><?php esc_html_e( 'Settings have been saved successfully.', 'meteoprog-weather-informers' ); ?></p>
 		</div>
 	<?php endif; ?>
 
@@ -47,13 +47,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php require __DIR__ . '/parts/apikey-form.php'; ?>
 
 	<?php if ( ! $api_key ) : ?>
-		<p><?php _e( 'Please enter your API key to proceed.', 'meteoprog-weather-informers' ); ?></p>
+		<p><?php esc_html_e( 'Please enter your API key to proceed.', 'meteoprog-weather-informers' ); ?></p>
 
 	<?php else : ?>
 
 		<?php if ( ! $informers ) : ?>
 			<p>
-				<?php _e( 'No widgets found. Create free and customizable weather widgets at', 'meteoprog-weather-informers' ); ?>
+				<?php esc_html_e( 'No widgets found. Create free and customizable weather widgets at', 'meteoprog-weather-informers' ); ?>
 				<a href="https://billing.meteoprog.com/?utm_source=wp-plugin&utm_medium=admin-link&utm_campaign=meteoprog-weather-widgets"
 				target="_blank" rel="noopener noreferrer">https://billing.meteoprog.com</a>.
 			</p>

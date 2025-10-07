@@ -3,10 +3,10 @@
  * Frontend Renderer for Meteoprog Weather Widgets.
  *
  * Handles all frontend integration points:
- * - Shortcode [meteoprog_informer id="..."]
- * - Placeholder replacement {meteoprog_informer_UUID}
- * - Template helper function meteoprog_informer($id)
- * - Enqueuing loader.js via local wrapper script
+ * - Shortcode [meteoprog_informer id="..."].
+ * - Placeholder replacement {meteoprog_informer_UUID}.
+ * - Template helper function meteoprog_informer($id).
+ * - Enqueuing loader.js via local wrapper script.
  *
  * Compatible with PHP 5.6+ and WordPress 4.9+.
  *
@@ -21,33 +21,61 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class Meteoprog_Informers_Frontend
+ *
+ * Responsible for rendering Meteoprog weather informers on the frontend
+ * via shortcodes, placeholders, and template functions.
+ */
 class Meteoprog_Informers_Frontend {
+
+	/**
+	 * API instance.
+	 *
+	 * @var Meteoprog_Informers_API
+	 */
 	private $api;
+
+	/**
+	 * Option name for default informer ID.
+	 *
+	 * @var string
+	 */
 	private $opt_default_id = 'meteoprog_default_informer_id';
 
+	/**
+	 * Cached default informer ID.
+	 *
+	 * @var string|null
+	 */
 	private static $default_id_cache = null;
 
+	/**
+	 * Constructor.
+	 *
+	 * @param Meteoprog_Informers_API $api API instance.
+	 */
 	public function __construct( $api ) {
 		$this->api = $api;
 
-		// Shortcode [meteoprog_informer id="..."]
+		// Shortcode [meteoprog_informer id="..."].
 		add_shortcode( 'meteoprog_informer', array( $this, 'shortcode' ) );
 
-		// Replace placeholders {meteoprog_informer_UUID}
+		// Replace placeholders {meteoprog_informer_UUID}.
 		add_filter( 'the_content', array( $this, 'replace_placeholders' ) );
 
-		// Enable shortcode parsing in legacy Text Widgets
+		// Enable shortcode parsing in legacy Text Widgets.
 		add_filter( 'widget_text', 'do_shortcode' );
 
-		// Enqueue global loader.js (once per page)
+		// Enqueue global loader.js (once per page).
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_loader' ) );
 
-		// Template helper function meteoprog_informer($id)
+		// Template helper function meteoprog_informer($id).
 		add_action( 'init', array( $this, 'register_template_function' ) );
 	}
 
 	/**
-	 * Shortcode callback
+	 * Shortcode callback.
 	 *
 	 * @param array $atts Shortcode attributes.
 	 * @return string HTML output or comment.
@@ -62,24 +90,22 @@ class Meteoprog_Informers_Frontend {
 		return $this->build_html( $id );
 	}
 
-	/**
-	 * Replace placeholders like {meteoprog_informer_UUID}
-	 *
-	 * @return string HTML output or comment.
-	 */
 		/**
 		 * Replace placeholders like {meteoprog_informer_UUID} or {meteoprog_informer}.
+	 *
+	 * @param string $content Post content.
+	 * @return string Filtered content.
 		 */
 	public function replace_placeholders( $content ) {
 		return preg_replace_callback(
 			'/\{meteoprog_informer(?:_([A-Za-z0-9\-]+))?\}/',
 			function ( $matches ) {
-				// If UUID is provided → use it
+				// If UUID is provided → use it.
 				if ( ! empty( $matches[1] ) ) {
 					return $this->build_html( $matches[1] );
 				}
 
-				// Otherwise fallback to default informer ID
+				// Otherwise fallback to default informer ID.
 				$default_id = $this->get_default_informer_id();
 
 				if ( ! $default_id ) {
@@ -93,10 +119,11 @@ class Meteoprog_Informers_Frontend {
 	}
 
 	/**
-	 * Build informer HTML
+	 * Build informer HTML.
 	 *
-	 * @param string $id — informer UUID
-	 * @param bool   $with_loader — true = embed loader.js directly (for Gutenberg editor)
+	 * @param string $id          Informer UUID.
+	 * @param bool   $with_loader Whether to embed loader.js directly (for Gutenberg editor).
+	 * @return string HTML code.
 	 */
 	public function build_html( $id, $with_loader = false ) {
 		static $data_layer_initialized = false;
@@ -106,18 +133,17 @@ class Meteoprog_Informers_Frontend {
 
 		$html = "\n<!-- meteoprog.com informer -->\n";
 
-		// Push to global data layer only once per page
+		// Push to global data layer only once per page.
 		if ( ! $data_layer_initialized ) {
 			$html                  .= "<script>window.meteoprogDataLayer=window.meteoprogDataLayer||[];</script>\n";
 			$data_layer_initialized = true;
 		}
 
 		$html .= "<script>window.meteoprogDataLayer.push({id:\"$id_js\"});</script>\n";
-		$html .= "<div id=\"$div_id\"></div>\n";
+		$html .= "<div id=\"" . esc_attr( $div_id ) . "\"></div>\n";
 
 		return $html;
 	}
-
 
 	/**
 	 * Enqueue Meteoprog loader via a local wrapper script.
@@ -134,12 +160,12 @@ class Meteoprog_Informers_Frontend {
 	 */
 	public function enqueue_loader() {
 
-		// Do not enqueue inside Elementor editor
+		// Do not enqueue inside Elementor editor.
 		if ( $this->is_elementor_editor() ) {
 			return;
 		}
 
-		// Prevent multiple enqueues
+		// Prevent multiple enqueues.
 		static $enqueued = false;
 		if ( $enqueued ) {
 			return;
@@ -160,10 +186,20 @@ class Meteoprog_Informers_Frontend {
 	}
 
 	/**
-	 * Register global template function meteoprog_informer($id)
+	 * Register global template function meteoprog_informer($id).
+	 *
+	 * This allows developers to call meteoprog_informer() in theme templates.
+	 *
+	 * @return void
 	 */
 	public function register_template_function() {
 		if ( ! function_exists( 'meteoprog_informer' ) ) {
+			/**
+			 * Template helper function for rendering informer by ID.
+			 *
+			 * @param string|null $id Informer ID (optional). Defaults to saved option.
+			 * @return string HTML output.
+			 */
 			function meteoprog_informer( $id = null ) {
 				$inst = isset( $GLOBALS['meteoprog_weather_informers_instance'] )
 					? $GLOBALS['meteoprog_weather_informers_instance']
@@ -174,7 +210,7 @@ class Meteoprog_Informers_Frontend {
 				}
 
 				if ( ! $id ) {
-					// We can't use $this here — call get_option directly
+					// We can't use $this here — call get_option() directly.
 					$id = get_option( 'meteoprog_default_informer_id', '' );
 				}
 				if ( ! $id ) {
@@ -189,9 +225,6 @@ class Meteoprog_Informers_Frontend {
 	/**
 	 * Determine whether the current request is running inside the Elementor editor.
 	 *
-	 * This method simply wraps the global meteoprog_is_elementor_editor_mode() helper
-	 * to make the behavior easily mockable in unit tests without overriding global functions.
-	 *
 	 * @return bool True if Elementor editor mode is active, false otherwise.
 	 */
 	protected function is_elementor_editor() {
@@ -202,15 +235,20 @@ class Meteoprog_Informers_Frontend {
 	/**
 	 * Get and cache the default informer ID for this request.
 	 *
-	 * @return string
+	 * @return string Default informer ID.
 	 */
 	private function get_default_informer_id() {
-		if ( self::$default_id_cache === null ) {
+		if ( null === self::$default_id_cache ) {
 			self::$default_id_cache = get_option( $this->opt_default_id, '' );
 		}
 		return self::$default_id_cache;
 	}
 
+	/**
+	 * Flush cached default informer ID.
+	 *
+	 * @return void
+	 */
 	public static function flush_cached_default_id() {
 		self::$default_id_cache = null;
 	}

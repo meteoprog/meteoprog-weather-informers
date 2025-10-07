@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function meteoprog_plugin_bootstrap() {
 
 	// -------------------------------------------------------------------------
-	// Fix: Elementor calls get_plugins() without including plugin.php on old WP
+	// Fix: Elementor calls get_plugins() without including plugin.php on old WP.
 	// -------------------------------------------------------------------------
 	if ( ! function_exists( 'get_plugins' ) ) {
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -48,17 +48,17 @@ function meteoprog_plugin_bootstrap() {
 	$admin    = new Meteoprog_Informers_Admin( $api, $frontend );
 	$block    = new Meteoprog_Informers_Block( $frontend, $api );
 
-	// Store instance globally (used by helper function meteoprog_informer())
+	// Store instance globally (used by helper function meteoprog_informer()).
 	$GLOBALS['meteoprog_weather_informers_instance'] = $frontend;
 	$GLOBALS['meteoprog_weather_informers_api']      = $api;
 
-	// Elementor integration (optional)
+	// Elementor integration (optional).
 	if ( class_exists( '\Elementor\Plugin' ) ) {
 		require_once __DIR__ . '/includes/class-meteoprog-informers-elementor.php';
 		new Meteoprog_Informers_Elementor( $frontend, $api );
 	}
 
-	// Shortcodes Ultimate integration (optional)
+	// Shortcodes Ultimate integration (optional).
 	if ( defined( 'SU_PLUGIN_VERSION' ) || function_exists( 'su_shortcode_init' ) ) {
 		require_once __DIR__ . '/includes/integrations/integration-shortcodes-ultimate.php';
 	}

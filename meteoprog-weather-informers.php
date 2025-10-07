@@ -13,6 +13,10 @@
  * Domain Path: /languages
  * License: GPL-2.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ *
+ * @package    MeteoprogWeatherInformers
+ * @author     meteoprog
+ * @license    GPL-2.0-or-later
  */
 
 /**
@@ -122,7 +126,7 @@ require_once __DIR__ . '/includes/class-meteoprog-informers-block.php';
 require_once __DIR__ . '/includes/class-meteoprog-informers-widget.php';
 
 
-// Load WP-CLI commands (only runs in CLI context)
+// Load WP-CLI commands (only runs in CLI context).
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	require_once __DIR__ . '/includes/class-meteoprog-informers-cli.php';
 }
@@ -168,5 +172,5 @@ add_action( 'admin_menu', 'meteoprog_add_remove_data_page' );
 // Permanently delete all plugin data (called only after explicit confirmation)
 // -----------------------------------------------------------------------------
 
-// Hide the submenu item so page is accessible only via direct URL
+// Hide the submenu item so page is accessible only via direct URL.
 add_action( 'admin_head', 'meteoprog_hide_remove_data_page' );

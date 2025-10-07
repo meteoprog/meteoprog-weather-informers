@@ -29,7 +29,19 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	 * Manage Meteoprog Weather Informers from the command line.
 	 */
 	class Meteoprog_Informers_CLI extends WP_CLI_Command {
-		private $opt_api_key    = 'meteoprog_api_key';
+
+		/**
+		 * Option key for storing API key.
+		 *
+		 * @var string
+		 */
+		private $opt_api_key = 'meteoprog_api_key';
+
+		/**
+		 * Option key for storing default informer ID.
+		 *
+		 * @var string
+		 */
 		private $opt_default_id = 'meteoprog_default_informer_id';
 
 		/**
@@ -45,6 +57,8 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 		 *     wp meteoprog-weather-informers set-key 1234567890abcdef
 		 *
 		 * @subcommand set-key
+		 *
+		 * @param array $args Command arguments.
 		 */
 		public function set_key( $args ) {
 			$key = sanitize_text_field( isset( $args[0] ) ? $args[0] : '' );
@@ -86,6 +100,8 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 		 *     wp meteoprog-weather-informers set-default 123e4567-e89b-12d3-a456-426614174000
 		 *
 		 * @subcommand set-default
+		 *
+		 * @param array $args Command arguments.
 		 */
 		public function set_default( $args ) {
 			$id = sanitize_text_field( isset( $args[0] ) ? $args[0] : '' );
@@ -126,7 +142,7 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 		public function refresh() {
 			meteoprog_clear_cache();
 			$api = new Meteoprog_Informers_API();
-			$api->get_informers(); // Force reload
+			$api->get_informers(); // Force reload.
 			WP_CLI::success( 'Informer list refreshed.' );
 		}
 
@@ -145,6 +161,6 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 		}
 	}
 
-	// Register CLI command for Meteoprog Weather Informers
+	// Register CLI command for Meteoprog Weather Informers.
 	WP_CLI::add_command( 'meteoprog-weather-informers', 'Meteoprog_Informers_CLI' );
 }

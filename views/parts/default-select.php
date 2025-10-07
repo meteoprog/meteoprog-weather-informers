@@ -54,7 +54,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<option value="<?php echo esc_attr( $iid ); ?>"
 				<?php selected( $default_id, $iid ); ?>
 				title="<?php echo esc_attr( $title_text ); ?>">
-				<?php echo $icon . ' ' . esc_html( $informer_domain ?: __( 'No domain', 'meteoprog-weather-informers' ) ) . ' — ' . esc_html( $iid ) . ' (' . esc_html( $domain_label ) . ')'; ?>
+				<?php
+					$domain_text = $informer_domain ? $informer_domain : __( 'No domain', 'meteoprog-weather-informers' );
+					echo esc_html( $icon ) . ' ' .
+						esc_html( $domain_text ) . ' — ' .
+						esc_html( $iid ) . ' (' .
+						esc_html( $domain_label ) . ')';
+				?>
 			</option>
 		<?php endforeach; ?>
 	</select>

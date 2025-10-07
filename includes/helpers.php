@@ -18,21 +18,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+if ( ! function_exists( 'meteoprog_mask_string' ) ) {
 /**
  * Mask part of a string with a fixed number of mask characters.
  *
- *  Original: 550e8400-e29b-41d4-a716-446655440000
- *  Masked:   550e********400000
+	 * Original: 550e8400-e29b-41d4-a716-446655440000
+	 * Masked:   550e********400000
  *
- * @param string $key         Original string.
- * @param int    $from_start  Number of visible characters at the start.
- * @param int    $before_end  Number of visible characters at the end.
- * @param int    $between     Number of mask characters to insert between.
- * @param string $mask        Mask character.
+	 * @param string $key        Original string.
+	 * @param int    $from_start Number of visible characters at the start.
+	 * @param int    $before_end Number of visible characters at the end.
+	 * @param int    $between    Number of mask characters to insert between.
+	 * @param string $mask       Mask character.
  *
  * @return string Masked string.
  */
-if ( ! function_exists( 'meteoprog_mask_string' ) ) {
 	function meteoprog_mask_string( $key, $from_start = 4, $before_end = 6, $between = 8, $mask = '*' ) {
 		$key = (string) $key;
 		$len = strlen( $key );
@@ -50,15 +50,14 @@ if ( ! function_exists( 'meteoprog_mask_string' ) ) {
 	}
 }
 
+if ( ! function_exists( 'meteoprog_clear_cache' ) ) {
 /**
  * Clear informers cache globally.
  *
- * Wrapper around Meteoprog_Informers_API::clear_cache()
- * so it can be reused in CLI and admin actions.
+	 * Wrapper around Meteoprog_Informers_API::clear_cache().
  *
  * @return void
  */
-if ( ! function_exists( 'meteoprog_clear_cache' ) ) {
 	function meteoprog_clear_cache() {
 		if ( class_exists( 'Meteoprog_Informers_API' ) ) {
 			$api = new Meteoprog_Informers_API();
@@ -67,22 +66,22 @@ if ( ! function_exists( 'meteoprog_clear_cache' ) ) {
 	}
 }
 
+if ( ! function_exists( 'meteoprog_is_elementor_editor_mode' ) ) {
 /**
  * Detect if Elementor editor is currently active.
  *
  * Supports old and new Elementor versions:
- * - Modern (3.5+): editor->is_edit_mode()
- * - Mid (3.0+): ELEMENTOR_EDITOR constant
- * - Legacy (2.x): elementor-preview param
- * - Classic: action=elementor (post.php?post=X&action=elementor)
- * - Fallback: preview->is_preview_mode()
+	 * - Modern (3.5+): editor->is_edit_mode().
+	 * - Mid (3.0+): ELEMENTOR_EDITOR constant.
+	 * - Legacy (2.x): elementor-preview param.
+	 * - Classic: action=elementor (post.php?post=X&action=elementor).
+	 * - Fallback: preview->is_preview_mode().
  *
  * @return bool
  */
-if ( ! function_exists( 'meteoprog_is_elementor_editor_mode' ) ) {
 	function meteoprog_is_elementor_editor_mode() {
 
-		// Modern check (Elementor 3.5+)
+		// Modern check (Elementor 3.5+).
 		if (
 			class_exists( '\Elementor\Plugin' ) &&
 			\Elementor\Plugin::$instance &&
@@ -92,22 +91,22 @@ if ( ! function_exists( 'meteoprog_is_elementor_editor_mode' ) ) {
 			return true;
 		}
 
-		// Mid versions (Elementor 3.0+)
+		// Mid versions (Elementor 3.0+).
 		if ( defined( 'ELEMENTOR_EDITOR' ) && ELEMENTOR_EDITOR ) {
 			return true;
 		}
 
-		// Legacy iframe mode (?elementor-preview)
+		// Legacy iframe mode (?elementor-preview).
 		if ( isset( $_GET['elementor-preview'] ) && is_admin() ) {
 			return true;
 		}
 
 		// Classic editor URL (post.php?post=X&action=elementor)
-		if ( isset( $_GET['action'] ) && $_GET['action'] === 'elementor' && is_admin() ) {
+		if ( isset( $_GET['action'] ) && 'elementor' === $_GET['action'] && is_admin() ) {
 			return true;
 		}
 
-		// Fallback preview mode
+		// Fallback preview mode.
 		if (
 			class_exists( '\Elementor\Plugin' ) &&
 			\Elementor\Plugin::$instance &&
@@ -121,6 +120,7 @@ if ( ! function_exists( 'meteoprog_is_elementor_editor_mode' ) ) {
 	}
 }
 
+if ( ! function_exists( 'meteoprog_host_from_url' ) ) {
 /**
  * Extract hostname from a URL or plain domain string.
  *
@@ -130,19 +130,18 @@ if ( ! function_exists( 'meteoprog_is_elementor_editor_mode' ) ) {
  * @param string $url URL or domain string.
  * @return string Hostname in lowercase, or empty string on failure.
  */
-if ( ! function_exists( 'meteoprog_host_from_url' ) ) {
 	function meteoprog_host_from_url( $url ) {
 		if ( ! $url ) {
 			return '';
 		}
 
-		// Use WordPress-safe parser
+		// Use WordPress-safe parser.
 		$host = wp_parse_url( $url, PHP_URL_HOST );
 		if ( ! empty( $host ) ) {
 			return strtolower( $host );
 		}
 
-		// Fallback for plain domain without scheme
+		// Fallback for plain domain without scheme.
 		$url = preg_replace( '#^https?://#i', '', $url );
 		$url = preg_replace( '#/.*$#', '', $url );
 		return strtolower( $url );
