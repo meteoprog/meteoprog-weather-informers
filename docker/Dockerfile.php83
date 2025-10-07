@@ -1,0 +1,92 @@
+FROM php:8.3-fpm-alpine
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+ARG CACHEBUST=0
+
+ARG UID=1000
+ARG GID=1000
+
+# Install basic utilities, DNS tools, and PHP extensions
+RUN apk add --no-cache \
+    bash \
+    mariadb-client \
+    git \
+    unzip \
+    zip \
+    subversion \
+    curl \
+    sudo \
+    tree \
+    gettext \
+    icu-dev \
+    bind-tools \
+    openssh-client \
+    $PHPIZE_DEPS \
+ && docker-php-ext-install mysqli pdo_mysql
+
+# Workaround for Alpine DNS issues during build (raw.githubusercontent.com, wordpress.org, getcomposer.org, wp-cli.org repo.packagist.org)
+RUN echo "[Build] Checking DNS resolution... (cachebust=$CACHEBUST)" \
+ && for host in raw.githubusercontent.com github.com wordpress.org getcomposer.org wp-cli.org repo.packagist.org; do \
+      echo "[DNS] Checking $host..."; \
+      if ! nslookup $host > /dev/null 2>&1; then \
+        echo "ERROR: DNS resolution failed for $host (Alpine DNS bug). Check your Docker network or /etc/resolv.conf"; \
+        exit 1; \
+      fi; \
+    done
+
+RUN echo "date.timezone = UTC" > /usr/local/etc/php/conf.d/timezone.ini
+
+# Disable TLS for the MySQL client to avoid SSL errors during wp-tests
+RUN printf "[client]\nskip-ssl\n" >> /etc/my.cnf
+
+# Create a non-root user to match local UID/GID for mounted volumes
+RUN addgroup -g ${GID} user && \
+    adduser -D -u ${UID} -G user user && \
+    adduser user wheel
+
+# Install the latest stable Composer (supports PHP 8.3)
+RUN curl -sS https://getcomposer.org/installer | php \
+    -- --install-dir=/usr/local/bin --filename=composer \
+    && chmod +x /usr/local/bin/composer
+
+# Install WP-CLI
+RUN curl -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+    && chmod +x /usr/local/bin/wp
+
+# --------------------------------------------------------------------
+# Install wp-cli/dist-archive-command manually through Composer
+# (no SSH keys, fully HTTPS, stable)
+# --------------------------------------------------------------------
+RUN mkdir -p /root/.wp-cli/packages \
+ && cd /root/.wp-cli/packages \
+ && printf '%s\n' '{' \
+ '"require": {' \
+ '  "wp-cli/wp-cli": "^2.8",' \
+ '  "wp-cli/dist-archive-command": "dev-main"' \
+ '},' \
+ '"repositories": [' \
+ '  {"type":"composer","url":"https://packagist.org"},' \
+ '  {"type":"vcs","url":"https://github.com/wp-cli/dist-archive-command.git"}' \
+ '],' \
+ '"minimum-stability": "dev",' \
+ '"prefer-stable": true' \
+ '}' > composer.json \
+ && composer config --no-plugins allow-plugins.wp-cli/* true \
+ && composer install --no-dev --prefer-dist --no-interaction \
+ && wp --allow-root package list
+
+# Install PHPUnit 9.6.x (fully compatible with PHP 8.3)
+RUN curl -Ls https://phar.phpunit.de/phpunit-9.phar -o /usr/local/bin/phpunit \
+    && chmod +x /usr/local/bin/phpunit
+
+# Install WP test framework installer (master branch supports WP 6.x+)
+RUN curl -o /usr/local/bin/install-wp-tests.sh \
+    https://raw.githubusercontent.com/wp-cli/scaffold-command/master/templates/install-wp-tests.sh \
+    && chmod +x /usr/local/bin/install-wp-tests.sh
+
+# Run basic version checks under the non-root user
+USER user
+RUN composer --version && wp --version && phpunit --version
+
+USER root

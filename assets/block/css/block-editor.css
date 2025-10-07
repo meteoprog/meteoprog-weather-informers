@@ -1,0 +1,57 @@
+/*!
+ * MeteoprogWeatherInformers — Block Editor styles
+ * (c) 2003-2025 Meteoprog. All rights reserved.
+ * https://meteoprog.com
+ *
+ * These styles are loaded only inside the Gutenberg block editor.
+ * They style the informer block wrapper, preview, and controls.
+ */
+
+/* Wrapper around informer inside Gutenberg editor */
+.meteoprog-block-editor {
+  border: 1px solid #ccd0d4;
+  border-radius: 6px;
+  padding: 12px;
+  background: #fff;
+  margin: 8px 0;
+}
+
+/* Loading spinner / notice alignment */
+.meteoprog-block-editor .components-spinner {
+  display: block;
+  margin: 20px auto;
+}
+
+/* Info text under selector */
+.meteoprog-block-editor p {
+  font-size: 12px;
+  color: #666;
+  margin-top: 8px;
+}
+
+/* Informer preview inside editor */
+.meteoprog-block-editor iframe,
+.meteoprog-block-editor .meteoprog-preview-box,
+.meteoprog-block-editor [id^="meteoprogData_"] {
+  display: block;
+  margin-top: 12px;
+  max-width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 6px;
+  background: #fafafa;
+}
+
+
+/* Custom SVG icon for Meteoprog Elementor widget */
+.wp-icon-meteoprog {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23007acc"><path d="M6 19a4 4 0 0 1 0-8 5.5 5.5 0 0 1 10.74-1.62A4.5 4.5 0 1 1 18 19H6z"/></svg>') no-repeat center;
+    background-size: 1em 1em;
+}
+
+.wp-icon-meteoprog:before {
+    content: '';
+}

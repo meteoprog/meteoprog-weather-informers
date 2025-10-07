@@ -1,0 +1,807 @@
+# Copyright (C) 2025 Meteoprog
+# This file is distributed under the same license as the Meteoprog Weather Widget plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Meteoprog Weather Widget 1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/meteoprog-weather-informers\n"
+"Last-Translator: meteoprog <app@meteoprog.com>\n"
+"Language-Team: English <app@meteoprog.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-10-07T10:03:28+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: meteoprog-weather-informers\n"
+
+#. Plugin Name of the plugin
+#: meteoprog-weather-informers.php
+#: includes/class-meteoprog-informers-widget.php:27
+#: meteoprog-weather-informers.php:139
+#: views/admin-page.php:19
+#: views/parts/help.php:55
+#: assets/block/js/block.js:123
+msgid "Meteoprog Weather Widget"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: meteoprog-weather-informers.php
+msgid "https://billing.meteoprog.com"
+msgstr ""
+
+#. Description of the plugin
+#: meteoprog-weather-informers.php
+msgid "Embed Meteoprog weather widgets on your WordPress site using a free API key. Supports shortcodes, placeholders, Gutenberg block, Elementor, and Shortcodes Ultimate."
+msgstr ""
+
+#. Author of the plugin
+#: meteoprog-weather-informers.php
+msgid "meteoprog"
+msgstr ""
+
+#. Author URI of the plugin
+#: meteoprog-weather-informers.php
+msgid "https://profiles.wordpress.org/meteoprog/"
+msgstr ""
+
+#: includes/class-meteoprog-informers-admin.php:98
+#: includes/class-meteoprog-informers-admin.php:99
+#: includes/class-meteoprog-informers-elementor.php:127
+#: views/parts/features.php:108
+#: views/parts/help.php:72
+msgid "Meteoprog Widgets"
+msgstr ""
+
+#: includes/class-meteoprog-informers-admin.php:128
+#: includes/class-meteoprog-informers-admin.php:175
+#: includes/class-meteoprog-informers-admin.php:196
+#: meteoprog-weather-informers.php:233
+msgid "Insufficient permissions."
+msgstr ""
+
+#: includes/class-meteoprog-informers-block.php:117
+msgid "No informer selected."
+msgstr ""
+
+#: includes/class-meteoprog-informers-widget.php:29
+msgid "Display a Meteoprog weather informer (supports default or specific ID)."
+msgstr ""
+
+#: includes/class-meteoprog-informers-widget.php:77
+msgid "Informer ID (leave empty to use default)"
+msgstr ""
+
+#: includes/elementor/class-meteoprog-informer-widget.php:73
+msgid "Meteoprog Informer"
+msgstr ""
+
+#: includes/elementor/class-meteoprog-informer-widget.php:96
+msgid "Informer Settings"
+msgstr ""
+
+#: includes/elementor/class-meteoprog-informer-widget.php:102
+#: includes/integrations/integration-shortcodes-ultimate.php:126
+#: assets/block/js/block.js:159
+msgid "Default widget (from settings)"
+msgstr ""
+
+#: includes/elementor/class-meteoprog-informer-widget.php:121
+#: includes/integrations/integration-shortcodes-ultimate.php:141
+#: views/parts/default-select.php:57
+#: assets/block/js/block.js:164
+msgid "No domain"
+msgstr ""
+
+#: includes/elementor/class-meteoprog-informer-widget.php:128
+#: includes/integrations/integration-shortcodes-ultimate.php:146
+#: assets/block/js/block.js:164
+msgid "OK"
+msgstr ""
+
+#: includes/elementor/class-meteoprog-informer-widget.php:128
+#: includes/elementor/class-meteoprog-informer-widget.php:236
+#: includes/integrations/integration-shortcodes-ultimate.php:99
+#: includes/integrations/integration-shortcodes-ultimate.php:146
+#: views/parts/default-select.php:45
+#: assets/block/js/block.js:69
+#: assets/block/js/block.js:164
+msgid "Domain mismatch"
+msgstr ""
+
+#: includes/elementor/class-meteoprog-informer-widget.php:140
+#: assets/block/js/block.js:185
+msgid "Select Meteoprog Weather Informer"
+msgstr ""
+
+#: includes/elementor/class-meteoprog-informer-widget.php:145
+msgid "Choose which weather informer to display."
+msgstr ""
+
+#: includes/elementor/class-meteoprog-informer-widget.php:170
+#: includes/elementor/class-meteoprog-informer-widget.php:222
+#: includes/integrations/integration-shortcodes-ultimate.php:87
+#: assets/block/js/block.js:60
+msgid "No informer selected — default preview"
+msgstr ""
+
+#: includes/elementor/class-meteoprog-informer-widget.php:171
+#: includes/elementor/class-meteoprog-informer-widget.php:231
+#: includes/integrations/integration-shortcodes-ultimate.php:94
+#: assets/block/js/block.js:63
+#: assets/block/js/block.js:101
+msgid "Preview is visible only on frontend"
+msgstr ""
+
+#: includes/elementor/class-meteoprog-informer-widget.php:215
+#: includes/integrations/integration-shortcodes-ultimate.php:82
+#: assets/block/js/block.js:92
+msgid "Meteoprog Weather Informer"
+msgstr ""
+
+#: includes/elementor/class-meteoprog-informer-widget.php:236
+#: includes/integrations/integration-shortcodes-ultimate.php:99
+#: views/parts/default-select.php:44
+#: assets/block/js/block.js:69
+msgid "Domain OK"
+msgstr ""
+
+#: includes/integrations/integration-shortcodes-ultimate.php:162
+#: includes/integrations/integration-shortcodes-ultimate.php:168
+msgid "Informer ID"
+msgstr ""
+
+#: includes/integrations/integration-shortcodes-ultimate.php:163
+msgid "Select informer or use default from settings."
+msgstr ""
+
+#: includes/integrations/integration-shortcodes-ultimate.php:169
+msgid "Enter informer ID (or leave empty to use default)."
+msgstr ""
+
+#: includes/integrations/integration-shortcodes-ultimate.php:174
+msgid "Meteoprog Weather"
+msgstr ""
+
+#: includes/integrations/integration-shortcodes-ultimate.php:179
+msgid "Display Meteoprog weather informer"
+msgstr ""
+
+#: meteoprog-weather-informers.php:121
+msgid ""
+"This plugin connects to Meteoprog services to render weather informers.\n"
+"\n"
+"• Outgoing requests: The plugin requests informer metadata from https://billing.meteoprog.com via HTTPS. Your site domain is sent in the 'X-Site-Domain' header to identify the requesting site. The Authorization header includes your informer API key saved in WordPress options.\n"
+"\n"
+"• Frontend: The plugin asynchronously loads a JavaScript file from https://cdn.meteoprog.net to render the widget. When loading that file, the third-party service may receive visitor IP addresses and may set cookies as part of content delivery.\n"
+"\n"
+"For more information, please review the Meteoprog legal documents:\n"
+"• Privacy Policy: https://billing.meteoprog.com/p/privacy_policy\n"
+"• User Agreement: https://billing.meteoprog.com/p/user_agreement\n"
+"• Legal Information: https://billing.meteoprog.com/p/legal_information\n"
+"• Refund Policy: https://billing.meteoprog.com/p/refund_policy"
+msgstr ""
+
+#: meteoprog-weather-informers.php:181
+msgid "Settings"
+msgstr ""
+
+#: meteoprog-weather-informers.php:186
+msgid "Delete Data"
+msgstr ""
+
+#: meteoprog-weather-informers.php:205
+#: meteoprog-weather-informers.php:206
+#: meteoprog-weather-informers.php:257
+msgid "Remove Meteoprog Plugin Data"
+msgstr ""
+
+#: meteoprog-weather-informers.php:244
+msgid "Meteoprog Plugin Data Removed"
+msgstr ""
+
+#: meteoprog-weather-informers.php:245
+msgid "All plugin settings and cached data have been successfully deleted."
+msgstr ""
+
+#: meteoprog-weather-informers.php:248
+msgid "Back to Plugins"
+msgstr ""
+
+#: meteoprog-weather-informers.php:258
+msgid "Do you really want to delete all plugin settings and cached data? This action cannot be undone."
+msgstr ""
+
+#: meteoprog-weather-informers.php:262
+msgid "Yes, delete everything"
+msgstr ""
+
+#: meteoprog-weather-informers.php:264
+msgid "Cancel"
+msgstr ""
+
+#: views/admin-page.php:23
+msgid "Invalid API key. Please check and try again."
+msgstr ""
+
+#: views/admin-page.php:27
+msgid "Failed to refresh informer list. Check API key or network."
+msgstr ""
+
+#: views/admin-page.php:33
+msgid "Informer list has been refreshed successfully."
+msgstr ""
+
+#: views/admin-page.php:39
+msgid "Settings have been saved successfully."
+msgstr ""
+
+#: views/admin-page.php:50
+msgid "Please enter your API key to proceed."
+msgstr ""
+
+#: views/admin-page.php:56
+msgid "No widgets found. Create free and customizable weather widgets at"
+msgstr ""
+
+#: views/parts/apikey-form.php:24
+msgid "API Key"
+msgstr ""
+
+#: views/parts/apikey-form.php:26
+msgid "Important: The widget API key is different from the Meteoprog Weather API key. Use the key from billing.meteoprog.com."
+msgstr ""
+
+#: views/parts/apikey-form.php:27
+msgid "Help"
+msgstr ""
+
+#: views/parts/apikey-form.php:41
+msgid "Save API Key"
+msgstr ""
+
+#: views/parts/apikey-form.php:49
+msgid "Refresh list"
+msgstr ""
+
+#: views/parts/apikey-form.php:54
+msgid "Enter your Meteoprog Widget API key. You can find it in your account on billing.meteoprog.com. This key is required to load and manage your widgets."
+msgstr ""
+
+#: views/parts/default-select.php:19
+msgid "Default Widget"
+msgstr ""
+
+#: views/parts/default-select.php:26
+msgid "Select default widget:"
+msgstr ""
+
+#: views/parts/default-select.php:34
+msgid "— None —"
+msgstr ""
+
+#: views/parts/default-select.php:62
+msgid "Save"
+msgstr ""
+
+#: views/parts/default-select.php:66
+msgid "If you insert the shortcode [meteoprog_informer] without ID, this widget will be used automatically."
+msgstr ""
+
+#: views/parts/features.php:23
+msgid "Meteoprog Widget Features"
+msgstr ""
+
+#: views/parts/features.php:31
+msgid "Location"
+msgstr ""
+
+#: views/parts/features.php:33
+msgid "Auto-detect by visitor IP"
+msgstr ""
+
+#: views/parts/features.php:34
+msgid "Set fixed location (any city/town)"
+msgstr ""
+
+#: views/parts/features.php:35
+msgid "Fallback default location"
+msgstr ""
+
+#: views/parts/features.php:40
+msgid "Language & Coverage"
+msgstr ""
+
+#: views/parts/features.php:42
+msgid "Auto-detect visitor language"
+msgstr ""
+
+#: views/parts/features.php:43
+msgid "Set default widget language"
+msgstr ""
+
+#: views/parts/features.php:44
+msgid "Informer interface supports 35+ languages"
+msgstr ""
+
+#: views/parts/features.php:45
+msgid "Covers over 2,150,000 locations worldwide with up-to-date forecasts"
+msgstr ""
+
+#: views/parts/features.php:48
+msgid "The WordPress plugin interface is currently in English. Community translations will be delivered via WordPress.org translation system."
+msgstr ""
+
+#: views/parts/features.php:53
+msgid "Information Display"
+msgstr ""
+
+#: views/parts/features.php:55
+msgid "Current weather: temperature, description, icon"
+msgstr ""
+
+#: views/parts/features.php:56
+msgid "Wind, Humidity, Precipitation, Pressure, UV index"
+msgstr ""
+
+#: views/parts/features.php:57
+msgid "Hourly and multi-day forecast"
+msgstr ""
+
+#: views/parts/features.php:62
+msgid "Units"
+msgstr ""
+
+#: views/parts/features.php:64
+msgid "Degrees Celsius (°C)"
+msgstr ""
+
+#: views/parts/features.php:65
+msgid "Degrees Fahrenheit (°F)"
+msgstr ""
+
+#: views/parts/features.php:70
+msgid "Styling & Appearance"
+msgstr ""
+
+#: views/parts/features.php:72
+msgid "Custom width and rounded corners"
+msgstr ""
+
+#: views/parts/features.php:73
+msgid "Font and icon colors"
+msgstr ""
+
+#: views/parts/features.php:74
+msgid "Light / Dark background"
+msgstr ""
+
+#: views/parts/features.php:75
+msgid "Border and shadow options"
+msgstr ""
+
+#: views/parts/features.php:76
+msgid "Interactive theme"
+msgstr ""
+
+#: views/parts/features.php:81
+msgid "Interactivity"
+msgstr ""
+
+#: views/parts/features.php:83
+msgid "Automatic weather updates"
+msgstr ""
+
+#: views/parts/features.php:84
+msgid "Responsive layout"
+msgstr ""
+
+#: views/parts/features.php:85
+msgid "Cross-browser compatibility"
+msgstr ""
+
+#: views/parts/features.php:90
+msgid "Integration"
+msgstr ""
+
+#: views/parts/features.php:93
+msgid "Shortcodes & Placeholders:"
+msgstr ""
+
+#: views/parts/features.php:94
+msgid "Insert directly into content or templates"
+msgstr ""
+
+#: views/parts/features.php:97
+msgid "Legacy Widget (WordPress 4.9–5.7):"
+msgstr ""
+
+#: views/parts/features.php:98
+msgid "Appearance → Widgets → Meteoprog Weather Widget"
+msgstr ""
+
+#: views/parts/features.php:101
+msgid "Gutenberg block:"
+msgstr ""
+
+#: views/parts/features.php:102
+msgid "Widgets → Meteoprog Weather Widget"
+msgstr ""
+
+#: views/parts/features.php:105
+#: views/parts/help.php:69
+msgid "Elementor integration:"
+msgstr ""
+
+#: views/parts/features.php:107
+#: views/parts/help.php:71
+msgid "Add the “Meteoprog Weather Widget” from the"
+msgstr ""
+
+#: views/parts/features.php:109
+#: views/parts/help.php:73
+msgid "group in the Elementor panel."
+msgstr ""
+
+#: views/parts/features.php:113
+msgid "Shortcodes Ultimate:"
+msgstr ""
+
+#: views/parts/features.php:114
+msgid "Custom shortcode [su_meteoprog_informer] with live preview in admin, plus full integration into the SU insert dialog."
+msgstr ""
+
+#: views/parts/features.php:117
+msgid "WP-CLI & REST API:"
+msgstr ""
+
+#: views/parts/features.php:118
+msgid "Manage keys, defaults, and cache; or integrate via REST endpoint"
+msgstr ""
+
+#: views/parts/features.php:127
+msgid "set API key"
+msgstr ""
+
+#: views/parts/features.php:128
+msgid "show current API key (masked)"
+msgstr ""
+
+#: views/parts/features.php:129
+msgid "set default informer"
+msgstr ""
+
+#: views/parts/features.php:130
+msgid "show default informer"
+msgstr ""
+
+#: views/parts/features.php:131
+msgid "clear cache and reload informers from API"
+msgstr ""
+
+#: views/parts/features.php:132
+msgid "clear cache only"
+msgstr ""
+
+#: views/parts/features.php:138
+msgid "Free to Use"
+msgstr ""
+
+#: views/parts/features.php:140
+msgid "Meteoprog Weather Widget is completely free — no hidden fees, subscriptions, or usage limits."
+msgstr ""
+
+#: views/parts/features.php:143
+msgid "Supports WordPress 4.9 → latest and PHP 5.6 → 8.3 for maximum compatibility."
+msgstr ""
+
+#: views/parts/features.php:144
+msgid "Works with Gutenberg, Elementor, Shortcodes Ultimate, Legacy Widgets, shortcodes, placeholders, and WP-CLI."
+msgstr ""
+
+#: views/parts/features.php:145
+msgid "Actively maintained to support older WordPress versions and popular integrations."
+msgstr ""
+
+#: views/parts/features.php:148
+msgid "We welcome your ideas for future free features and potential premium extensions."
+msgstr ""
+
+#: views/parts/help.php:21
+msgid "How to use Meteoprog Widgets"
+msgstr ""
+
+#: views/parts/help.php:25
+msgid "1. Create new widget:"
+msgstr ""
+
+#: views/parts/help.php:26
+#: views/parts/informers-table.php:38
+msgid "You can create new free and fully customizable weather widgets (informers) at"
+msgstr ""
+
+#: views/parts/help.php:32
+msgid "2. API Key:"
+msgstr ""
+
+#: views/parts/help.php:33
+msgid "Important: The API key for widgets (informers) is"
+msgstr ""
+
+#: views/parts/help.php:34
+msgid "NOT the same as the Meteoprog Weather API key."
+msgstr ""
+
+#: views/parts/help.php:35
+msgid "Use only the widget (informer) API key from"
+msgstr ""
+
+#: views/parts/help.php:38
+msgid "This key is"
+msgstr ""
+
+#: views/parts/help.php:39
+msgid "free"
+msgstr ""
+
+#: views/parts/help.php:40
+msgid "and without limits."
+msgstr ""
+
+#: views/parts/help.php:44
+msgid "3. Domain requirement:"
+msgstr ""
+
+#: views/parts/help.php:45
+msgid "Each widget (informer) is bound to a specific domain. The domain must exactly match your WordPress site domain, otherwise it will not be displayed."
+msgstr ""
+
+#: views/parts/help.php:49
+msgid "4. Usage options:"
+msgstr ""
+
+#: views/parts/help.php:54
+msgid "Use the"
+msgstr ""
+
+#: views/parts/help.php:56
+msgid "block in the"
+msgstr ""
+
+#: views/parts/help.php:57
+msgid "Gutenberg editor"
+msgstr ""
+
+#: views/parts/help.php:58
+msgid "category \"Widgets\""
+msgstr ""
+
+#: views/parts/help.php:61
+msgid "Insert via shortcode:"
+msgstr ""
+
+#: views/parts/help.php:65
+msgid "Insert via placeholder in content:"
+msgstr ""
+
+#: views/parts/help.php:77
+msgid "Shortcodes Ultimate integration:"
+msgstr ""
+
+#: views/parts/help.php:79
+msgid "Use the custom shortcode"
+msgstr ""
+
+#: views/parts/help.php:81
+msgid "to embed a specific informer with live preview in the admin editor, or insert it via the SU insert dialog (Meteoprog Weather)."
+msgstr ""
+
+#: views/parts/help.php:83
+msgid "You can also use"
+msgstr ""
+
+#: views/parts/help.php:85
+msgid "without the \"id\" attribute to display the default informer set in plugin settings."
+msgstr ""
+
+#: views/parts/help.php:91
+msgid "5. Default widget:"
+msgstr ""
+
+#: views/parts/help.php:92
+msgid "If you insert the shortcode"
+msgstr ""
+
+#: views/parts/help.php:94
+msgid "without ID, the widget selected in the settings as \"Default Widget\" will be displayed automatically."
+msgstr ""
+
+#: views/parts/help.php:95
+msgid "You can also use the placeholder"
+msgstr ""
+
+#: views/parts/help.php:97
+msgid "to display the default widget inside content."
+msgstr ""
+
+#: views/parts/help.php:103
+msgid "Need more help?"
+msgstr ""
+
+#: views/parts/help.php:105
+msgid "View source code on GitHub"
+msgstr ""
+
+#: views/parts/help.php:108
+msgid "Read FAQ on WordPress.org"
+msgstr ""
+
+#: views/parts/informers-table.php:24
+msgid "Create new widget (Informer) — opens the Meteoprog website"
+msgstr ""
+
+#: views/parts/informers-table.php:26
+msgid "Create widget (Informer)"
+msgstr ""
+
+#: views/parts/informers-table.php:29
+msgid "Opens the Meteoprog.com informer generator in a new tab"
+msgstr ""
+
+#: views/parts/informers-table.php:35
+msgid "Your Widgets (Informers)"
+msgstr ""
+
+#: views/parts/informers-table.php:46
+#: views/parts/informers-table.php:68
+msgid "Status"
+msgstr ""
+
+#: views/parts/informers-table.php:47
+#: views/parts/informers-table.php:73
+msgid "Informer"
+msgstr ""
+
+#: views/parts/informers-table.php:48
+#: views/parts/informers-table.php:93
+#: assets/admin/js/admin.js:27
+msgid "Copy"
+msgstr ""
+
+#: views/parts/informers-table.php:49
+#: views/parts/informers-table.php:109
+#: views/parts/informers-table.php:112
+#: assets/admin/js/admin.js:71
+msgid "Preview"
+msgstr ""
+
+#: views/parts/informers-table.php:63
+msgid "✔ Domain OK"
+msgstr ""
+
+#: views/parts/informers-table.php:64
+msgid "✖ Domain mismatch"
+msgstr ""
+
+#: views/parts/informers-table.php:75
+msgid "ID:"
+msgstr ""
+
+#: views/parts/informers-table.php:79
+msgid "Shortcode:"
+msgstr ""
+
+#: views/parts/informers-table.php:83
+msgid "Placeholder:"
+msgstr ""
+
+#: views/parts/informers-table.php:87
+msgid "Domain:"
+msgstr ""
+
+#: views/parts/informers-table.php:97
+msgid "Shortcode"
+msgstr ""
+
+#: views/parts/informers-table.php:103
+msgid "Placeholder"
+msgstr ""
+
+#: views/parts/promo.php:22
+msgid "Enjoying Meteoprog Weather Widgets?"
+msgstr ""
+
+#: views/parts/promo.php:27
+msgid "Give us a ★★★★★ rating"
+msgstr ""
+
+#: views/parts/promo.php:29
+msgid "on WordPress.org — it really helps us!"
+msgstr ""
+
+#: views/parts/weather-api.php:24
+msgid "Meteoprog Weather API (optional)"
+msgstr ""
+
+#: views/parts/weather-api.php:32
+msgid "For developers who need more than widgets, Meteoprog provides a powerful Weather API suite."
+msgstr ""
+
+#: views/parts/weather-api.php:37
+msgid "Worldwide coverage — over 2,150,000 geo points in 170+ countries"
+msgstr ""
+
+#: views/parts/weather-api.php:38
+msgid "OpenAPI documentation available for easy integration"
+msgstr ""
+
+#: views/parts/weather-api.php:39
+msgid "Multilingual API — 35+ supported languages"
+msgstr ""
+
+#: views/parts/weather-api.php:40
+msgid "Forecasts up to 14 days — hourly & daily granularity"
+msgstr ""
+
+#: views/parts/weather-api.php:41
+msgid "Rich data: temperature, precipitation, wind, pressure, UV index, and more"
+msgstr ""
+
+#: views/parts/weather-api.php:42
+msgid "Extra modules:"
+msgstr ""
+
+#: views/parts/weather-api.php:44
+msgid "Air Quality"
+msgstr ""
+
+#: views/parts/weather-api.php:45
+msgid "Water"
+msgstr ""
+
+#: views/parts/weather-api.php:46
+msgid "Astronomy"
+msgstr ""
+
+#: views/parts/weather-api.php:47
+msgid "K-index (geomagnetic)"
+msgstr ""
+
+#: views/parts/weather-api.php:48
+msgid "Weather Extremes & Historical Extremes"
+msgstr ""
+
+#: views/parts/weather-api.php:49
+msgid "Timezone & Geocoding APIs"
+msgstr ""
+
+#: views/parts/weather-api.php:52
+msgid "Integration formats: JSON or XML over HTTPS"
+msgstr ""
+
+#: views/parts/weather-api.php:53
+msgid "14-day free trial available for testing a selection of API features"
+msgstr ""
+
+#: views/parts/weather-api.php:60
+msgid "Learn more & view API documentation"
+msgstr ""
+
+#: views/parts/weather-api.php:65
+msgid "Note: The Weather API is optional and separate. Widgets use a free Informer API key and do not require the paid API."
+msgstr ""
+
+#: assets/admin/js/admin.js:24
+msgid "Copied"
+msgstr ""
+
+#: assets/admin/js/admin.js:41
+msgid "Loading..."
+msgstr ""
+
+#: assets/admin/js/admin.js:66
+msgid "Close"
+msgstr ""
+
+#: assets/block/js/block.js:143
+msgid "Failed to load informers. Check your API key."
+msgstr ""
