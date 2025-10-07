@@ -68,8 +68,8 @@
  * This note is included for transparency during the plugin review process.
  */
 
-if ( ! defined('ABSPATH') ) {
-    exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
 // -----------------------------------------------------------------------------
@@ -89,42 +89,42 @@ define( 'METEOPROG_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 // Used for stable cache-busting of assets in production environments.
 // Fallback for enqueue when filemtime() is not available (e.g. on CDN).
 if ( ! defined( 'METEOPROG_PLUGIN_VERSION' ) ) {
-    if ( ! function_exists( 'get_plugin_data' ) ) {
-        require_once ABSPATH . 'wp-admin/includes/plugin.php';
-    }
-    $plugin_data = get_plugin_data( __FILE__ );
-    define( 'METEOPROG_PLUGIN_VERSION', $plugin_data['Version'] );
+	if ( ! function_exists( 'get_plugin_data' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/plugin.php';
+	}
+	$plugin_data = get_plugin_data( __FILE__ );
+	define( 'METEOPROG_PLUGIN_VERSION', $plugin_data['Version'] );
 }
 
 /**
  * Debug mode helper.
  *
- * Uncomment the line below to enable debug mode.  
+ * Uncomment the line below to enable debug mode.
  * In this mode, the plugin will load informers from a local JSON file
  * (`/assets/test/test-informers.json`) instead of making HTTP API requests.
  */
 if ( ! defined( 'METEOPROG_DEBUG' ) ) {
-    define( 'METEOPROG_DEBUG', 0 );
+	define( 'METEOPROG_DEBUG', 0 );
 }
 
 // -----------------------------------------------------------------------------
 // Autoload classes
 // -----------------------------------------------------------------------------
 
-require_once dirname(__FILE__) . '/includes/helpers.php';
-require_once dirname(__FILE__) . '/includes/functions-admin.php';
-require_once dirname(__FILE__) . '/includes/functions-privacy.php';
-require_once dirname(__FILE__) . '/includes/functions-uninstall.php';
-require_once dirname(__FILE__) . '/includes/class-meteoprog-informers-api.php';
-require_once dirname(__FILE__) . '/includes/class-meteoprog-informers-frontend.php';
-require_once dirname(__FILE__) . '/includes/class-meteoprog-informers-admin.php';
-require_once dirname(__FILE__) . '/includes/class-meteoprog-informers-block.php';
-require_once dirname(__FILE__) . '/includes/class-meteoprog-informers-widget.php';
+require_once __DIR__ . '/includes/helpers.php';
+require_once __DIR__ . '/includes/functions-admin.php';
+require_once __DIR__ . '/includes/functions-privacy.php';
+require_once __DIR__ . '/includes/functions-uninstall.php';
+require_once __DIR__ . '/includes/class-meteoprog-informers-api.php';
+require_once __DIR__ . '/includes/class-meteoprog-informers-frontend.php';
+require_once __DIR__ . '/includes/class-meteoprog-informers-admin.php';
+require_once __DIR__ . '/includes/class-meteoprog-informers-block.php';
+require_once __DIR__ . '/includes/class-meteoprog-informers-widget.php';
 
 
 // Load WP-CLI commands (only runs in CLI context)
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
-    require_once dirname(__FILE__) . '/includes/class-meteoprog-informers-cli.php';
+	require_once __DIR__ . '/includes/class-meteoprog-informers-cli.php';
 }
 
 
@@ -132,7 +132,7 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 // Plugin bootstrap
 // -----------------------------------------------------------------------------
 
-require_once dirname(__FILE__) . '/plugin.php';
+require_once __DIR__ . '/plugin.php';
 add_action( 'plugins_loaded', 'meteoprog_plugin_bootstrap' );
 
 
