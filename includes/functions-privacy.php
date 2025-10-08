@@ -29,25 +29,35 @@ function meteoprog_register_privacy_policy() {
 	}
 
 	/* This is the privacy policy text shown in WP Admin (Settings > Privacy). */
-	$text = __(
-		"This plugin connects to Meteoprog services to render weather informers.
 
-• Outgoing requests: The plugin requests informer metadata from https://billing.meteoprog.com via HTTPS. Your site domain is sent in the 'X-Site-Domain' header to identify the requesting site. The Authorization header includes your informer API key saved in WordPress options.
+	$content = '<p>' . __( 'This plugin connects to Meteoprog services to render weather informers.', 'meteoprog-weather-informers' ) . '</p>';
 
-• Frontend: The plugin asynchronously loads a JavaScript file from https://cdn.meteoprog.net to render the widget. When loading that file, the third-party service may receive visitor IP addresses and may set cookies as part of content delivery.
-
-For more information, please review the Meteoprog legal documents:
-• Privacy Policy: https://billing.meteoprog.com/p/privacy_policy
-• User Agreement: https://billing.meteoprog.com/p/user_agreement
-• Legal Information: https://billing.meteoprog.com/p/legal_information
-• Refund Policy: https://billing.meteoprog.com/p/refund_policy",
+	$content .= '<h4>' . __( 'Outgoing requests', 'meteoprog-weather-informers' ) . '</h4>';
+	$content .= '<p>' . __(
+		'The plugin requests informer metadata from <code>https://billing.meteoprog.com</code> via HTTPS. 
+Your site domain is sent in the <code>X-Site-Domain</code> header to identify the requesting site. 
+The Authorization header includes your informer API key saved in WordPress options.',
 		'meteoprog-weather-informers'
-	);
+	) . '</p>';
 
-	$content = wp_kses_post( wpautop( $text ) );
+	$content .= '<h4>' . __( 'Frontend', 'meteoprog-weather-informers' ) . '</h4>';
+	$content .= '<p>' . __(
+		'The plugin asynchronously loads a JavaScript file from <code>https://cdn.meteoprog.net</code> to render the widget. 
+When loading that file, the third-party service may receive visitor IP addresses and may set technical cookies required for content delivery or security. 
+These cookies are managed by Meteoprog and are subject to their privacy policy.',
+		'meteoprog-weather-informers'
+	) . '</p>';
+
+	$content .= '<h4>' . __( 'Legal Information', 'meteoprog-weather-informers' ) . '</h4>';
+	$content .= '<ul>';
+	$content .= '<li><a href="https://billing.meteoprog.com/p/privacy_policy" target="_blank" rel="noopener noreferrer">' . __( 'Privacy Policy', 'meteoprog-weather-informers' ) . '</a></li>';
+	$content .= '<li><a href="https://billing.meteoprog.com/p/user_agreement" target="_blank" rel="noopener noreferrer">' . __( 'User Agreement', 'meteoprog-weather-informers' ) . '</a></li>';
+	$content .= '<li><a href="https://billing.meteoprog.com/p/legal_information" target="_blank" rel="noopener noreferrer">' . __( 'Legal Information', 'meteoprog-weather-informers' ) . '</a></li>';
+	$content .= '<li><a href="https://billing.meteoprog.com/p/refund_policy" target="_blank" rel="noopener noreferrer">' . __( 'Refund Policy', 'meteoprog-weather-informers' ) . '</a></li>';
+	$content .= '</ul>';
 
 	wp_add_privacy_policy_content(
 		__( 'Meteoprog Weather Widget', 'meteoprog-weather-informers' ),
-		$content
+		wp_kses_post( $content )
 	);
 }

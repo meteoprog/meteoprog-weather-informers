@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-10-08T12:59:32+00:00\n"
+"POT-Creation-Date: 2025-10-08T16:57:53+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: meteoprog-weather-informers\n"
@@ -17,7 +17,7 @@ msgstr ""
 #. Plugin Name of the plugin
 #: meteoprog-weather-informers.php
 #: includes/class-meteoprog-informers-widget.php:35
-#: includes/functions-privacy.php:50
+#: includes/functions-privacy.php:60
 #: views/admin-page.php:19
 #: views/parts/help.php:55
 #: assets/block/js/block.js:123
@@ -159,19 +159,47 @@ msgstr ""
 msgid "Remove Meteoprog Plugin Data"
 msgstr ""
 
-#: includes/functions-privacy.php:32
+#: includes/functions-privacy.php:33
+msgid "This plugin connects to Meteoprog services to render weather informers."
+msgstr ""
+
+#: includes/functions-privacy.php:35
+msgid "Outgoing requests"
+msgstr ""
+
+#: includes/functions-privacy.php:36
 msgid ""
-"This plugin connects to Meteoprog services to render weather informers.\n"
-"\n"
-"• Outgoing requests: The plugin requests informer metadata from https://billing.meteoprog.com via HTTPS. Your site domain is sent in the 'X-Site-Domain' header to identify the requesting site. The Authorization header includes your informer API key saved in WordPress options.\n"
-"\n"
-"• Frontend: The plugin asynchronously loads a JavaScript file from https://cdn.meteoprog.net to render the widget. When loading that file, the third-party service may receive visitor IP addresses and may set cookies as part of content delivery.\n"
-"\n"
-"For more information, please review the Meteoprog legal documents:\n"
-"• Privacy Policy: https://billing.meteoprog.com/p/privacy_policy\n"
-"• User Agreement: https://billing.meteoprog.com/p/user_agreement\n"
-"• Legal Information: https://billing.meteoprog.com/p/legal_information\n"
-"• Refund Policy: https://billing.meteoprog.com/p/refund_policy"
+"The plugin requests informer metadata from <code>https://billing.meteoprog.com</code> via HTTPS. \n"
+"Your site domain is sent in the <code>X-Site-Domain</code> header to identify the requesting site. \n"
+"The Authorization header includes your informer API key saved in WordPress options."
+msgstr ""
+
+#: includes/functions-privacy.php:43
+msgid "Frontend"
+msgstr ""
+
+#: includes/functions-privacy.php:44
+msgid ""
+"The plugin asynchronously loads a JavaScript file from <code>https://cdn.meteoprog.net</code> to render the widget. \n"
+"When loading that file, the third-party service may receive visitor IP addresses and may set technical cookies required for content delivery or security. \n"
+"These cookies are managed by Meteoprog and are subject to their privacy policy."
+msgstr ""
+
+#: includes/functions-privacy.php:51
+#: includes/functions-privacy.php:55
+msgid "Legal Information"
+msgstr ""
+
+#: includes/functions-privacy.php:53
+msgid "Privacy Policy"
+msgstr ""
+
+#: includes/functions-privacy.php:54
+msgid "User Agreement"
+msgstr ""
+
+#: includes/functions-privacy.php:56
+msgid "Refund Policy"
 msgstr ""
 
 #: includes/functions-uninstall.php:50

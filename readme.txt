@@ -144,9 +144,11 @@ We welcome issues and pull requests on GitHub.
 
 
 == Privacy ==
-This plugin does not collect or store any personal data about visitors. 
-The informer API key is stored in WordPress options. No personal information is sent to Meteoprog.
+This plugin itself does not collect or store any personal data. However, when the widget is displayed on the frontend, visitors’ browsers load the widget script from the Meteoprog CDN, which receives standard request information (IP address, User-Agent, Referrer).
 
+The CDN may also set technical cookies required for content delivery or security. These cookies are managed by Meteoprog and are subject to their privacy policy.
+
+This plugin adds a suggested section to WordPress's default Privacy Policy page, explaining what data is transmitted when widgets are displayed.
 
 == Links ==
 * [Meteoprog Homepage](https://meteoprog.com) — main weather portal
@@ -158,10 +160,11 @@ The informer API key is stored in WordPress options. No personal information is 
 
 This plugin connects to the Meteoprog services to display widgets.
 
-1. https://billing.meteoprog.com — used to fetch your informer list via a secure API request (Authorization header with your informer API key).
-2. https://cdn.meteoprog.net — used to load a small JavaScript file that renders the widgets on the frontend.
+1. https://billing.meteoprog.com — used by the plugin to fetch your informer list via a secure API request (Authorization header with your informer API key and site domain).
 
-No personal user data is sent.
+2. https://cdn.meteoprog.net — the visitor’s browser loads a small JavaScript file from the Meteoprog CDN to render the widgets. As with any CDN, the visitor’s IP address and browser information are transmitted as part of the HTTPS request. This is standard browser behavior.
+
+No personal data is collected or stored by the plugin itself.
    
 
 == Screenshots ==
