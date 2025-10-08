@@ -14,6 +14,7 @@ RUN apk add --no-cache \
     git \
     unzip \
     zip \
+    libzip-dev \
     subversion \
     curl \
     sudo \
@@ -23,7 +24,7 @@ RUN apk add --no-cache \
     bind-tools \
     openssh-client \
     $PHPIZE_DEPS \
- && docker-php-ext-install mysqli pdo_mysql
+ && docker-php-ext-install mysqli pdo_mysql zip
 
 # Workaround for Alpine DNS issues during build (raw.githubusercontent.com, wordpress.org, getcomposer.org, wp-cli.org repo.packagist.org)
 RUN echo "[Build] Checking DNS resolution... (cachebust=$CACHEBUST)" \

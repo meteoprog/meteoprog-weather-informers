@@ -147,9 +147,11 @@ php83-wp683: build-php83
 php83-latest: build-php83
 	$(call RUN_TESTS,$(IMAGE_PHP83),latest,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
 
+php83-nightly: build-php83
+	$(call RUN_TESTS,$(IMAGE_PHP83),nightly,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
 
 
-phpcs-check: build-php81
+phpcs-check: build-php83
 	docker run --rm -u $(UID):$(GID) \
 		-v $(SRC_PLUGIN):/src-plugin -w /src-plugin $(IMAGE_PHP81) \
 		bash -lc 'set -euo pipefail; \
@@ -161,7 +163,7 @@ phpcs-check: build-php81
 				--extensions=php \
 				--ignore=node_modules,vendor,tests,bin,assets/test .'
 
-phpcs-fix: build-php81
+phpcs-fix: build-php83
 	docker run --rm -u $(UID):$(GID) \
 		-v $(SRC_PLUGIN):/src-plugin -w /src-plugin $(IMAGE_PHP81) \
 		bash -lc 'set -euo pipefail; \
