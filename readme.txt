@@ -142,10 +142,6 @@ The test matrix covers multiple WordPress (4.9–6.8+) and PHP (5.6–8.4) versi
 We welcome issues and pull requests on GitHub.
 
 
-== External Services ==
-This plugin connects to the Meteoprog service (https://meteoprog.com) to fetch and display weather informer content via a loader script and a public widgets API hosted at https://billing.meteoprog.com/. 
-The plugin sends only the site domain and the provided informer API key to Meteoprog to retrieve the list of your widgets. No other data is transmitted.
-
 
 == Privacy ==
 This plugin does not collect or store any personal data about visitors. 
@@ -157,6 +153,16 @@ The informer API key is stored in WordPress options. No personal information is 
 * [Meteoprog Informer Dashboard](https://billing.meteoprog.com/informer) — create and manage your free informers
 * [GitHub repository](https://github.com/meteoprog/meteoprog-weather-widgets)
 
+
+== External Services ==
+
+This plugin connects to the Meteoprog services to display widgets.
+
+1. https://billing.meteoprog.com — used to fetch your informer list via a secure API request (Authorization header with your informer API key).
+2. https://cdn.meteoprog.net — used to load a small JavaScript file that renders the widgets on the frontend.
+
+No personal user data is sent.
+   
 
 == Screenshots ==
 
