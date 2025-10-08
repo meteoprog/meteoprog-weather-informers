@@ -80,6 +80,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Plugin Constants
 // -----------------------------------------------------------------------------
 
+// Used for stable cache-busting of assets in production environments.
+// Fallback for enqueue when filemtime() is not available (e.g. on CDN).
+define( 'METEOPROG_PLUGIN_VERSION', '1.0' );
+
 // Absolute path to the main plugin file (used for reference in includes and hooks).
 define( 'METEOPROG_PLUGIN_FILE', __FILE__ );
 
@@ -88,17 +92,6 @@ define( 'METEOPROG_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 
 // Public URL to the plugin directory (with trailing slash).
 define( 'METEOPROG_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-
-// Plugin version number, parsed from the plugin header.
-// Used for stable cache-busting of assets in production environments.
-// Fallback for enqueue when filemtime() is not available (e.g. on CDN).
-if ( ! defined( 'METEOPROG_PLUGIN_VERSION' ) ) {
-	if ( ! function_exists( 'get_plugin_data' ) ) {
-		require_once ABSPATH . 'wp-admin/includes/plugin.php';
-	}
-	$plugin_data = get_plugin_data( __FILE__ );
-	define( 'METEOPROG_PLUGIN_VERSION', $plugin_data['Version'] );
-}
 
 /**
  * Debug mode helper.
