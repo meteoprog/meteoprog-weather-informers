@@ -55,7 +55,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<p class="meteoprog-admin-api-box__cta">
 			<a href="https://billing.meteoprog.com/pricing/?utm_source=wp-plugin&utm_medium=admin-link&utm_campaign=meteoprog-weather-widgets"
-				target="_blank"
+				target="_blank" rel="noopener noreferrer"
 				class="button meteoprog-admin-api-box__button">
 				📖 <?php esc_html_e( 'Learn more & view API documentation', 'meteoprog-weather-informers' ); ?>
 			</a>
