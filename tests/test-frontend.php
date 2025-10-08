@@ -404,6 +404,9 @@ class FrontendTest extends WP_Compat_TestCase {
         );
     }
 
+    /**
+     * Ensure enqueue_loader() is idempotent and does not enqueue twice.
+     */
     public function test_enqueue_loader_idempotent() {
         $this->frontend->enqueue_loader();
         $data_first = wp_scripts()->get_data( 'meteoprog-loader', 'data' );
