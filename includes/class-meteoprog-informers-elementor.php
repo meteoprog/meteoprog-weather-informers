@@ -68,7 +68,7 @@ class Meteoprog_Informers_Elementor {
 		// Editor-only styles for visual parity with Gutenberg block editor.
 		add_action( 'elementor/editor/after_enqueue_styles', array( $this, 'enqueue_editor_styles' ) );
 
-		// No frontend CSS required: actual informer UI is built by loader.js (see Frontend::build_html()).
+		// No frontend CSS required: actual informer UI is built by loader.js.
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_styles' ) );
 
 		// Register widget + category only after Elementor finished bootstrapping.

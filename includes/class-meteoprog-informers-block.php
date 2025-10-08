@@ -152,10 +152,11 @@ class Meteoprog_Informers_Block {
 
 		// Warning if still empty.
 		if ( '' === $id ) {
-			return '<div style="color:#a00;font-size:13px;">' .
-				esc_html__( 'No informer selected.', 'meteoprog-weather-informers' ) .
-				'</div>';
+			return __( '<!-- Meteoprog Weather Widget: default ID not set -->', 'meteoprog-weather-informers' );
 		}
+
+		// Enqueue loader exactly when widget HTML is generated.
+		$this->frontend->enqueue_loader();
 
 		// Final render (Gutenberg + frontend).
 		return $this->frontend->build_html( $id );
@@ -288,6 +289,7 @@ class Meteoprog_Informers_Block {
 			self::REST_ROUTE_INFORMERS,
 			array(
 				'methods'             => 'GET',
+				'show_in_index'       => false,
 				'callback'            => array( $this, 'rest_informers_callback' ),
 				'permission_callback' => function () {
 					return current_user_can( 'edit_posts' );

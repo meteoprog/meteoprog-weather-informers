@@ -95,9 +95,12 @@ class BlockTest extends WP_Compat_TestCase {
         }
 
         // Mocks for frontend and API layers.
-        $this->frontend = $this->getMockBuilder(stdClass::class)
-                               ->setMethods(['build_html'])
-                               ->getMock();
+        $this->frontend = $this->getMockBuilder(Meteoprog_Informers_Frontend::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['enqueue_loader', 'build_html'])
+            ->getMock();
+
+
         $this->api = $this->getMockBuilder(stdClass::class)
                           ->setMethods(['get_informers'])
                           ->getMock();
@@ -143,7 +146,7 @@ class BlockTest extends WP_Compat_TestCase {
 
         $output = call_user_func($block->render_callback, []);
         $this->assertNotEmpty($output);
-        $this->assertStringContainsString('No informer selected.', $output);
+        $this->assertStringContainsString('default ID not set', $output);
     }
 
     /**
@@ -153,6 +156,10 @@ class BlockTest extends WP_Compat_TestCase {
         if ( ! function_exists('register_block_type') ) {
             $this->markTestSkipped('Gutenberg not available');
         }
+
+        // Expect enqueue_loader() to be called once (no return value needed).
+        $this->frontend->expects($this->once())
+                        ->method('enqueue_loader');
 
         $this->frontend->method('build_html')
                        ->with('123')

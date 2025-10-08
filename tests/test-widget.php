@@ -19,9 +19,10 @@ class WidgetTest extends WP_Compat_TestCase {
      * Initializes the widget environment and registers the widget.
      */
     public function prepare_environment() {
+        
         // Create a mock frontend object so the widget can render predictable HTML
         $frontend = $this->getMockBuilder(stdClass::class)
-                        ->setMethods(['build_html'])
+                        ->setMethods(['enqueue_loader', 'build_html'])
                         ->getMock();
 
         // Always return a static HTML string from build_html()
@@ -73,7 +74,7 @@ class WidgetTest extends WP_Compat_TestCase {
         );
         $output = ob_get_clean();
 
-        $this->assertStringContainsString('<!-- Meteoprog informer: no ID set -->', $output);
+        $this->assertStringContainsString('<!-- Meteoprog Weather Widget: default ID not set -->', $output);
     }
 
     /**

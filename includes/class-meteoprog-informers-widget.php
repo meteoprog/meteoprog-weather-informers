@@ -59,16 +59,20 @@ class Meteoprog_Informers_Widget extends WP_Widget {
 			: get_option( 'meteoprog_default_informer_id', '' );
 
 		if ( empty( $id ) ) {
-			echo '<!-- Meteoprog informer: no ID set -->';
+			echo '<!-- Meteoprog Weather Widget: default ID not set -->';
 		} else {
 			$frontend = meteoprog_get_frontend_instance();
 
 			if ( $frontend ) {
+
+				// Enqueue loader exactly when widget HTML is generated.
+				$frontend->enqueue_loader();
+
 				// Build and output informer HTML.
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo $frontend->build_html( $id );
 			} else {
-				echo '<!-- Meteoprog informer: frontend instance not available -->';
+				echo '<!-- Meteoprog Weather Widget: frontend instance not available -->';
 			}
 		}
 

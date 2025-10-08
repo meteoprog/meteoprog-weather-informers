@@ -33,9 +33,13 @@ class FrontendTest extends WP_Compat_TestCase {
         // Create a mock object for the API dependency
         $this->api = $this->getMockBuilder(stdClass::class)->getMock();
 
+
+        if ( ! defined( 'METEOPROG_PLUGIN_VERSION' ) ) {
+            define( 'METEOPROG_PLUGIN_VERSION', 'test-version' );
+        }
+
         // Instantiate the frontend class with the mocked API
         $this->frontend = new Meteoprog_Informers_Frontend($this->api);
-
         
         // Store the frontend instance in a global variable.
         // This is required for the global function meteoprog_informer() to work.
@@ -157,15 +161,30 @@ class FrontendTest extends WP_Compat_TestCase {
     // -------------------------------------------------------------------------
 
     /**
-     * Test that enqueue_loader() registers and enqueues the loader.js script.
+     * Test that enqueue_loader() registers and enqueues the loader.js script
+     * when build_html() is called (realistic frontend usage).
      */
     public function test_enqueue_loader_registers_script() {
+        global $wp_scripts;
+
+        if ( ! $wp_scripts ) {
+            wp_scripts(); // initialize global scripts registry
+        }
+
         wp_dequeue_script('meteoprog-loader');
 
+        // Explicitly call enqueue_loader() — build_html no longer does this
         $this->frontend->enqueue_loader();
 
-        $this->assertTrue(wp_script_is('meteoprog-loader', 'registered'));
-        $this->assertTrue(wp_script_is('meteoprog-loader', 'enqueued'));
+        $this->assertTrue(
+            wp_script_is('meteoprog-loader', 'registered'),
+            'Loader script should be registered when enqueue_loader() is called.'
+        );
+
+        $this->assertTrue(
+            wp_script_is('meteoprog-loader', 'enqueued'),
+            'Loader script should be enqueued when enqueue_loader() is called.'
+        );
     }
 
     /**
@@ -266,6 +285,34 @@ class FrontendTest extends WP_Compat_TestCase {
         $this->assertStringContainsString('meteoprogData_xyz', $output);
     }
 
+        /**
+     * Test that print_data_layer() outputs the expected JavaScript block
+     * with all queued informer IDs.
+     */
+    public function test_print_data_layer_outputs_script() {
+        // Queue some IDs by rendering informer HTML
+        $this->frontend->build_html('aaa');
+        $this->frontend->build_html('bbb');
+
+        ob_start();
+        $this->frontend->print_data_layer();
+        $output = ob_get_clean();
+
+        $this->assertStringContainsString('window.meteoprogDataLayer', $output);
+        $this->assertStringContainsString('aaa', $output);
+        $this->assertStringContainsString('bbb', $output);
+    }
+
+    /**
+     * Test that calling meteoprog_informer() without an ID
+     * and without a saved default returns an HTML comment.
+     */
+    public function test_global_function_without_id_returns_comment() {
+        update_option('meteoprog_default_informer_id', '');
+        $output = meteoprog_informer();
+        $this->assertStringContainsString('no informer ID', $output);
+    }
+
     // -------------------------------------------------------------------------
     // Template function registration
     // -------------------------------------------------------------------------
@@ -287,5 +334,88 @@ class FrontendTest extends WP_Compat_TestCase {
         unset($GLOBALS['meteoprog_weather_informers_instance']);
         $output = meteoprog_informer('abc');
         $this->assertStringContainsString('no instance', $output);
+    }
+
+    /**
+     * Test resource hints behavior for CDN preconnect.
+     */
+    public function test_add_resource_hints() {
+
+        $urls = $this->frontend->add_resource_hints(array(), 'preconnect');
+        $this->assertNotContains(
+            'https://cdn.meteoprog.net',
+            $urls,
+            'Preconnect hint should not be added when no informers are queued.'
+        );
+
+        $this->frontend->build_html('abc123'); 
+        $urls = $this->frontend->add_resource_hints(array(), 'preconnect');
+        $this->assertContains(
+            'https://cdn.meteoprog.net',
+            $urls,
+            'Preconnect hint should be added when informers are queued.'
+        );
+
+        set_current_screen('dashboard');
+        $urls_admin = $this->frontend->add_resource_hints(array(), 'preconnect');
+        $this->assertNotContains(
+            'https://cdn.meteoprog.net',
+            $urls_admin,
+            'Preconnect hint should not be added in admin screens.'
+        );
+    }
+
+    /**
+     * Test that external loader URL and version can be filtered
+     * via 'meteoprog_loader_url' and 'meteoprog_loader_version' filters.
+     */
+    public function test_loader_url_and_version_filters() {
+        // Reset global scripts for a clean state.
+        $GLOBALS['wp_scripts'] = null;
+        wp_scripts();
+
+        add_filter( 'meteoprog_loader_url', function( $url ) {
+            return 'https://example.com/custom-loader.js';
+        } );
+
+        add_filter( 'meteoprog_loader_version', function( $ver ) {
+            return '9.9.9';
+        } );
+
+        $this->frontend->enqueue_loader();
+
+        $data = wp_scripts()->get_data( 'meteoprog-loader', 'data' );
+
+        $this->assertNotEmpty(
+            $data,
+            'Localized data for meteoprog-loader should not be empty.'
+        );
+
+        // Escape expected URL the same way wp_localize_script does (via json_encode).
+        $expected_json = json_encode([
+            'url'     => 'https://example.com/custom-loader.js',
+            'version' => '9.9.9',
+        ]);
+
+        $this->assertStringContainsString(
+            $expected_json,
+            $data,
+            'Filtered loader URL and version should appear in localized script data.'
+        );
+    }
+
+    public function test_enqueue_loader_idempotent() {
+        $this->frontend->enqueue_loader();
+        $data_first = wp_scripts()->get_data( 'meteoprog-loader', 'data' );
+
+        // Call again — should not change data or register twice
+        $this->frontend->enqueue_loader();
+        $data_second = wp_scripts()->get_data( 'meteoprog-loader', 'data' );
+
+        $this->assertSame(
+            $data_first,
+            $data_second,
+            'enqueue_loader() should be idempotent and not duplicate localization or enqueue.'
+        );
     }
 }

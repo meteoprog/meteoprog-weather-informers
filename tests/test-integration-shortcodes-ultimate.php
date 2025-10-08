@@ -22,7 +22,7 @@
 
 class ShortcodesUltimateIntegrationTest extends WP_Compat_TestCase {
 
-    private $frontendMock;
+    private $frontend;
     private $apiMock;
 
     /**
@@ -31,18 +31,25 @@ class ShortcodesUltimateIntegrationTest extends WP_Compat_TestCase {
      * Sets up mocks, loads the integration file, and triggers `init`
      * to register the [su_meteoprog_informer] shortcode.
      */
-    public function setup_environment() {
+    public function prepare_environment() {
+
         // --- Frontend mock ---
-        $this->frontendMock = $this->getMockBuilder(stdClass::class)
-            ->setMethods(['build_html'])
+
+        // Mocks for frontend and API layers.
+        $this->frontend = $this->getMockBuilder(Meteoprog_Informers_Frontend::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['enqueue_loader', 'build_html'])
             ->getMock();
-        $this->frontendMock->method('build_html')->willReturn('<div>Informer HTML</div>');
-        $GLOBALS['meteoprog_weather_informers_instance'] = $this->frontendMock;
+
+
+        $this->frontend->method('build_html')->willReturn('<div>Informer HTML</div>');
+        $GLOBALS['meteoprog_weather_informers_instance'] = $this->frontend;
 
         // --- API mock ---
         $this->apiMock = $this->getMockBuilder(stdClass::class)
             ->setMethods(['get_informers'])
             ->getMock();
+
         $this->apiMock->method('get_informers')->willReturn(array(
             array(
                 'informer_id' => 'abc123',

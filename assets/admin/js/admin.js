@@ -49,9 +49,14 @@ document.addEventListener('click', function(e) {
       `;
       box.appendChild(s1);
 
+      // Determine loader URL from localized config (fallback to default)
+      var loaderUrl = (window.MeteoprogLoaderConfig && window.MeteoprogLoaderConfig.url)
+        ? window.MeteoprogLoaderConfig.url
+        : 'https://cdn.meteoprog.net/informerv4/1/loader.js';
+
       // Load remote loader.js
       var s2 = document.createElement('script');
-      s2.src = "https://cdn.meteoprog.net/informerv4/1/loader.js";
+      s2.src = loaderUrl;
       s2.async = true;
 
       s2.onload = function() {

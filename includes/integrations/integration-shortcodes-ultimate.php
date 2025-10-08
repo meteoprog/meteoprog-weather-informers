@@ -110,6 +110,9 @@ if ( ! function_exists( 'meteoprog_su_informer_shortcode_handler' ) ) {
 			return ob_get_clean();
 		}
 
+		// Enqueue loader exactly when widget HTML is generated.
+		$frontend->enqueue_loader();
+
 		return $frontend->build_html( $id );
 	}
 }

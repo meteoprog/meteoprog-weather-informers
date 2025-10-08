@@ -51,7 +51,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$domain_label
 				);
 			?>
-			<option value="<?php echo esc_attr( $iid ); ?>"
+			<option value="<?php echo esc_attr( $inf['informer_id'] ); ?>"
 				<?php selected( $default_id, $iid ); ?>
 				title="<?php echo esc_attr( $title_text ); ?>">
 				<?php

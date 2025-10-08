@@ -25,9 +25,10 @@
  * - Clear separation between local assets and external dependencies.
  */
 
-(function () {
-    var script = document.createElement("script");
-    script.src = "https://cdn.meteoprog.net/informerv4/1/loader.js";
-    script.async = true;
-    document.head.appendChild(script);
+(function() {
+    if (typeof MeteoprogLoaderConfig === 'undefined') return;
+    var s = document.createElement('script');
+    s.src = MeteoprogLoaderConfig.url;
+    s.async = true;
+    document.head.appendChild(s);
 })();

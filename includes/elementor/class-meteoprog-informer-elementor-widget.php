@@ -76,7 +76,7 @@ class Meteoprog_Informer_Elementor_Widget extends \Elementor\Widget_Base {
 	 * @return string
 	 */
 	public function get_title() {
-		return __( 'Meteoprog Informer', 'meteoprog-weather-informers' );
+		return __( 'Meteoprog Weather Widget', 'meteoprog-weather-informers' );
 	}
 
 	/**
@@ -114,7 +114,7 @@ class Meteoprog_Informer_Elementor_Widget extends \Elementor\Widget_Base {
 		$this->start_controls_section(
 			'section_informer',
 			array(
-				'label' => __( 'Informer Settings', 'meteoprog-weather-informers' ),
+				'label' => __( 'Meteoprog Weather Widget Settings', 'meteoprog-weather-informers' ),
 			)
 		);
 
@@ -269,6 +269,10 @@ class Meteoprog_Informer_Elementor_Widget extends \Elementor\Widget_Base {
 
 		// Frontend render — uses loader.js for real informer.
 		if ( $this->frontend && method_exists( $this->frontend, 'build_html' ) ) {
+
+			// Enqueue loader exactly when widget HTML is generated.
+			$this->frontend->enqueue_loader();
+
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo $this->frontend->build_html( $id );
 		}

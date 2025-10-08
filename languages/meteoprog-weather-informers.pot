@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-10-08T16:57:53+00:00\n"
+"POT-Creation-Date: 2025-10-08T21:01:42+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: meteoprog-weather-informers\n"
@@ -17,6 +17,7 @@ msgstr ""
 #. Plugin Name of the plugin
 #: meteoprog-weather-informers.php
 #: includes/class-meteoprog-informers-widget.php:35
+#: includes/elementor/class-meteoprog-informer-elementor-widget.php:79
 #: includes/functions-privacy.php:60
 #: views/admin-page.php:19
 #: views/parts/help.php:55
@@ -59,41 +60,37 @@ msgstr ""
 msgid "Insufficient permissions."
 msgstr ""
 
-#: includes/class-meteoprog-informers-block.php:156
-msgid "No informer selected."
+#: includes/class-meteoprog-informers-block.php:155
+msgid "<!-- Meteoprog Weather Widget: default ID not set -->"
 msgstr ""
 
 #: includes/class-meteoprog-informers-widget.php:37
 msgid "Display a Meteoprog weather informer (supports default or specific ID)."
 msgstr ""
 
-#: includes/class-meteoprog-informers-widget.php:90
+#: includes/class-meteoprog-informers-widget.php:94
 msgid "Informer ID (leave empty to use default)"
 msgstr ""
 
-#: includes/elementor/class-meteoprog-informer-elementor-widget.php:79
-msgid "Meteoprog Informer"
-msgstr ""
-
 #: includes/elementor/class-meteoprog-informer-elementor-widget.php:117
-msgid "Informer Settings"
+msgid "Meteoprog Weather Widget Settings"
 msgstr ""
 
 #: includes/elementor/class-meteoprog-informer-elementor-widget.php:123
-#: includes/integrations/integration-shortcodes-ultimate.php:141
+#: includes/integrations/integration-shortcodes-ultimate.php:144
 #: assets/block/js/block.js:159
 msgid "Default widget (from settings)"
 msgstr ""
 
 #: includes/elementor/class-meteoprog-informer-elementor-widget.php:142
-#: includes/integrations/integration-shortcodes-ultimate.php:160
+#: includes/integrations/integration-shortcodes-ultimate.php:163
 #: views/parts/default-select.php:58
 #: assets/block/js/block.js:164
 msgid "No domain"
 msgstr ""
 
 #: includes/elementor/class-meteoprog-informer-elementor-widget.php:149
-#: includes/integrations/integration-shortcodes-ultimate.php:171
+#: includes/integrations/integration-shortcodes-ultimate.php:174
 #: assets/block/js/block.js:164
 msgid "OK"
 msgstr ""
@@ -101,7 +98,7 @@ msgstr ""
 #: includes/elementor/class-meteoprog-informer-elementor-widget.php:149
 #: includes/elementor/class-meteoprog-informer-elementor-widget.php:257
 #: includes/integrations/integration-shortcodes-ultimate.php:100
-#: includes/integrations/integration-shortcodes-ultimate.php:172
+#: includes/integrations/integration-shortcodes-ultimate.php:175
 #: views/parts/default-select.php:45
 #: assets/block/js/block.js:69
 #: assets/block/js/block.js:164
@@ -226,24 +223,24 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: includes/integrations/integration-shortcodes-ultimate.php:188
-#: includes/integrations/integration-shortcodes-ultimate.php:194
+#: includes/integrations/integration-shortcodes-ultimate.php:191
+#: includes/integrations/integration-shortcodes-ultimate.php:197
 msgid "Informer ID"
 msgstr ""
 
-#: includes/integrations/integration-shortcodes-ultimate.php:189
+#: includes/integrations/integration-shortcodes-ultimate.php:192
 msgid "Select informer or use default from settings."
 msgstr ""
 
-#: includes/integrations/integration-shortcodes-ultimate.php:195
+#: includes/integrations/integration-shortcodes-ultimate.php:198
 msgid "Enter informer ID (or leave empty to use default)."
 msgstr ""
 
-#: includes/integrations/integration-shortcodes-ultimate.php:200
+#: includes/integrations/integration-shortcodes-ultimate.php:203
 msgid "Meteoprog Weather"
 msgstr ""
 
-#: includes/integrations/integration-shortcodes-ultimate.php:205
+#: includes/integrations/integration-shortcodes-ultimate.php:208
 msgid "Display Meteoprog weather informer"
 msgstr ""
 
@@ -698,7 +695,7 @@ msgstr ""
 #: views/parts/informers-table.php:49
 #: views/parts/informers-table.php:110
 #: views/parts/informers-table.php:113
-#: assets/admin/js/admin.js:71
+#: assets/admin/js/admin.js:76
 msgid "Preview"
 msgstr ""
 
@@ -826,7 +823,7 @@ msgstr ""
 msgid "Loading..."
 msgstr ""
 
-#: assets/admin/js/admin.js:66
+#: assets/admin/js/admin.js:71
 msgid "Close"
 msgstr ""
 
