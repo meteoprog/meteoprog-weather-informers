@@ -49,13 +49,13 @@ build-php83:
 # ------------------------------
 
 define RUN_TESTS
-	docker run --rm --network wordpress_proxy \
+	docker run --rm -it --network wordpress_proxy \
 	  -u $(UID):$(GID) \
 	  -e METEOPROG_DEBUG=$(METEOPROG_DEBUG) -e METEOPROG_DEBUG_API_KEY=$(METEOPROG_DEBUG_API_KEY) \
 	  -e WP_VERSION=$(2) \
 	  -e TEST_DB_NAME=$(DB_NAME)_$(subst .,_,$(2)) \
 	  -v $(SRC_PLUGIN):/src-plugin $(1) \
-	  bash -lc 'set -euo pipefail; \
+	  bash -c 'set -euo pipefail; \
 	    echo "[Step 0] Priming DNS resolver (Alpine DNS bug workaround)..."; \
 	    if ! nslookup wordpress.org > /dev/null 2>&1; then \
 	      echo "ERROR: DNS resolution failed (Alpine bug)"; \
@@ -91,9 +91,8 @@ define RUN_TESTS
 	    echo -e "y\n" | bash bin/install-wp-tests.sh $$DB_NAME $(DB_USER) $(DB_PASS) $(DB_HOST) $${WP_VERSION}; \
 	    echo "[Step 8] Run PHPUnit"; \
 	    phpunit --bootstrap tests/bootstrap-extra.php --configuration phpunit.xml.dist; \
-	    echo "[Step 10] Done"'
+	    echo "[Step 10] Done";' 
 endef
-
 
 
 
@@ -124,7 +123,7 @@ php81-wp66: build-php81
 php81-wp673: build-php81
 	$(call RUN_TESTS,$(IMAGE_PHP81),6.7.3,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
 
-php81-wp683: #build-php81
+php81-wp683: build-php81
 	$(call RUN_TESTS,$(IMAGE_PHP81),6.8.3,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
 
 php81-latest: build-php81
