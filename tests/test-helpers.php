@@ -87,4 +87,13 @@ class HelpersTest extends WP_Compat_TestCase {
         meteoprog_clear_cache();
         $this->assertFalse(get_transient($key));
     }
+
+    /**
+     * Ensure that helper functions return null by default
+     * when no global frontend or API instances are set.
+     */
+    public function test_get_frontend_and_api_instance_returns_null_by_default() {
+        $this->assertNull(meteoprog_get_frontend_instance());
+        $this->assertNull(meteoprog_get_api_instance());
+    }
 }

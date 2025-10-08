@@ -82,7 +82,8 @@ class Meteoprog_Informers_Frontend {
 	 */
 	public function shortcode( $atts ) {
 		$atts = shortcode_atts( array( 'id' => null ), $atts );
-		$id   = $atts['id'] ?: $this->get_default_informer_id();
+		$id   = ( ! empty( $atts['id'] ) ) ? $atts['id'] : $this->get_default_informer_id();
+
 		if ( ! $id ) {
 			return '<!-- Meteoprog informer: ID not set -->';
 		}
@@ -122,10 +123,9 @@ class Meteoprog_Informers_Frontend {
 	 * Build informer HTML.
 	 *
 	 * @param string $id          Informer UUID.
-	 * @param bool   $with_loader Whether to embed loader.js directly (for Gutenberg editor).
 	 * @return string HTML code.
 	 */
-	public function build_html( $id, $with_loader = false ) {
+	public function build_html( $id ) {
 		static $data_layer_initialized = false;
 
 		$id_js  = esc_js( $id );
@@ -157,6 +157,8 @@ class Meteoprog_Informers_Frontend {
 	 * Loader is enqueued on all frontend pages except inside Elementor editor.
 	 * This guarantees informer availability everywhere (home, archives, templates)
 	 * without scanning content or blocks, and avoids double-loading in editor.
+	 *
+	 * @return void
 	 */
 	public function enqueue_loader() {
 
@@ -189,8 +191,6 @@ class Meteoprog_Informers_Frontend {
 	 * Register global template function meteoprog_informer($id).
 	 *
 	 * This allows developers to call meteoprog_informer() in theme templates.
-	 *
-	 * @return void
 	 */
 	public function register_template_function() {
 		if ( ! function_exists( 'meteoprog_informer' ) ) {
@@ -201,11 +201,9 @@ class Meteoprog_Informers_Frontend {
 			 * @return string HTML output.
 			 */
 			function meteoprog_informer( $id = null ) {
-				$inst = isset( $GLOBALS['meteoprog_weather_informers_instance'] )
-					? $GLOBALS['meteoprog_weather_informers_instance']
-					: null;
+				$frontend = meteoprog_get_frontend_instance();
 
-				if ( ! $inst ) {
+				if ( ! $frontend ) {
 					return '<!-- no instance -->';
 				}
 
@@ -217,7 +215,7 @@ class Meteoprog_Informers_Frontend {
 					return '<!-- no informer ID -->';
 				}
 
-				return $inst->build_html( $id );
+				return $frontend->build_html( $id );
 			}
 		}
 	}

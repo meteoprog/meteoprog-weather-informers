@@ -115,7 +115,7 @@ if ( ! defined( 'METEOPROG_DEBUG' ) ) {
 // Autoload classes
 // -----------------------------------------------------------------------------
 
-require_once __DIR__ . '/includes/helpers.php';
+require_once __DIR__ . '/includes/functions-helpers.php';
 require_once __DIR__ . '/includes/functions-admin.php';
 require_once __DIR__ . '/includes/functions-privacy.php';
 require_once __DIR__ . '/includes/functions-uninstall.php';

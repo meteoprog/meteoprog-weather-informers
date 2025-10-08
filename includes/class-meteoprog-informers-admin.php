@@ -18,15 +18,47 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Admin Settings Controller.
+ *
+ * Handles API key saving, default informer selection, cache refresh,
+ * and enqueues admin assets.
+ */
 class Meteoprog_Informers_Admin {
+
+	/**
+	 * API client instance.
+	 *
+	 * @var Meteoprog_Informers_API
+	 */
 	private $api;
+
+	/**
+	 * Frontend renderer instance.
+	 *
+	 * @var Meteoprog_Informers_Frontend
+	 */
 	private $frontend;
-	private $opt_api_key    = 'meteoprog_api_key';
+
+	/**
+	 * Option name for the API key.
+	 *
+	 * @var string
+	 */
+	private $opt_api_key = 'meteoprog_api_key';
+
+	/**
+	 * Option name for the default informer ID.
+	 *
+	 * @var string
+	 */
 	private $opt_default_id = 'meteoprog_default_informer_id';
 
 	/**
-	 * @param $api
-	 * @param $frontend
+	 * Constructor.
+	 *
+	 * @param Meteoprog_Informers_API      $api      API client.
+	 * @param Meteoprog_Informers_Frontend $frontend Frontend renderer.
 	 */
 	public function __construct( $api, $frontend ) {
 		$this->api      = $api;
@@ -45,7 +77,7 @@ class Meteoprog_Informers_Admin {
 	/**
 	 * Enqueue admin CSS and JS for the Meteoprog settings page.
 	 *
-	 * @param $hook
+	 * @param string $hook Current admin page hook suffix.
 	 */
 	public function enqueue_assets( $hook ) {
 		// Only load on our settings page (matches both "settings_page" and "options-general_page" patterns).
@@ -163,6 +195,9 @@ class Meteoprog_Informers_Admin {
 
 	/**
 	 * Sanitize API key input before saving.
+	 *
+	 * @param string $val API key value.
+	 * @return string Sanitized key.
 	 */
 	public function sanitize_api_key( $val ) {
 		$old = get_option( $this->opt_api_key, '' );
@@ -223,9 +258,14 @@ class Meteoprog_Informers_Admin {
 		$masked_key   = function_exists( 'meteoprog_mask_string' ) ? meteoprog_mask_string( $api_key ) : $api_key;
 		$current_host = wp_parse_url( home_url(), PHP_URL_HOST );
 
-		$refreshed = ! empty( $_GET['refreshed'] );
-		$saved     = ! empty( $_GET['saved'] );
-		$error     = ! empty( $_GET['error'] ) ? $_GET['error'] : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$refreshed = isset( $_GET['refreshed'] ) ? (bool) $_GET['refreshed'] : false;
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$saved = isset( $_GET['saved'] ) ? (bool) $_GET['saved'] : false;
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$error = ! empty( $_GET['error'] ) ? sanitize_text_field( wp_unslash( $_GET['error'] ) ) : '';
 
 		include plugin_dir_path( __DIR__ ) . 'views/admin-page.php';
 	}

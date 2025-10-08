@@ -40,24 +40,24 @@ function meteoprog_render_remove_data_page() {
 		wp_die( esc_html__( 'Insufficient permissions.', 'meteoprog-weather-informers' ), '', array( 'response' => 403 ) );
 	}
 
-	if (
-		isset( $_POST['meteoprog_confirm_remove'] ) &&
-		isset( $_POST['meteoprog_remove_data_nonce'] ) &&
-		wp_verify_nonce( $_POST['meteoprog_remove_data_nonce'], 'meteoprog_remove_data_action' )
-	) {
-		meteoprog_delete_all_plugin_data();
-		?>
-		<div class="wrap">
-			<h1><?php esc_html_e( 'Meteoprog Plugin Data Removed', 'meteoprog-weather-informers' ); ?></h1>
-			<p><?php esc_html_e( 'All plugin settings and cached data have been successfully deleted.', 'meteoprog-weather-informers' ); ?></p>
-			<p>
-				<a href="<?php echo esc_url( admin_url( 'plugins.php' ) ); ?>" class="button">
-					<?php esc_html_e( 'Back to Plugins', 'meteoprog-weather-informers' ); ?>
-				</a>
-			</p>
-		</div>
-		<?php
-		return;
+	if ( isset( $_POST['meteoprog_confirm_remove'], $_POST['meteoprog_remove_data_nonce'] ) ) {
+		$nonce = sanitize_text_field( wp_unslash( $_POST['meteoprog_remove_data_nonce'] ) );
+
+		if ( wp_verify_nonce( $nonce, 'meteoprog_remove_data_action' ) ) {
+			meteoprog_delete_all_plugin_data();
+			?>
+			<div class="wrap">
+				<h1><?php esc_html_e( 'Meteoprog Plugin Data Removed', 'meteoprog-weather-informers' ); ?></h1>
+				<p><?php esc_html_e( 'All plugin settings and cached data have been successfully deleted.', 'meteoprog-weather-informers' ); ?></p>
+				<p>
+					<a href="<?php echo esc_url( admin_url( 'plugins.php' ) ); ?>" class="button">
+						<?php esc_html_e( 'Back to Plugins', 'meteoprog-weather-informers' ); ?>
+					</a>
+				</p>
+			</div>
+			<?php
+			return;
+		}
 	}
 	?>
 	<div class="wrap">
@@ -79,15 +79,28 @@ function meteoprog_render_remove_data_page() {
 /**
  * Run when the plugin is uninstalled via WordPress.
  * Deletes only the cached transients, preserving API key and settings.
+ *
+ * @return void
  */
 function meteoprog_informers_on_uninstall() {
 	global $wpdb;
+
 	// Delete only transients related to informers cache.
+
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_meteoprog_informers_cache_%'" );
+
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_timeout_meteoprog_informers_cache_%'" );
 }
 
-
+/**
+ * Permanently delete all plugin data: options and transients.
+ *
+ * This is triggered from the manual data removal page.
+ *
+ * @return void
+ */
 function meteoprog_delete_all_plugin_data() {
 	global $wpdb;
 
@@ -96,6 +109,10 @@ function meteoprog_delete_all_plugin_data() {
 	delete_option( 'meteoprog_default_informer_id' );
 
 	// Delete plugin transients.
+
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_meteoprog_informers_cache_%'" );
+
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_timeout_meteoprog_informers_cache_%'" );
 }

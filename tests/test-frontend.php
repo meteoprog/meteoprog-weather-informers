@@ -262,7 +262,7 @@ class FrontendTest extends WP_Compat_TestCase {
      * It should contain both the data placeholder and the loader script.
      */
     public function test_build_html_with_loader() {
-        $output = $this->frontend->build_html('xyz', true);
+        $output = $this->frontend->build_html('xyz');
         $this->assertStringContainsString('meteoprogData_xyz', $output);
     }
 

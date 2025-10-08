@@ -97,11 +97,13 @@ if ( ! function_exists( 'meteoprog_is_elementor_editor_mode' ) ) {
 		}
 
 		// Legacy iframe mode (?elementor-preview).
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( isset( $_GET['elementor-preview'] ) && is_admin() ) {
 			return true;
 		}
 
-		// Classic editor URL (post.php?post=X&action=elementor)
+		// Classic editor URL (post.php?post=X&action=elementor).
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( isset( $_GET['action'] ) && 'elementor' === $_GET['action'] && is_admin() ) {
 			return true;
 		}
@@ -145,5 +147,31 @@ if ( ! function_exists( 'meteoprog_host_from_url' ) ) {
 		$url = preg_replace( '#^https?://#i', '', $url );
 		$url = preg_replace( '#/.*$#', '', $url );
 		return strtolower( $url );
+	}
+}
+
+if ( ! function_exists( 'meteoprog_get_frontend_instance' ) ) {
+	/**
+	 * Get frontend instance (Meteoprog_Informers_Frontend).
+	 *
+	 * @return Meteoprog_Informers_Frontend|null
+	 */
+	function meteoprog_get_frontend_instance() {
+		return isset( $GLOBALS['meteoprog_weather_informers_instance'] )
+			? $GLOBALS['meteoprog_weather_informers_instance']
+			: null;
+	}
+}
+
+if ( ! function_exists( 'meteoprog_get_api_instance' ) ) {
+	/**
+	 * Get API instance (Meteoprog_Informers_API).
+	 *
+	 * @return Meteoprog_Informers_API|null
+	 */
+	function meteoprog_get_api_instance() {
+		return isset( $GLOBALS['meteoprog_weather_informers_api'] )
+			? $GLOBALS['meteoprog_weather_informers_api']
+			: null;
 	}
 }

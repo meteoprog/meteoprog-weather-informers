@@ -28,16 +28,19 @@ function meteoprog_register_privacy_policy() {
 		return;
 	}
 
-	/* translators: This is the privacy policy text shown in WP Admin (Settings > Privacy). */
+	/* This is the privacy policy text shown in WP Admin (Settings > Privacy). */
 	$text = __(
-		"This plugin connects to Meteoprog services to render weather informers.\n\n" .
-		"• Outgoing requests: The plugin requests informer metadata from https://billing.meteoprog.com via HTTPS. Your site domain is sent in the 'X-Site-Domain' header to identify the requesting site. The Authorization header includes your informer API key saved in WordPress options.\n\n" .
-		"• Frontend: The plugin asynchronously loads a JavaScript file from https://cdn.meteoprog.net to render the widget. When loading that file, the third-party service may receive visitor IP addresses and may set cookies as part of content delivery.\n\n" .
-		"For more information, please review the Meteoprog legal documents:\n" .
-		"• Privacy Policy: https://billing.meteoprog.com/p/privacy_policy\n" .
-		"• User Agreement: https://billing.meteoprog.com/p/user_agreement\n" .
-		"• Legal Information: https://billing.meteoprog.com/p/legal_information\n" .
-		'• Refund Policy: https://billing.meteoprog.com/p/refund_policy',
+		"This plugin connects to Meteoprog services to render weather informers.
+
+• Outgoing requests: The plugin requests informer metadata from https://billing.meteoprog.com via HTTPS. Your site domain is sent in the 'X-Site-Domain' header to identify the requesting site. The Authorization header includes your informer API key saved in WordPress options.
+
+• Frontend: The plugin asynchronously loads a JavaScript file from https://cdn.meteoprog.net to render the widget. When loading that file, the third-party service may receive visitor IP addresses and may set cookies as part of content delivery.
+
+For more information, please review the Meteoprog legal documents:
+• Privacy Policy: https://billing.meteoprog.com/p/privacy_policy
+• User Agreement: https://billing.meteoprog.com/p/user_agreement
+• Legal Information: https://billing.meteoprog.com/p/legal_information
+• Refund Policy: https://billing.meteoprog.com/p/refund_policy",
 		'meteoprog-weather-informers'
 	);
 

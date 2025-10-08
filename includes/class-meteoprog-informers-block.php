@@ -152,13 +152,13 @@ class Meteoprog_Informers_Block {
 
 		// Warning if still empty.
 		if ( '' === $id ) {
-			return '<div style="color:#a00;font-size:13px;">&#x26A0; ' .
+			return '<div style="color:#a00;font-size:13px;">' .
 				esc_html__( 'No informer selected.', 'meteoprog-weather-informers' ) .
 				'</div>';
 		}
 
 		// Final render (Gutenberg + frontend).
-		return $this->frontend->build_html( $id, true );
+		return $this->frontend->build_html( $id );
 	}
 
 	/**

@@ -20,6 +20,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Adds custom action links below the plugin name in the Plugins list.
+ *
+ * @param array $links Existing action links.
+ * @return array Modified action links.
  */
 function meteoprog_plugin_action_links( $links ) {
 	$settings_url = admin_url( 'options-general.php?page=meteoprog-informers' );
@@ -29,12 +32,12 @@ function meteoprog_plugin_action_links( $links ) {
 	$settings_url = is_string( $settings_url ) ? $settings_url : '';
 	$remove_url   = is_string( $remove_url ) ? $remove_url : '';
 
-	if ( $settings_url !== '' ) {
+	if ( '' !== $settings_url ) {
 		$settings_link = '<a href="' . esc_url( $settings_url ) . '">' . esc_html__( 'Settings', 'meteoprog-weather-informers' ) . '</a>';
 		array_unshift( $links, $settings_link );
 	}
 
-	if ( $remove_url !== '' ) {
+	if ( '' !== $remove_url ) {
 		$remove_link = '<a href="' . esc_url( $remove_url ) . '" style="color:red;">' . esc_html__( 'Delete Data', 'meteoprog-weather-informers' ) . '</a>';
 		$links[]     = $remove_link;
 	}
@@ -44,6 +47,8 @@ function meteoprog_plugin_action_links( $links ) {
 
 /**
  * Registers a hidden Tools submenu page for permanent data removal.
+ *
+ * @return void
  */
 function meteoprog_add_remove_data_page() {
 	add_submenu_page(

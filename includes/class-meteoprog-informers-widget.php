@@ -18,8 +18,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class Meteoprog_Informers_Widget
+ *
+ * Registers a classic WordPress widget for embedding Meteoprog informers.
+ */
 class Meteoprog_Informers_Widget extends WP_Widget {
 
+	/**
+	 * Constructor.
+	 */
 	public function __construct() {
 
 		parent::__construct(
@@ -39,8 +47,10 @@ class Meteoprog_Informers_Widget extends WP_Widget {
 	 *
 	 * @param array $args     Widget arguments (before/after wrappers).
 	 * @param array $instance Widget instance settings (may contain 'id').
+	 * @return void
 	 */
 	public function widget( $args, $instance ) {
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $args['before_widget'];
 
 		// Sanitize informer ID (whether from instance or default option).
@@ -51,23 +61,26 @@ class Meteoprog_Informers_Widget extends WP_Widget {
 		if ( empty( $id ) ) {
 			echo '<!-- Meteoprog informer: no ID set -->';
 		} else {
-			$frontend = isset( $GLOBALS['meteoprog_weather_informers_instance'] )
-				? $GLOBALS['meteoprog_weather_informers_instance']
-				: null;
+			$frontend = meteoprog_get_frontend_instance();
 
 			if ( $frontend ) {
 				// Build and output informer HTML.
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo $frontend->build_html( $id );
 			} else {
 				echo '<!-- Meteoprog informer: frontend instance not available -->';
 			}
 		}
 
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $args['after_widget'];
 	}
 
 	/**
 	 * Backend form in WP Admin.
+	 *
+	 * @param array $instance Widget instance settings.
+	 * @return void
 	 */
 	public function form( $instance ) {
 		$id = ! empty( $instance['id'] ) ? $instance['id'] : '';
@@ -89,6 +102,10 @@ class Meteoprog_Informers_Widget extends WP_Widget {
 
 	/**
 	 * Sanitize widget settings.
+	 *
+	 * @param array $new_instance New widget settings.
+	 * @param array $old_instance Old widget settings.
+	 * @return array Sanitized settings.
 	 */
 	public function update( $new_instance, $old_instance ) {
 		$instance       = array();

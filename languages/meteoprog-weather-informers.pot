@@ -9,15 +9,15 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-10-07T10:03:28+00:00\n"
+"POT-Creation-Date: 2025-10-08T12:59:32+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: meteoprog-weather-informers\n"
 
 #. Plugin Name of the plugin
 #: meteoprog-weather-informers.php
-#: includes/class-meteoprog-informers-widget.php:27
-#: meteoprog-weather-informers.php:139
+#: includes/class-meteoprog-informers-widget.php:35
+#: includes/functions-privacy.php:50
 #: views/admin-page.php:19
 #: views/parts/help.php:55
 #: assets/block/js/block.js:123
@@ -44,129 +44,122 @@ msgstr ""
 msgid "https://profiles.wordpress.org/meteoprog/"
 msgstr ""
 
-#: includes/class-meteoprog-informers-admin.php:98
-#: includes/class-meteoprog-informers-admin.php:99
+#: includes/class-meteoprog-informers-admin.php:136
+#: includes/class-meteoprog-informers-admin.php:137
 #: includes/class-meteoprog-informers-elementor.php:127
 #: views/parts/features.php:108
 #: views/parts/help.php:72
 msgid "Meteoprog Widgets"
 msgstr ""
 
-#: includes/class-meteoprog-informers-admin.php:128
-#: includes/class-meteoprog-informers-admin.php:175
-#: includes/class-meteoprog-informers-admin.php:196
-#: meteoprog-weather-informers.php:233
+#: includes/class-meteoprog-informers-admin.php:166
+#: includes/class-meteoprog-informers-admin.php:216
+#: includes/class-meteoprog-informers-admin.php:237
+#: includes/functions-uninstall.php:40
 msgid "Insufficient permissions."
 msgstr ""
 
-#: includes/class-meteoprog-informers-block.php:117
+#: includes/class-meteoprog-informers-block.php:156
 msgid "No informer selected."
 msgstr ""
 
-#: includes/class-meteoprog-informers-widget.php:29
+#: includes/class-meteoprog-informers-widget.php:37
 msgid "Display a Meteoprog weather informer (supports default or specific ID)."
 msgstr ""
 
-#: includes/class-meteoprog-informers-widget.php:77
+#: includes/class-meteoprog-informers-widget.php:90
 msgid "Informer ID (leave empty to use default)"
 msgstr ""
 
-#: includes/elementor/class-meteoprog-informer-widget.php:73
+#: includes/elementor/class-meteoprog-informer-elementor-widget.php:79
 msgid "Meteoprog Informer"
 msgstr ""
 
-#: includes/elementor/class-meteoprog-informer-widget.php:96
+#: includes/elementor/class-meteoprog-informer-elementor-widget.php:117
 msgid "Informer Settings"
 msgstr ""
 
-#: includes/elementor/class-meteoprog-informer-widget.php:102
-#: includes/integrations/integration-shortcodes-ultimate.php:126
+#: includes/elementor/class-meteoprog-informer-elementor-widget.php:123
+#: includes/integrations/integration-shortcodes-ultimate.php:141
 #: assets/block/js/block.js:159
 msgid "Default widget (from settings)"
 msgstr ""
 
-#: includes/elementor/class-meteoprog-informer-widget.php:121
-#: includes/integrations/integration-shortcodes-ultimate.php:141
-#: views/parts/default-select.php:57
+#: includes/elementor/class-meteoprog-informer-elementor-widget.php:142
+#: includes/integrations/integration-shortcodes-ultimate.php:160
+#: views/parts/default-select.php:58
 #: assets/block/js/block.js:164
 msgid "No domain"
 msgstr ""
 
-#: includes/elementor/class-meteoprog-informer-widget.php:128
-#: includes/integrations/integration-shortcodes-ultimate.php:146
+#: includes/elementor/class-meteoprog-informer-elementor-widget.php:149
+#: includes/integrations/integration-shortcodes-ultimate.php:171
 #: assets/block/js/block.js:164
 msgid "OK"
 msgstr ""
 
-#: includes/elementor/class-meteoprog-informer-widget.php:128
-#: includes/elementor/class-meteoprog-informer-widget.php:236
-#: includes/integrations/integration-shortcodes-ultimate.php:99
-#: includes/integrations/integration-shortcodes-ultimate.php:146
+#: includes/elementor/class-meteoprog-informer-elementor-widget.php:149
+#: includes/elementor/class-meteoprog-informer-elementor-widget.php:257
+#: includes/integrations/integration-shortcodes-ultimate.php:100
+#: includes/integrations/integration-shortcodes-ultimate.php:172
 #: views/parts/default-select.php:45
 #: assets/block/js/block.js:69
 #: assets/block/js/block.js:164
 msgid "Domain mismatch"
 msgstr ""
 
-#: includes/elementor/class-meteoprog-informer-widget.php:140
+#: includes/elementor/class-meteoprog-informer-elementor-widget.php:161
 #: assets/block/js/block.js:185
 msgid "Select Meteoprog Weather Informer"
 msgstr ""
 
-#: includes/elementor/class-meteoprog-informer-widget.php:145
+#: includes/elementor/class-meteoprog-informer-elementor-widget.php:166
 msgid "Choose which weather informer to display."
 msgstr ""
 
-#: includes/elementor/class-meteoprog-informer-widget.php:170
-#: includes/elementor/class-meteoprog-informer-widget.php:222
-#: includes/integrations/integration-shortcodes-ultimate.php:87
+#: includes/elementor/class-meteoprog-informer-elementor-widget.php:191
+#: includes/elementor/class-meteoprog-informer-elementor-widget.php:243
+#: includes/integrations/integration-shortcodes-ultimate.php:88
 #: assets/block/js/block.js:60
 msgid "No informer selected — default preview"
 msgstr ""
 
-#: includes/elementor/class-meteoprog-informer-widget.php:171
-#: includes/elementor/class-meteoprog-informer-widget.php:231
-#: includes/integrations/integration-shortcodes-ultimate.php:94
+#: includes/elementor/class-meteoprog-informer-elementor-widget.php:192
+#: includes/elementor/class-meteoprog-informer-elementor-widget.php:252
+#: includes/integrations/integration-shortcodes-ultimate.php:95
 #: assets/block/js/block.js:63
 #: assets/block/js/block.js:101
 msgid "Preview is visible only on frontend"
 msgstr ""
 
-#: includes/elementor/class-meteoprog-informer-widget.php:215
-#: includes/integrations/integration-shortcodes-ultimate.php:82
+#: includes/elementor/class-meteoprog-informer-elementor-widget.php:236
+#: includes/integrations/integration-shortcodes-ultimate.php:83
 #: assets/block/js/block.js:92
 msgid "Meteoprog Weather Informer"
 msgstr ""
 
-#: includes/elementor/class-meteoprog-informer-widget.php:236
-#: includes/integrations/integration-shortcodes-ultimate.php:99
+#: includes/elementor/class-meteoprog-informer-elementor-widget.php:257
+#: includes/integrations/integration-shortcodes-ultimate.php:100
 #: views/parts/default-select.php:44
 #: assets/block/js/block.js:69
 msgid "Domain OK"
 msgstr ""
 
-#: includes/integrations/integration-shortcodes-ultimate.php:162
-#: includes/integrations/integration-shortcodes-ultimate.php:168
-msgid "Informer ID"
+#: includes/functions-admin.php:36
+msgid "Settings"
 msgstr ""
 
-#: includes/integrations/integration-shortcodes-ultimate.php:163
-msgid "Select informer or use default from settings."
+#: includes/functions-admin.php:41
+msgid "Delete Data"
 msgstr ""
 
-#: includes/integrations/integration-shortcodes-ultimate.php:169
-msgid "Enter informer ID (or leave empty to use default)."
+#: includes/functions-admin.php:56
+#: includes/functions-admin.php:57
+#: includes/functions-uninstall.php:64
+msgid "Remove Meteoprog Plugin Data"
 msgstr ""
 
-#: includes/integrations/integration-shortcodes-ultimate.php:174
-msgid "Meteoprog Weather"
-msgstr ""
-
-#: includes/integrations/integration-shortcodes-ultimate.php:179
-msgid "Display Meteoprog weather informer"
-msgstr ""
-
-#: meteoprog-weather-informers.php:121
+#: includes/functions-privacy.php:32
 msgid ""
 "This plugin connects to Meteoprog services to render weather informers.\n"
 "\n"
@@ -181,42 +174,49 @@ msgid ""
 "• Refund Policy: https://billing.meteoprog.com/p/refund_policy"
 msgstr ""
 
-#: meteoprog-weather-informers.php:181
-msgid "Settings"
-msgstr ""
-
-#: meteoprog-weather-informers.php:186
-msgid "Delete Data"
-msgstr ""
-
-#: meteoprog-weather-informers.php:205
-#: meteoprog-weather-informers.php:206
-#: meteoprog-weather-informers.php:257
-msgid "Remove Meteoprog Plugin Data"
-msgstr ""
-
-#: meteoprog-weather-informers.php:244
+#: includes/functions-uninstall.php:50
 msgid "Meteoprog Plugin Data Removed"
 msgstr ""
 
-#: meteoprog-weather-informers.php:245
+#: includes/functions-uninstall.php:51
 msgid "All plugin settings and cached data have been successfully deleted."
 msgstr ""
 
-#: meteoprog-weather-informers.php:248
+#: includes/functions-uninstall.php:54
 msgid "Back to Plugins"
 msgstr ""
 
-#: meteoprog-weather-informers.php:258
+#: includes/functions-uninstall.php:65
 msgid "Do you really want to delete all plugin settings and cached data? This action cannot be undone."
 msgstr ""
 
-#: meteoprog-weather-informers.php:262
+#: includes/functions-uninstall.php:69
 msgid "Yes, delete everything"
 msgstr ""
 
-#: meteoprog-weather-informers.php:264
+#: includes/functions-uninstall.php:71
 msgid "Cancel"
+msgstr ""
+
+#: includes/integrations/integration-shortcodes-ultimate.php:188
+#: includes/integrations/integration-shortcodes-ultimate.php:194
+msgid "Informer ID"
+msgstr ""
+
+#: includes/integrations/integration-shortcodes-ultimate.php:189
+msgid "Select informer or use default from settings."
+msgstr ""
+
+#: includes/integrations/integration-shortcodes-ultimate.php:195
+msgid "Enter informer ID (or leave empty to use default)."
+msgstr ""
+
+#: includes/integrations/integration-shortcodes-ultimate.php:200
+msgid "Meteoprog Weather"
+msgstr ""
+
+#: includes/integrations/integration-shortcodes-ultimate.php:205
+msgid "Display Meteoprog weather informer"
 msgstr ""
 
 #: views/admin-page.php:23
@@ -259,11 +259,11 @@ msgstr ""
 msgid "Save API Key"
 msgstr ""
 
-#: views/parts/apikey-form.php:49
+#: views/parts/apikey-form.php:53
 msgid "Refresh list"
 msgstr ""
 
-#: views/parts/apikey-form.php:54
+#: views/parts/apikey-form.php:58
 msgid "Enter your Meteoprog Widget API key. You can find it in your account on billing.meteoprog.com. This key is required to load and manage your widgets."
 msgstr ""
 
@@ -279,11 +279,11 @@ msgstr ""
 msgid "— None —"
 msgstr ""
 
-#: views/parts/default-select.php:62
+#: views/parts/default-select.php:68
 msgid "Save"
 msgstr ""
 
-#: views/parts/default-select.php:66
+#: views/parts/default-select.php:72
 msgid "If you insert the shortcode [meteoprog_informer] without ID, this widget will be used automatically."
 msgstr ""
 
@@ -458,51 +458,51 @@ msgstr ""
 msgid "Manage keys, defaults, and cache; or integrate via REST endpoint"
 msgstr ""
 
-#: views/parts/features.php:127
+#: views/parts/features.php:126
 msgid "set API key"
 msgstr ""
 
-#: views/parts/features.php:128
+#: views/parts/features.php:127
 msgid "show current API key (masked)"
 msgstr ""
 
-#: views/parts/features.php:129
+#: views/parts/features.php:128
 msgid "set default informer"
 msgstr ""
 
-#: views/parts/features.php:130
+#: views/parts/features.php:129
 msgid "show default informer"
 msgstr ""
 
-#: views/parts/features.php:131
+#: views/parts/features.php:130
 msgid "clear cache and reload informers from API"
 msgstr ""
 
-#: views/parts/features.php:132
+#: views/parts/features.php:131
 msgid "clear cache only"
 msgstr ""
 
-#: views/parts/features.php:138
+#: views/parts/features.php:136
 msgid "Free to Use"
 msgstr ""
 
-#: views/parts/features.php:140
+#: views/parts/features.php:138
 msgid "Meteoprog Weather Widget is completely free — no hidden fees, subscriptions, or usage limits."
 msgstr ""
 
-#: views/parts/features.php:143
+#: views/parts/features.php:141
 msgid "Supports WordPress 4.9 → latest and PHP 5.6 → 8.3 for maximum compatibility."
 msgstr ""
 
-#: views/parts/features.php:144
+#: views/parts/features.php:142
 msgid "Works with Gutenberg, Elementor, Shortcodes Ultimate, Legacy Widgets, shortcodes, placeholders, and WP-CLI."
 msgstr ""
 
-#: views/parts/features.php:145
+#: views/parts/features.php:143
 msgid "Actively maintained to support older WordPress versions and popular integrations."
 msgstr ""
 
-#: views/parts/features.php:148
+#: views/parts/features.php:146
 msgid "We welcome your ideas for future free features and potential premium extensions."
 msgstr ""
 
@@ -652,57 +652,57 @@ msgid "Your Widgets (Informers)"
 msgstr ""
 
 #: views/parts/informers-table.php:46
-#: views/parts/informers-table.php:68
+#: views/parts/informers-table.php:69
 msgid "Status"
 msgstr ""
 
 #: views/parts/informers-table.php:47
-#: views/parts/informers-table.php:73
+#: views/parts/informers-table.php:74
 msgid "Informer"
 msgstr ""
 
 #: views/parts/informers-table.php:48
-#: views/parts/informers-table.php:93
+#: views/parts/informers-table.php:94
 #: assets/admin/js/admin.js:27
 msgid "Copy"
 msgstr ""
 
 #: views/parts/informers-table.php:49
-#: views/parts/informers-table.php:109
-#: views/parts/informers-table.php:112
+#: views/parts/informers-table.php:110
+#: views/parts/informers-table.php:113
 #: assets/admin/js/admin.js:71
 msgid "Preview"
 msgstr ""
 
-#: views/parts/informers-table.php:63
+#: views/parts/informers-table.php:64
 msgid "✔ Domain OK"
 msgstr ""
 
-#: views/parts/informers-table.php:64
+#: views/parts/informers-table.php:65
 msgid "✖ Domain mismatch"
 msgstr ""
 
-#: views/parts/informers-table.php:75
+#: views/parts/informers-table.php:76
 msgid "ID:"
 msgstr ""
 
-#: views/parts/informers-table.php:79
+#: views/parts/informers-table.php:80
 msgid "Shortcode:"
 msgstr ""
 
-#: views/parts/informers-table.php:83
+#: views/parts/informers-table.php:84
 msgid "Placeholder:"
 msgstr ""
 
-#: views/parts/informers-table.php:87
+#: views/parts/informers-table.php:88
 msgid "Domain:"
 msgstr ""
 
-#: views/parts/informers-table.php:97
+#: views/parts/informers-table.php:98
 msgid "Shortcode"
 msgstr ""
 
-#: views/parts/informers-table.php:103
+#: views/parts/informers-table.php:104
 msgid "Placeholder"
 msgstr ""
 

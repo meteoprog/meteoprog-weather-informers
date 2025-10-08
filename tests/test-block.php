@@ -143,7 +143,7 @@ class BlockTest extends WP_Compat_TestCase {
 
         $output = call_user_func($block->render_callback, []);
         $this->assertNotEmpty($output);
-        $this->assertStringContainsString('⚠', $output);
+        $this->assertStringContainsString('No informer selected.', $output);
     }
 
     /**
@@ -155,7 +155,7 @@ class BlockTest extends WP_Compat_TestCase {
         }
 
         $this->frontend->method('build_html')
-                       ->with('123', true)
+                       ->with('123')
                        ->willReturn('<div>Informer 123</div>');
 
         $output = $this->block->render_block(['id' => '123']);

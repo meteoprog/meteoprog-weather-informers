@@ -54,33 +54,54 @@ class Meteoprog_Informer_Elementor_Widget extends \Elementor\Widget_Base {
 	 * @param array $args Widget args.
 	 */
 	public function __construct( $data = array(), $args = null ) {
-		$this->frontend = isset( $GLOBALS['meteoprog_weather_informers_instance'] )
-			? $GLOBALS['meteoprog_weather_informers_instance']
-			: null;
 
-		$this->api = isset( $GLOBALS['meteoprog_weather_informers_api'] )
-			? $GLOBALS['meteoprog_weather_informers_api']
-			: null;
+		$this->frontend = meteoprog_get_frontend_instance();
+		$this->api      = meteoprog_get_api_instance();
 
 		parent::__construct( $data, $args );
 	}
 
+	/**
+	 * Get widget unique name.
+	 *
+	 * @return string
+	 */
 	public function get_name() {
 		return 'meteoprog_informer';
 	}
 
+	/**
+	 * Get widget title for Elementor panel.
+	 *
+	 * @return string
+	 */
 	public function get_title() {
 		return __( 'Meteoprog Informer', 'meteoprog-weather-informers' );
 	}
 
+	/**
+	 * Get widget icon.
+	 *
+	 * @return string
+	 */
 	public function get_icon() {
 		return 'wp-icon-meteoprog';
 	}
 
+	/**
+	 * Get widget categories.
+	 *
+	 * @return array
+	 */
 	public function get_categories() {
 		return array( 'meteoprog' );
 	}
 
+	/**
+	 * Get widget keywords.
+	 *
+	 * @return array
+	 */
 	public function get_keywords() {
 		return array( 'meteoprog', 'weather', 'informer', 'widget' );
 	}
@@ -248,7 +269,8 @@ class Meteoprog_Informer_Elementor_Widget extends \Elementor\Widget_Base {
 
 		// Frontend render — uses loader.js for real informer.
 		if ( $this->frontend && method_exists( $this->frontend, 'build_html' ) ) {
-			echo $this->frontend->build_html( $id, true );
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo $this->frontend->build_html( $id );
 		}
 	}
 }

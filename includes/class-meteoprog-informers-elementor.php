@@ -87,7 +87,7 @@ class Meteoprog_Informers_Elementor {
 	public function register_hooks() {
 
 		// Load widget class only now, when Elementor core is guaranteed to be available.
-		require_once plugin_dir_path( __FILE__ ) . '/elementor/class-meteoprog-informer-widget.php';
+		require_once plugin_dir_path( __FILE__ ) . '/elementor/class-meteoprog-informer-elementor-widget.php';
 
 		// Register the actual widget and a dedicated "Meteoprog" category.
 

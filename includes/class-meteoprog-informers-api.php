@@ -18,6 +18,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class Meteoprog_Informers_API
+ *
+ * Handles communication with the Meteoprog Informer API:
+ * - Fetching informer lists.
+ * - Validating API keys.
+ * - Caching responses.
+ * - Supporting local debug mode.
+ */
 class Meteoprog_Informers_API {
 
 	/**

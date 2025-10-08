@@ -18,11 +18,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="wrap meteoprog-admin">
 	<h1><?php esc_html_e( 'Meteoprog Weather Widget', 'meteoprog-weather-informers' ); ?></h1>
 
-	<?php if ( $error === 'invalid_key' ) : ?>
+	<?php if ( 'invalid_key' === $error ) : ?>
 		<div class="notice notice-error is-dismissible">
 			<p><?php esc_html_e( 'Invalid API key. Please check and try again.', 'meteoprog-weather-informers' ); ?></p>
 		</div>
-	<?php elseif ( $error === 'refresh_failed' ) : ?>
+	<?php elseif ( 'refresh_failed' === $error ) : ?>
 		<div class="notice notice-error is-dismissible">
 			<p><?php esc_html_e( 'Failed to refresh informer list. Check API key or network.', 'meteoprog-weather-informers' ); ?></p>
 		</div>
