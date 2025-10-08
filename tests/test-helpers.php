@@ -17,6 +17,16 @@
 
 class HelpersTest extends WP_Compat_TestCase {
 
+    /**
+     * Reset global state before each test.
+     *
+     * @before
+     */
+    public function reset_globals() {
+        unset($GLOBALS['meteoprog_weather_informers_instance']);
+        unset($GLOBALS['meteoprog_weather_informers_api']);
+    }
+
     // -------------------------------------------------------------------------
     // meteoprog_mask_string()
     // -------------------------------------------------------------------------
