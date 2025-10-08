@@ -151,9 +151,27 @@ php83-nightly: build-php83
 	$(call RUN_TESTS,$(IMAGE_PHP83),nightly,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
 
 
+# -------------------------------------
+# PHPCS / PHPCBF — Code style checks & auto-fixes
+# -------------------------------------
+# Uses the PHP 8.3 container to run WordPress Coding Standards (WPCS) checks.
+#
+# Targets:
+# - phpcs-check: Runs static code analysis against WPCS and PHPCompatibility rules.
+# - phpcs-fix:   Automatically fixes code formatting issues where possible.
+#
+# Inside the container, the following Composer packages are installed globally:
+# - dealerdirect/phpcodesniffer-composer-installer — enables external standards
+# - wp-coding-standards/wpcs — the official WordPress Coding Standards
+# - phpcompatibility/phpcompatibility-wp — checks compatibility with multiple PHP versions
+#
+# Excluded directories: node_modules, vendor, tests, bin, assets/test.
+# Only *.php files are scanned.
+# -------------------------------------
+
 phpcs-check: build-php83
 	docker run --rm -u $(UID):$(GID) \
-		-v $(SRC_PLUGIN):/src-plugin -w /src-plugin $(IMAGE_PHP81) \
+		-v $(SRC_PLUGIN):/src-plugin -w /src-plugin $(IMAGE_PHP83) \
 		bash -lc 'set -euo pipefail; \
 			composer global config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true; \
 			composer global require dealerdirect/phpcodesniffer-composer-installer:^1.0 \
@@ -165,7 +183,7 @@ phpcs-check: build-php83
 
 phpcs-fix: build-php83
 	docker run --rm -u $(UID):$(GID) \
-		-v $(SRC_PLUGIN):/src-plugin -w /src-plugin $(IMAGE_PHP81) \
+		-v $(SRC_PLUGIN):/src-plugin -w /src-plugin $(IMAGE_PHP83) \
 		bash -lc 'set -euo pipefail; \
 			composer global config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true; \
 			composer global require dealerdirect/phpcodesniffer-composer-installer:^1.0 \
@@ -185,7 +203,7 @@ testall: \
 	php56-wp49 \
 	php74-wp58 php74-wp59 \
 	php81-wp62 php81-wp66 php81-wp673 php81-wp683 php81-latest \
-	php83-wp62 php83-wp66 php83-wp673 php83-wp683 php83-latest
+	php83-wp62 php83-wp66 php83-wp673 php83-wp683 php83-latest php83-nightly
 	@echo "All test suites have finished."
 
 
