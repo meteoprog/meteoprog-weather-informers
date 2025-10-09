@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p>
 	<?php esc_html_e( 'You can create new free and fully customizable weather widgets (informers) at', 'meteoprog-weather-informers' ); ?>
 	<a href="https://billing.meteoprog.com/informer/?utm_source=wp-plugin&utm_medium=admin-link&utm_campaign=meteoprog-weather-widgets"
-		target="_blank" rel="noopener noreferrer">https://billing.meteoprog.com/informer</a>.
+		target="_blank" rel="noopener noreferrer">https://billing.meteoprog.com/informer/</a>.
 </p>
 
 <table class="widefat striped">
@@ -108,13 +108,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			<!-- Preview -->
 			<td data-label="<?php esc_attr_e( 'Preview', 'meteoprog-weather-informers' ); ?>" class="meteoprog-preview-cell">
-				<a href="#" class="meteoprog-preview button button-secondary"
-					data-id="<?php echo esc_attr( $iid ); ?>">
-					👁 <?php esc_html_e( 'Preview', 'meteoprog-weather-informers' ); ?>
-				</a>
-				<div id="meteoprog-preview-<?php echo esc_attr( $iid ); ?>"
-					class="meteoprog-preview-box"
-					style="display:none;margin-top:10px;"></div>
+				<?php if ( $match ) : ?>
+					<a href="#" class="meteoprog-preview button button-secondary"
+						data-id="<?php echo esc_attr( $iid ); ?>">
+						👁 <?php esc_html_e( 'Preview', 'meteoprog-weather-informers' ); ?>
+					</a>
+					<div id="meteoprog-preview-<?php echo esc_attr( $iid ); ?>"
+						class="meteoprog-preview-box"
+						style="display:none;margin-top:10px;"></div>
+				<?php else : ?>
+					<span style="color:red;font-weight:bold;">
+						<?php esc_html_e( '✖ Domain mismatch', 'meteoprog-weather-informers' ); ?>
+					</span>
+					<span class="dashicons dashicons-editor-help"
+						title="<?php esc_attr_e( 'This informer was created for a different domain. Please check the domain specified when generating the informer on https://billing.meteoprog.com/informer/.', 'meteoprog-weather-informers' ); ?>"
+						aria-label="<?php esc_attr_e( 'This informer was created for a different domain. Please check the domain specified when generating the informer on https://billing.meteoprog.com/informer/.', 'meteoprog-weather-informers' ); ?>">
+					</span>
+				<?php endif; ?>	
 			</td>
 		</tr>
 	<?php endforeach; ?>

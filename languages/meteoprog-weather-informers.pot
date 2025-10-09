@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-10-08T21:01:42+00:00\n"
+"POT-Creation-Date: 2025-10-09T10:38:51+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: meteoprog-weather-informers\n"
@@ -694,7 +694,7 @@ msgstr ""
 
 #: views/parts/informers-table.php:49
 #: views/parts/informers-table.php:110
-#: views/parts/informers-table.php:113
+#: views/parts/informers-table.php:114
 #: assets/admin/js/admin.js:76
 msgid "Preview"
 msgstr ""
@@ -704,6 +704,7 @@ msgid "✔ Domain OK"
 msgstr ""
 
 #: views/parts/informers-table.php:65
+#: views/parts/informers-table.php:121
 msgid "✖ Domain mismatch"
 msgstr ""
 
@@ -729,6 +730,11 @@ msgstr ""
 
 #: views/parts/informers-table.php:104
 msgid "Placeholder"
+msgstr ""
+
+#: views/parts/informers-table.php:124
+#: views/parts/informers-table.php:125
+msgid "This informer was created for a different domain. Please check the domain specified when generating the informer on https://billing.meteoprog.com/informer/."
 msgstr ""
 
 #: views/parts/promo.php:22
