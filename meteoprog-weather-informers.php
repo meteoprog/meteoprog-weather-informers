@@ -101,7 +101,7 @@ define( 'METEOPROG_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
  * (`/assets/test/test-informers.json`) instead of making HTTP API requests.
  */
 if ( ! defined( 'METEOPROG_DEBUG' ) ) {
-	define( 'METEOPROG_DEBUG', 1 );
+	define( 'METEOPROG_DEBUG', 0 );
 }
 
 // -----------------------------------------------------------------------------

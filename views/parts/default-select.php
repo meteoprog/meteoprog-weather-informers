@@ -52,7 +52,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				);
 			?>
 			<option value="<?php echo esc_attr( $inf['informer_id'] ); ?>"
-				<?php selected( $default_id, $iid ); ?>
+				<?php selected( $default_id, $inf['informer_id'] ); ?>
 				title="<?php echo esc_attr( $title_text ); ?>">
 				<?php
 					$domain_text = $informer_domain ? $informer_domain : __( 'No domain', 'meteoprog-weather-informers' );
