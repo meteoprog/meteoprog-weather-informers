@@ -96,9 +96,6 @@ define( 'METEOPROG_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 /**
  * Debug mode helper.
  *
- * Uncomment the line below to enable debug mode.
- * In this mode, the plugin will load informers from a local JSON file
- * (`/assets/test/test-informers.json`) instead of making HTTP API requests.
  */
 if ( ! defined( 'METEOPROG_DEBUG' ) ) {
 	define( 'METEOPROG_DEBUG', 0 );
