@@ -74,6 +74,7 @@ define RUN_TESTS
 	  -e DB_HOST=$$DB_HOST_REAL \
 	  -e DB_USER=$(DB_USER) \
 	  -e DB_PASS=$(DB_PASS) \
+	  -e DB_HOST_REAL=$$DB_HOST_REAL \
 	  -v $(SRC_PLUGIN):/src-plugin $(1) \
 	  bash -c 'set -euo pipefail; \
 	    echo "[Step 0] Priming DNS resolver..."; \
