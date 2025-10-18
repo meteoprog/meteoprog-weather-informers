@@ -262,7 +262,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  # 📊 Job summary for overall CI
   summary:
     name: 📊 CI Summary
     runs-on: ubuntu-latest
@@ -272,6 +271,29 @@ jobs:
       - name: 🧾 Generate summary
         run: |
           echo "## ✅ CI Summary" >> $GITHUB_STEP_SUMMARY
-          echo "- PHP matrix: 5.6 / 7.4 / 8.1 / 8.3 / 8.4" >> $GITHUB_STEP_SUMMARY
-          echo "- WordPress versions: 4.9 / 5.8 / 6.8.3" >> $GITHUB_STEP_SUMMARY
-          echo "- All builds passed successfully 🎉" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Plugin:** Meteoprog Weather Informers" >> $GITHUB_STEP_SUMMARY
+          echo "**PHP versions:** 5.6 / 7.4 / 8.1 / 8.3 / 8.4" >> $GITHUB_STEP_SUMMARY
+          echo "**WordPress versions:** 4.9 / 5.8 / 6.8.3" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ needs.tests.result }}" = "success" ]; then
+            echo "🧪 Tests: all passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "🧪 Tests: ❌ failed" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "${{ needs.phpcs.result }}" = "success" ]; then
+            echo "🧹 WPCS: no violations" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "🧹 WPCS: ❌ style issues detected" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "${{ needs.nightly.result }}" = "success" ]; then
+            echo "🌙 Nightly builds: ✅ success (non-blocking)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "🌙 Nightly builds: ⚠️ failed (non-blocking)" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🎉 CI completed on \`$(date -u '+%Y-%m-%d %H:%M UTC')\`" >> $GITHUB_STEP_SUMMARY
