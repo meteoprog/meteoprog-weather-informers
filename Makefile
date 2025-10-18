@@ -82,8 +82,13 @@ define RUN_TESTS
 	      echo "ERROR: DNS resolution failed"; exit 1; fi; \
 	    WP_PATH="/tmp/wordpress-$${WP_VERSION}"; \
 	    DB_NAME="$${TEST_DB_NAME}"; \
-	    echo "[Step 1] Download WordPress $${WP_VERSION}"; \
-	    php -d memory_limit=-1 /usr/local/bin/wp core download --path="$$WP_PATH" --version="$${WP_VERSION}" --allow-root; \
+	    echo "[Step 1.0] Waiting for database connection..."; \
+	    for i in $$(seq 1 30); do \
+	      if mysqladmin ping -h$$DB_HOST_REAL -p$(DB_PASS) --silent >/dev/null 2>&1; then \
+	        echo "[OK] Database is ready"; break; \
+	      fi; \
+	      echo "[Wait $$i/30] MariaDB not ready yet..."; sleep 2; \
+	    done; \
 	    echo "[Step 1.1] Drop test database $$DB_NAME"; \
 	    mysql --user=$(DB_USER) --password=$(DB_PASS) --host=$$DB_HOST_REAL -e "DROP DATABASE IF EXISTS $$DB_NAME;"; \
 	    echo "[Step 1.2] Create database $$DB_NAME"; \
