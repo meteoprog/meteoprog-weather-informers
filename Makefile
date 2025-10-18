@@ -49,23 +49,33 @@ build-php83:
 # ------------------------------
 
 define RUN_TESTS
-	@if docker network inspect wordpress_proxy >/dev/null 2>&1; then \
-	  NETWORK_OPT="--network wordpress_proxy"; \
+	# Determine Docker network based on environment
+	@if [ "$$CI" = "true" ]; then \
+	  echo "[CI detected] Using --network host"; \
+	  NETWORK_OPT="--network host"; \
 	else \
-	  NETWORK_OPT=""; \
+	  if docker network inspect wordpress_proxy >/dev/null 2>&1; then \
+	    echo "[Local] Using network wordpress_proxy"; \
+	    NETWORK_OPT="--network wordpress_proxy"; \
+	  else \
+	    echo "[Local] No network found, running isolated"; \
+	    NETWORK_OPT=""; \
+	  fi; \
 	fi; \
 	docker run --rm $$NETWORK_OPT \
 	  -u $(UID):$(GID) \
-	  -e METEOPROG_DEBUG=$(METEOPROG_DEBUG) -e METEOPROG_DEBUG_API_KEY=$(METEOPROG_DEBUG_API_KEY) \
+	  -e METEOPROG_DEBUG=$(METEOPROG_DEBUG) \
+	  -e METEOPROG_DEBUG_API_KEY=$(METEOPROG_DEBUG_API_KEY) \
 	  -e WP_VERSION=$(2) \
 	  -e TEST_DB_NAME=$(DB_NAME)_$(subst .,_,$(2)) \
+	  -e DB_HOST=$(DB_HOST) \
+	  -e DB_USER=$(DB_USER) \
+	  -e DB_PASS=$(DB_PASS) \
 	  -v $(SRC_PLUGIN):/src-plugin $(1) \
 	  bash -c 'set -euo pipefail; \
 	    echo "[Step 0] Priming DNS resolver (Alpine DNS bug workaround)..."; \
 	    if ! nslookup wordpress.org > /dev/null 2>&1; then \
-	      echo "ERROR: DNS resolution failed (Alpine bug)"; \
-	      exit 1; \
-	    fi; \
+	      echo "ERROR: DNS resolution failed (Alpine bug)"; exit 1; fi; \
 	    WP_PATH="/tmp/wordpress-$${WP_VERSION}"; \
 	    DB_NAME="$${TEST_DB_NAME}"; \
 	    echo "[Step 1] Download WordPress $${WP_VERSION} into $$WP_PATH"; \
@@ -96,7 +106,7 @@ define RUN_TESTS
 	    echo -e "y\n" | bash bin/install-wp-tests.sh $$DB_NAME $(DB_USER) $(DB_PASS) $(DB_HOST) $${WP_VERSION}; \
 	    echo "[Step 8] Run PHPUnit"; \
 	    phpunit --bootstrap tests/bootstrap-extra.php --configuration phpunit.xml.dist; \
-	    echo "[Step 10] Done";' 
+	    echo "[Step 10] Done";'
 endef
 
 
