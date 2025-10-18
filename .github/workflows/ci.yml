@@ -85,6 +85,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
+          driver: docker-container
           driver-opts: image=moby/buildkit:latest
 
       # Cache Composer dependencies (if used in Makefile)
@@ -189,6 +190,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
+          driver: docker-container
           driver-opts: image=moby/buildkit:latest
 
       - name: Wait for DB ready
