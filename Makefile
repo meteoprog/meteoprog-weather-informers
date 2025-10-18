@@ -90,10 +90,18 @@ define RUN_TESTS
 	# Always use the same isolated Docker network for DB + tests
 	echo "[Network] Using isolated network $(DB_NETWORK)"; \
 	NETWORK_OPT="--network $(DB_NETWORK)"; \
-	DB_HOST_REAL="$(DB_CONTAINER_NAME)"; \
+	if [ "$$GITHUB_ACTIONS" = "true" ]; then \
+	  DB_HOST_REAL="host.docker.internal"; \
+	  ADD_HOST_OPT="--add-host=host.docker.internal:host-gateway"; \
+	  echo "[CI] Detected GitHub Actions, using DB host: $$DB_HOST_REAL"; \
+	else \
+	  DB_HOST_REAL="$(DB_CONTAINER_NAME)"; \
+	  ADD_HOST_OPT=""; \
+	  echo "[Local] Using local DB container: $$DB_HOST_REAL"; \
+	fi; \
 	RUN_ID=$$(date +%s%N | sha1sum | cut -c1-6); \
 	echo "[Run] WP=$(2) RUN_ID=$$RUN_ID"; \
-	docker run --rm $$NETWORK_OPT \
+	docker run --rm $$NETWORK_OPT $$ADD_HOST_OPT \
 	  -u $(UID):$(GID) \
 	  -e METEOPROG_DEBUG=$(METEOPROG_DEBUG) \
 	  -e METEOPROG_DEBUG_API_KEY=$(METEOPROG_DEBUG_API_KEY) \
