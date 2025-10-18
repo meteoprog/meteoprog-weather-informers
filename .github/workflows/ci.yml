@@ -60,7 +60,7 @@ jobs:
           - { php: "7.4", wp: "5.8",   target: "php74-wp58" }
           - { php: "8.1", wp: "6.8.3", target: "php81-wp683" }
           - { php: "8.3", wp: "6.8.3", target: "php83-wp683" }
-          - { php: "8.4", wp: "6.8.3", target: "php84-wp683" } 
+          - { php: "8.4", wp: "6.8.3", target: "php84-wp683" }
 
     env:
       DB_HOST: 127.0.0.1
@@ -71,18 +71,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Enable Buildx and cache layers for Docker builds
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Cache Docker layers
+      # Restore BuildKit cache
+      - name: Restore Docker layer cache
         uses: actions/cache@v4
         with:
           path: /tmp/.buildx-cache
-          key: buildx-${{ matrix.php }}-${{ github.ref }}
+          key: buildx-${{ matrix.php }}-${{ github.sha }}
           restore-keys: |
             buildx-${{ matrix.php }}-
             buildx-
+
+      # Enable Buildx with BuildKit image
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver-opts: image=moby/buildkit:latest
 
       # Cache Composer dependencies (if used in Makefile)
       - name: Cache Composer packages
@@ -133,6 +136,7 @@ jobs:
 
       - name: Run PHPCS check
         run: make phpcs-check
+
       - uses: actions/upload-artifact@v4
         with:
           name: phpcs-report
@@ -146,6 +150,13 @@ jobs:
     needs: i18n
     continue-on-error: true
     if: ${{ github.event_name != 'pull_request' }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { php: "8.3", target: "php83-nightly" }
+          - { php: "8.4", target: "php84-nightly" }
 
     services:
       db:
@@ -163,14 +174,22 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: docker/setup-buildx-action@v3
 
-      - name: Cache Docker layers
+      # Restore BuildKit cache
+      - name: Restore Docker layer cache
         uses: actions/cache@v4
         with:
           path: /tmp/.buildx-cache
-          key: nightly-${{ github.ref }}
-          restore-keys: nightly-
+          key: buildx-${{ matrix.php }}-${{ github.sha }}
+          restore-keys: |
+            buildx-${{ matrix.php }}-
+            buildx-
+
+      # Enable Buildx with BuildKit image
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver-opts: image=moby/buildkit:latest
 
       - name: Wait for DB ready
         run: |
@@ -179,17 +198,22 @@ jobs:
             sleep 2
           done
 
-      - name: Build Docker image PHP 8.3
-        run: make build-php83
+      # Prepare PHP version digits for Dockerfile selection (e.g., 8.3 -> 83)
+      - name: Prepare PHP version string
+        run: echo "PHP_VER=$(echo '${{ matrix.php }}' | tr -d '.')" >> $GITHUB_ENV
 
-      - name: Run Nightly tests (PHP 8.3)
-        run: make php83-nightly
+      # Build image with the same cache strategy as in "tests"
+      - name: Build Docker image PHP ${{ matrix.php }}
+        run: |
+          docker build \
+            --cache-from type=local,src=/tmp/.buildx-cache \
+            --cache-to type=local,dest=/tmp/.buildx-cache-new,mode=max \
+            -f docker/Dockerfile.php${{ env.PHP_VER }} \
+            -t custom-php${{ env.PHP_VER }} .
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
-      - name: Build Docker image PHP 8.4
-        run: make build-php84
-
-      - name: Run Nightly tests (PHP 8.4)
-        run: make php84-nightly
+      - name: Run Nightly tests (PHP ${{ matrix.php }})
+        run: make ${{ matrix.target }}
 
   # 5️⃣ Release build (triggered by tag v*)
   release:
@@ -200,6 +224,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      # Optional cache for Composer (if used during packaging)
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache
+          key: composer-${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: composer-
 
       - name: Regenerate POT file
         run: make i18n-pot
