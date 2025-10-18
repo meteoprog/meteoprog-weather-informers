@@ -302,28 +302,17 @@ phpcs-fix: build-php83
 plugin-check: build-php83
 	docker run --rm \
 		--network $(DB_NETWORK) \
-		--add-host=host.docker.internal:host-gateway \
 		-u $(UID):$(GID) \
 		-e DB_USER=$(DB_USER) \
 		-e DB_PASS=$(DB_PASS) \
 		-e DB_NAME=$(DB_NAME)_plugincheck \
-		-e GITHUB_ACTIONS=$$GITHUB_ACTIONS \
 		--dns=8.8.8.8 --dns=1.1.1.1 \
 		-v $(SRC_PLUGIN):/src-plugin -w /src-plugin $(IMAGE_PHP83) \
 		bash -lc 'set -euo pipefail; \
-			echo "[Network] Using isolated network $(DB_NETWORK)"; \
-			if [ "$${GITHUB_ACTIONS:-}" = "true" ]; then \
-				DB_HOST_REAL="host.docker.internal"; \
-				ADD_HOST_OPT="--add-host=host.docker.internal:host-gateway"; \
-				echo "[CI] Detected GitHub Actions, using DB host: $$DB_HOST_REAL"; \
-			else \
-				DB_HOST_REAL="$(DB_CONTAINER_NAME)"; \
-				ADD_HOST_OPT=""; \
-				echo "[Local] Using local DB container: $$DB_HOST_REAL"; \
-			fi; \
+			DB_HOST_REAL="$(DB_CONTAINER_NAME)"; \
+			echo "[DB] Using database host: $$DB_HOST_REAL"; \
 			echo "[Step 0] Priming DNS resolver..."; \
-			if ! getent hosts wordpress.org > /dev/null 2>&1; then \
-				echo "ERROR: DNS resolution failed"; exit 1; fi; \
+			getent hosts $$DB_HOST_REAL || { echo "ERROR: DB host not found in Docker network"; exit 1; }; \
 			WP_PATH="/tmp/wp-check"; \
 			DB_NAME="$${DB_NAME:-wordpress_plugincheck}"; \
 			echo "[WP] Downloading WordPress 6.8..."; \
@@ -331,7 +320,7 @@ plugin-check: build-php83
 			php -d memory_limit=-1 /usr/local/bin/wp core download \
 				--path="$$WP_PATH" --version=6.8 --allow-root; \
 			echo "[DB] Preparing database $$DB_NAME ..."; \
-			mysql --user=$(DB_USER) --password=$(DB_PASS) --host=$$DB_HOST_REAL \
+			mariadb --user=$(DB_USER) --password=$(DB_PASS) --host=$$DB_HOST_REAL \
 				-e "DROP DATABASE IF EXISTS $$DB_NAME; CREATE DATABASE $$DB_NAME CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"; \
 			echo "[WP] Creating wp-config.php ..."; \
 			wp config create --path="$$WP_PATH" \
@@ -353,7 +342,7 @@ plugin-check: build-php83
 			echo "[RUN] Executing Plugin Check ..."; \
 			php -d memory_limit=-1 /usr/local/bin/wp plugin check meteoprog-weather-informers --allow-root || true; \
 			echo "[CLEANUP] Dropping test DB $$DB_NAME ..."; \
-			mysql --user=$(DB_USER) --password=$(DB_PASS) --host=$$DB_HOST_REAL \
+			mariadb --user=$(DB_USER) --password=$(DB_PASS) --host=$$DB_HOST_REAL \
 				-e "DROP DATABASE IF EXISTS $$DB_NAME;"; \
 			rm -rf "$$WP_PATH"'
 

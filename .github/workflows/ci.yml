@@ -181,13 +181,14 @@ jobs:
 
       - id: check
         name: 🧩 Run Plugin Check (WP.org rules)
+        shell: bash
         run: |
           echo "::group::🧩 Plugin Check (isolated DB)"
           set -o pipefail
           make test-plugin-check | tee plugin-check.log
-          STATUS=${PIPESTATUS[0]}
+          EXIT_CODE=${PIPESTATUS[0]}
+          echo "status=$EXIT_CODE" >> $GITHUB_OUTPUT
           echo "::endgroup::"
-          echo "status=$STATUS" >> $GITHUB_OUTPUT
 
       - name: 📦 Upload Plugin Check log
         uses: actions/upload-artifact@v4
