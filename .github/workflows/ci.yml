@@ -17,7 +17,7 @@ env:
   DOCKER_BUILDKIT: 1
 
 jobs:
-  # 1️⃣ POT file
+  # 1️⃣ POT file — генерируем языковой шаблон
   i18n:
     name: 🌐 Generate POT
     runs-on: ubuntu-latest
@@ -29,7 +29,7 @@ jobs:
           name: pot-file
           path: languages/*.pot
 
-  # 2️⃣ Tests matrix with DB
+  # 2️⃣ Основные тесты PHP + WordPress
   tests:
     name: ✅ Tests Matrix
     runs-on: ubuntu-latest
@@ -54,9 +54,9 @@ jobs:
       matrix:
         include:
           - { php: "5.6", wp: "4.9",   target: "php56-wp49" }
-          # - { php: "7.4", wp: "5.8",   target: "php74-wp58" }
-          # - { php: "8.1", wp: "6.8.3", target: "php81-wp683" }
-          # - { php: "8.3", wp: "6.8.3", target: "php83-wp683" }
+          - { php: "7.4", wp: "5.8",   target: "php74-wp58" }
+          - { php: "8.1", wp: "6.8.3", target: "php81-wp683" }
+          - { php: "8.3", wp: "6.8.3", target: "php83-wp683" }
 
     env:
       DB_HOST: 127.0.0.1
@@ -84,7 +84,16 @@ jobs:
       - name: Run tests (WP ${{ matrix.wp }})
         run: make ${{ matrix.target }}
 
-  # 3️⃣ Nightly (optional, non-blocking)
+  # 3️⃣ Проверка стандарта кода (WordPress Coding Standards)
+  phpcs:
+    name: 🧹 PHPCS (WordPress Coding Standards)
+    runs-on: ubuntu-latest
+    needs: i18n
+    steps:
+      - uses: actions/checkout@v4
+      - run: make phpcs-check
+
+  # 4️⃣ Nightly build — не блокирует пайплайн
   nightly:
     name: 🌙 PHP 8.3 Nightly (Optional)
     runs-on: ubuntu-latest
@@ -122,20 +131,11 @@ jobs:
       - name: Run Nightly tests
         run: make php83-nightly
 
-  # 4️⃣ PHPCS
-  phpcs:
-    name: 🧹 PHPCS
-    runs-on: ubuntu-latest
-    needs: i18n
-    steps:
-      - uses: actions/checkout@v4
-      - run: make phpcs-check
-
-  # 5️⃣ Release (build ZIP and attach to GitHub Release)
+  # 5️⃣ Сборка релиза (по тегу v*)
   release:
-    name: 🚀 Build Release ZIP
+    name: 🚀 Build & Publish Release ZIP
     runs-on: ubuntu-latest
-    needs: [tests]
+    needs: [tests, phpcs]
     if: startsWith(github.ref, 'refs/tags/v') && success()
 
     steps:

@@ -395,7 +395,7 @@ class FrontendTest extends WP_Compat_TestCase {
         $expected_json = json_encode([
             'url'     => 'https://example.com/custom-loader.js',
             'version' => '9.9.9',
-        ]);
+        ], JSON_UNESCAPED_SLASHES);
 
         $this->assertStringContainsString(
             $expected_json,
