@@ -89,8 +89,12 @@ class ShortcodesUltimateIntegrationTest extends WP_Compat_TestCase {
      * Test that shortcode calls build_html() on frontend.
      */
     public function test_shortcode_renders_frontend() {
+        // Switch context to frontend
+        set_current_screen('front');
+
         $output = do_shortcode('[su_meteoprog_informer id="abc123"]');
-        $this->assertStringContainsString('Meteoprog Weather Informer', $output);
+
+        $this->assertStringContainsString('<div>Informer HTML</div>', $output);
     }
 
     /**

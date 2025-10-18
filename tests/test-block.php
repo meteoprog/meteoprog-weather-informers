@@ -97,7 +97,7 @@ class BlockTest extends WP_Compat_TestCase {
         // Mocks for frontend and API layers.
         $this->frontend = $this->getMockBuilder(Meteoprog_Informers_Frontend::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['enqueue_loader', 'build_html'])
+            ->setMethods(['enqueue_loader', 'build_html'])
             ->getMock();
 
 
