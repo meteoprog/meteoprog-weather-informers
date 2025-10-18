@@ -265,25 +265,100 @@ phpcs-check: build-php83
 		-v $(SRC_PLUGIN):/src-plugin -w /src-plugin $(IMAGE_PHP83) \
 		bash -lc 'set -euo pipefail; \
 			composer global config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true; \
-			composer global require dealerdirect/phpcodesniffer-composer-installer:^1.0 \
+			composer global require \
+				dealerdirect/phpcodesniffer-composer-installer:^1.0 \
 				wp-coding-standards/wpcs:^3.0 \
 				phpcompatibility/phpcompatibility-wp:^2.1; \
-			~/.composer/vendor/bin/phpcs --standard=WordPress \
+			echo "[PHPCS] Running WPCS + PHPCompatibility checks..."; \
+			~/.composer/vendor/bin/phpcs \
+				--standard=WordPress-Extra,WordPress-Docs,PHPCompatibilityWP \
+				--runtime-set testVersion 5.6-8.4 \
 				--extensions=php \
-				--ignore=node_modules,vendor,tests,bin,assets/test .'
-
+				--ignore=node_modules,vendor,tests,bin,assets/test . \
+				--report-summary --report-full'
+	
 phpcs-fix: build-php83
 	docker run --rm -u $(UID):$(GID) \
 		-v $(SRC_PLUGIN):/src-plugin -w /src-plugin $(IMAGE_PHP83) \
 		bash -lc 'set -euo pipefail; \
 			composer global config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true; \
-			composer global require dealerdirect/phpcodesniffer-composer-installer:^1.0 \
+			composer global require \
+				dealerdirect/phpcodesniffer-composer-installer:^1.0 \
 				wp-coding-standards/wpcs:^3.0 \
 				phpcompatibility/phpcompatibility-wp:^2.1; \
-			~/.composer/vendor/bin/phpcbf --standard=WordPress \
+			echo "[PHPCBF] Auto-fixing code style issues..."; \
+			~/.composer/vendor/bin/phpcbf \
+				--standard=WordPress-Extra,WordPress-Docs \
 				--extensions=php \
-				--ignore=node_modules,vendor,tests,bin,assets/test .'
-				
+				--ignore=node_modules,vendor,tests,bin,assets/test .'		
+
+
+# -------------------------------------
+# Plugin Check (WordPress.org rules)
+# -------------------------------------
+# Checks compliance with official WordPress.org plugin review guidelines.
+# Requires WordPress >=6.8 with `plugin-check` command installed.
+# -------------------------------------
+plugin-check: build-php83
+	docker run --rm \
+		--network $(DB_NETWORK) \
+		-u $(UID):$(GID) \
+		-e DB_USER=$(DB_USER) \
+		-e DB_PASS=$(DB_PASS) \
+		-e DB_NAME=$(DB_NAME)_plugincheck \
+		-e GITHUB_ACTIONS=$$GITHUB_ACTIONS \
+		--dns=8.8.8.8 --dns=1.1.1.1 \
+		-v $(SRC_PLUGIN):/src-plugin -w /src-plugin $(IMAGE_PHP83) \
+		bash -lc 'set -euo pipefail; \
+			echo "[Network] Using isolated network $(DB_NETWORK)"; \
+			if [ "$${GITHUB_ACTIONS:-}" = "true" ]; then \
+				DB_HOST_REAL="host.docker.internal"; \
+				ADD_HOST_OPT="--add-host=host.docker.internal:host-gateway"; \
+				echo "[CI] Detected GitHub Actions, using DB host: $$DB_HOST_REAL"; \
+			else \
+				DB_HOST_REAL="$(DB_CONTAINER_NAME)"; \
+				ADD_HOST_OPT=""; \
+				echo "[Local] Using local DB container: $$DB_HOST_REAL"; \
+			fi; \
+			echo "[Step 0] Priming DNS resolver..."; \
+			if ! getent hosts wordpress.org > /dev/null 2>&1; then \
+				echo "ERROR: DNS resolution failed"; exit 1; fi; \
+			WP_PATH="/tmp/wp-check"; \
+			DB_NAME="$${DB_NAME:-wordpress_plugincheck}"; \
+			echo "[WP] Downloading WordPress 6.8..."; \
+			mkdir -p "$$WP_PATH"; \
+			php -d memory_limit=-1 /usr/local/bin/wp core download \
+				--path="$$WP_PATH" --version=6.8 --allow-root; \
+			echo "[DB] Preparing database $$DB_NAME ..."; \
+			mysql --user=$(DB_USER) --password=$(DB_PASS) --host=$$DB_HOST_REAL \
+				-e "DROP DATABASE IF EXISTS $$DB_NAME; CREATE DATABASE $$DB_NAME CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"; \
+			echo "[WP] Creating wp-config.php ..."; \
+			wp config create --path="$$WP_PATH" \
+				--dbname="$$DB_NAME" --dbuser=$(DB_USER) --dbpass=$(DB_PASS) --dbhost=$$DB_HOST_REAL \
+				--skip-check --force --allow-root; \
+			echo "[WP] Installing WordPress ..."; \
+			wp core install --path="$$WP_PATH" \
+				--url=http://localhost --title="PluginCheck" \
+				--admin_user=admin --admin_password=admin --admin_email=admin@example.com \
+				--skip-email --allow-root; \
+			echo "[COPY] Copying plugin ..."; \
+			cp -r /src-plugin "$$WP_PATH/wp-content/plugins/meteoprog-weather-informers"; \
+			cd "$$WP_PATH/wp-content/plugins/meteoprog-weather-informers"; \
+			echo "{\"exclude\": [\"tests\", \"bin\", \"docker\", \"dist\", \"node_modules\", \"vendor\", \".github\", \"assets/test\"]}" > plugin-check.json; \
+			if ! wp help plugin check >/dev/null 2>&1; then \
+				echo "[INSTALL] Installing Plugin Check plugin..."; \
+				wp plugin install plugin-check --activate --allow-root; \
+			fi; \
+			echo "[RUN] Executing Plugin Check ..."; \
+			php -d memory_limit=-1 /usr/local/bin/wp plugin check meteoprog-weather-informers --allow-root || true; \
+			echo "[CLEANUP] Dropping test DB $$DB_NAME ..."; \
+			mysql --user=$(DB_USER) --password=$(DB_PASS) --host=$$DB_HOST_REAL \
+				-e "DROP DATABASE IF EXISTS $$DB_NAME;"; \
+			rm -rf "$$WP_PATH"'
+
+test-plugin-check: start-db plugin-check stop-db
+	@echo "[TEST PLUGIN CHECK] ✅ Completed full plugin check with isolated DB."
+								
 # -------------------------------------
 # Run all test suites in parallel
 # -------------------------------------
