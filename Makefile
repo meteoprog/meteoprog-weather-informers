@@ -49,7 +49,7 @@ build-php83:
 # ------------------------------
 
 define RUN_TESTS
-	docker run --rm -it --network wordpress_proxy \
+	docker run --rm --network wordpress_proxy \
 	  -u $(UID):$(GID) \
 	  -e METEOPROG_DEBUG=$(METEOPROG_DEBUG) -e METEOPROG_DEBUG_API_KEY=$(METEOPROG_DEBUG_API_KEY) \
 	  -e WP_VERSION=$(2) \

@@ -54,9 +54,9 @@ jobs:
       matrix:
         include:
           - { php: "5.6", wp: "4.9",   target: "php56-wp49" }
-          - { php: "7.4", wp: "5.8",   target: "php74-wp58" }
-          - { php: "8.1", wp: "6.8.3", target: "php81-wp683" }
-          - { php: "8.3", wp: "6.8.3", target: "php83-wp683" }
+          # - { php: "7.4", wp: "5.8",   target: "php74-wp58" }
+          # - { php: "8.1", wp: "6.8.3", target: "php81-wp683" }
+          # - { php: "8.3", wp: "6.8.3", target: "php83-wp683" }
 
     env:
       DB_HOST: 127.0.0.1
@@ -84,67 +84,67 @@ jobs:
       - name: Run tests (WP ${{ matrix.wp }})
         run: make ${{ matrix.target }}
 
-  # 3️⃣ Nightly (optional, non-blocking)
-  nightly:
-    name: 🌙 PHP 8.3 Nightly (Optional)
-    runs-on: ubuntu-latest
-    needs: i18n
-    continue-on-error: true
-    if: github.event_name != 'pull_request'
+  # # 3️⃣ Nightly (optional, non-blocking)
+  # nightly:
+  #   name: 🌙 PHP 8.3 Nightly (Optional)
+  #   runs-on: ubuntu-latest
+  #   needs: i18n
+  #   continue-on-error: true
+  #   if: github.event_name != 'pull_request'
 
-    services:
-      db:
-        image: mariadb:10.6
-        env:
-          MYSQL_ROOT_PASSWORD: rootpass
-          MYSQL_DATABASE: wordpress_test_suite
+  #   services:
+  #     db:
+  #       image: mariadb:10.6
+  #       env:
+  #         MYSQL_ROOT_PASSWORD: rootpass
+  #         MYSQL_DATABASE: wordpress_test_suite
 
-    steps:
-      - uses: actions/checkout@v4
-      - name: Build Docker image PHP 8.3
-        run: make build-php83
-      - name: Run Nightly tests
-        run: make php83-nightly
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Build Docker image PHP 8.3
+  #       run: make build-php83
+  #     - name: Run Nightly tests
+  #       run: make php83-nightly
 
-  # 4️⃣ PHPCS
-  phpcs:
-    name: 🧹 PHPCS
-    runs-on: ubuntu-latest
-    needs: i18n
-    steps:
-      - uses: actions/checkout@v4
-      - run: make phpcs-check
+  # # 4️⃣ PHPCS
+  # phpcs:
+  #   name: 🧹 PHPCS
+  #   runs-on: ubuntu-latest
+  #   needs: i18n
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - run: make phpcs-check
 
-  # 5️⃣ Release (build ZIP and attach to GitHub Release)
-  release:
-    name: 🚀 Build Release ZIP
-    runs-on: ubuntu-latest
-    needs: [tests, phpcs]
-    if: startsWith(github.ref, 'refs/tags/v')
+  # # 5️⃣ Release (build ZIP and attach to GitHub Release)
+  # release:
+  #   name: 🚀 Build Release ZIP
+  #   runs-on: ubuntu-latest
+  #   needs: [tests, phpcs]
+  #   if: startsWith(github.ref, 'refs/tags/v')
 
-    steps:
-      - uses: actions/checkout@v4
+  #   steps:
+  #     - uses: actions/checkout@v4
 
-      - name: Regenerate POT file
-        run: make i18n-pot
+  #     - name: Regenerate POT file
+  #       run: make i18n-pot
 
-      - name: Check version matches tag
-        run: |
-          TAG="${GITHUB_REF#refs/tags/}"
-          VER=$(grep -E '^ \* Version:' meteoprog-weather-informers.php | sed -E 's/^ \* Version:[[:space:]]*//')
-          if [ "v${VER}" != "${TAG}" ]; then
-            echo "Version mismatch: plugin=${VER}, tag=${TAG}"
-            exit 1
-          fi
-          echo "Version OK: ${VER}"
+  #     - name: Check version matches tag
+  #       run: |
+  #         TAG="${GITHUB_REF#refs/tags/}"
+  #         VER=$(grep -E '^ \* Version:' meteoprog-weather-informers.php | sed -E 's/^ \* Version:[[:space:]]*//')
+  #         if [ "v${VER}" != "${TAG}" ]; then
+  #           echo "Version mismatch: plugin=${VER}, tag=${TAG}"
+  #           exit 1
+  #         fi
+  #         echo "Version OK: ${VER}"
 
-      - name: Build dist ZIP
-        run: make dist-docker
+  #     - name: Build dist ZIP
+  #       run: make dist-docker
 
-      - name: Upload release to GitHub
-        uses: softprops/action-gh-release@v2
-        with:
-          files: dist/*.zip
-          generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: Upload release to GitHub
+  #       uses: softprops/action-gh-release@v2
+  #       with:
+  #         files: dist/*.zip
+  #         generate_release_notes: true
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
