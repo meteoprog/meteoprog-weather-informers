@@ -49,17 +49,20 @@ build-php83:
 # ------------------------------
 
 define RUN_TESTS
-	# Determine Docker network based on environment
+	# Determine Docker network and DB host based on environment
 	@if [ "$$CI" = "true" ]; then \
 	  echo "[CI detected] Using --network host"; \
 	  NETWORK_OPT="--network host"; \
+	  DB_HOST_REAL="127.0.0.1"; \
 	else \
 	  if docker network inspect wordpress_proxy >/dev/null 2>&1; then \
 	    echo "[Local] Using network wordpress_proxy"; \
 	    NETWORK_OPT="--network wordpress_proxy"; \
+	    DB_HOST_REAL="$(DB_HOST)"; \
 	  else \
 	    echo "[Local] No network found, running isolated"; \
 	    NETWORK_OPT=""; \
+	    DB_HOST_REAL="$(DB_HOST)"; \
 	  fi; \
 	fi; \
 	docker run --rm $$NETWORK_OPT \
@@ -68,25 +71,25 @@ define RUN_TESTS
 	  -e METEOPROG_DEBUG_API_KEY=$(METEOPROG_DEBUG_API_KEY) \
 	  -e WP_VERSION=$(2) \
 	  -e TEST_DB_NAME=$(DB_NAME)_$(subst .,_,$(2)) \
-	  -e DB_HOST=$(DB_HOST) \
+	  -e DB_HOST=$$DB_HOST_REAL \
 	  -e DB_USER=$(DB_USER) \
 	  -e DB_PASS=$(DB_PASS) \
 	  -v $(SRC_PLUGIN):/src-plugin $(1) \
 	  bash -c 'set -euo pipefail; \
-	    echo "[Step 0] Priming DNS resolver (Alpine DNS bug workaround)..."; \
+	    echo "[Step 0] Priming DNS resolver..."; \
 	    if ! nslookup wordpress.org > /dev/null 2>&1; then \
-	      echo "ERROR: DNS resolution failed (Alpine bug)"; exit 1; fi; \
+	      echo "ERROR: DNS resolution failed"; exit 1; fi; \
 	    WP_PATH="/tmp/wordpress-$${WP_VERSION}"; \
 	    DB_NAME="$${TEST_DB_NAME}"; \
-	    echo "[Step 1] Download WordPress $${WP_VERSION} into $$WP_PATH"; \
+	    echo "[Step 1] Download WordPress $${WP_VERSION}"; \
 	    php -d memory_limit=-1 /usr/local/bin/wp core download --path="$$WP_PATH" --version="$${WP_VERSION}" --allow-root; \
 	    echo "[Step 1.1] Drop test database $$DB_NAME"; \
-	    mysql --user=$(DB_USER) --password=$(DB_PASS) --host=$(DB_HOST) -e "DROP DATABASE IF EXISTS $$DB_NAME;"; \
-	    echo "[Step 1.2] Create database $$DB_NAME if not exists"; \
-	    mysql --user=$(DB_USER) --password=$(DB_PASS) --host=$(DB_HOST) -e "CREATE DATABASE IF NOT EXISTS $$DB_NAME CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"; \
+	    mysql --user=$(DB_USER) --password=$(DB_PASS) --host=$$DB_HOST_REAL -e "DROP DATABASE IF EXISTS $$DB_NAME;"; \
+	    echo "[Step 1.2] Create database $$DB_NAME"; \
+	    mysql --user=$(DB_USER) --password=$(DB_PASS) --host=$$DB_HOST_REAL -e "CREATE DATABASE IF NOT EXISTS $$DB_NAME CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"; \
 	    echo "[Step 2] Create wp-config.php"; \
 	    wp config create --path="$$WP_PATH" \
-	      --dbname="$$DB_NAME" --dbuser=$(DB_USER) --dbpass=$(DB_PASS) --dbhost=$(DB_HOST) \
+	      --dbname="$$DB_NAME" --dbuser=$(DB_USER) --dbpass=$(DB_PASS) --dbhost=$$DB_HOST_REAL \
 	      --skip-check --force --allow-root; \
 	    echo "[Step 3] Install WordPress"; \
 	    wp core install --path="$$WP_PATH" \
@@ -103,12 +106,11 @@ define RUN_TESTS
 	    wp scaffold plugin-tests $(PLUGIN_NAME) \
 	      --path="$$WP_PATH" --dir="$$WP_PATH/wp-content/plugins/$(PLUGIN_NAME)" --force --allow-root; \
 	    echo "[Step 7] Install WordPress test suite"; \
-	    echo -e "y\n" | bash bin/install-wp-tests.sh $$DB_NAME $(DB_USER) $(DB_PASS) $(DB_HOST) $${WP_VERSION}; \
+	    echo -e "y\n" | bash bin/install-wp-tests.sh $$DB_NAME $(DB_USER) $(DB_PASS) $$DB_HOST_REAL $${WP_VERSION}; \
 	    echo "[Step 8] Run PHPUnit"; \
 	    phpunit --bootstrap tests/bootstrap-extra.php --configuration phpunit.xml.dist; \
 	    echo "[Step 10] Done";'
 endef
-
 
 
 # -------------------------------------
