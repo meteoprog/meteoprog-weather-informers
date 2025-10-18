@@ -74,8 +74,12 @@ jobs:
             sleep 2
           done
 
+      - name: Prepare PHP version string
+        id: vars
+        run: echo "PHP_VER=$(echo '${{ matrix.php }}' | tr -d '.')" >> $GITHUB_ENV
+
       - name: Build Docker image PHP ${{ matrix.php }}
-        run: make build-php${{ replace(matrix.php, '.', '') }}
+        run: make build-php${{ env.PHP_VER }}
 
       - name: Run tests (WP ${{ matrix.wp }})
         run: make ${{ matrix.target }}
