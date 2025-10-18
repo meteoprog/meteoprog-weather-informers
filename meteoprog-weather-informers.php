@@ -23,7 +23,7 @@
  * Technical Notes for Reviewers
  *
  * Compatibility:
- * - Fully compatible with PHP 5.6 – 8.3
+ * - Fully compatible with PHP 5.6 – 8.4
  * - Minimum WordPress version: 4.9
  * - Tested against WordPress 4.9, 5.8, 5.9, 6.2.2, 6.6.2, 6.7.3, 6.8.3, latest (key historical and current stable releases)
  *

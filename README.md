@@ -2,7 +2,7 @@
 
 [![CI/CD](https://github.com/meteoprog/meteoprog-weather-informers/actions/workflows/ci.yml/badge.svg)](https://github.com/meteoprog/meteoprog-weather-informers/actions)
 [![License: GPL v2 or later](https://img.shields.io/badge/License-GPLv2%2B-blue.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
-[![PHP](https://img.shields.io/badge/PHP-5.6%20--%208.3-777bb3.svg?logo=php)](https://www.php.net/)
+[![PHP](https://img.shields.io/badge/PHP-5.6%20--%208.4-777bb3.svg?logo=php)](https://www.php.net/)
 [![WordPress](https://img.shields.io/badge/WordPress-4.9%20--%206.8-blue.svg?logo=wordpress)](https://wordpress.org/)
 [![Dockerized](https://img.shields.io/badge/Docker-ready-blue.svg?logo=docker)](https://hub.docker.com/)
 [![Release](https://img.shields.io/github/v/release/meteoprog/meteoprog-weather-informers)](https://github.com/meteoprog/meteoprog-weather-informers/releases)
@@ -15,7 +15,7 @@ This repository contains the **Meteoprog Weather Widget** WordPress plugin. It p
 
 ## 🧩 Plugin Overview
 - **WordPress versions:** 4.9 → 6.8+
-- **PHP versions:** 5.6 → 8.3
+- **PHP versions:** 5.6 → 8.4
 - **Integrations:** Gutenberg, Elementor, Shortcodes Ultimate, WP-CLI, REST API
 - **Compatibility:** Works on classic and block widgets, async frontend loader, optimized for Core Web Vitals.
 - **API Requirement:** Requires a **free informer API key** from [billing.meteoprog.com/informer](https://billing.meteoprog.com/informer?utm_source=github&utm_medium=readme).
@@ -31,7 +31,7 @@ Widgets will not display without a valid key linked to your website domain.
 ├── includes/              # Core classes and integrations
 ├── views/                 # Admin UI templates and partials
 ├── tests/                 # PHPUnit test suite (WP_Compat_TestCase)
-├── docker/                # Dockerfiles for PHP 5.6–8.3
+├── docker/                # Dockerfiles for PHP 5.6–8.4
 ├── Makefile               # Test, lint, build, and dist automation
 ├── languages/             # POT template for GlotPress
 ├── readme.txt             # WordPress.org readme
@@ -49,11 +49,12 @@ All PHP × WordPress combinations are tested using Docker via the Makefile. The 
 | 5.6 | 4.9        |
 | 7.4 | 5.8 – 5.9  |
 | 8.1 | 6.2 – 6.8  |
-| 8.3 | 6.2 – nightly |
+| 8.3 | 6.2 – latest / nightly |
+| 8.4 | 6.8.3 – latest / nightly |
 
 Run tests locally:
 ```bash
-make php83-wp683
+make test-php83-wp683
 ```
 Run all test suites in parallel:
 ```bash

@@ -16,6 +16,7 @@ IMAGE_PHP56=custom-php56
 IMAGE_PHP74=custom-php74
 IMAGE_PHP81=custom-php81
 IMAGE_PHP83=custom-php83
+IMAGE_PHP84=custom-php84
 
 METEOPROG_DEBUG=1
 METEOPROG_DEBUG_API_KEY=
@@ -73,6 +74,10 @@ build-php81:
 
 build-php83:
 	DOCKER_BUILDKIT=1 docker build --network=host -f ./docker/Dockerfile.php83 -t $(IMAGE_PHP83) \
+	  --build-arg CACHEBUST=$(shell date +%s) --build-arg UID=$(UID) --build-arg GID=$(GID) .
+
+build-php84:
+	DOCKER_BUILDKIT=1 docker build --network=host -f ./docker/Dockerfile.php84 -t $(IMAGE_PHP84) \
 	  --build-arg CACHEBUST=$(shell date +%s) --build-arg UID=$(UID) --build-arg GID=$(GID) .
 
 # ------------------------------
@@ -190,24 +195,44 @@ php83-latest: build-php83
 php83-nightly: build-php83
 	$(call RUN_TESTS,$(IMAGE_PHP83),nightly,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
 
+# -------------------------------------
+# PHP 8.4 — Upcoming stable PHP support
+# -------------------------------------
+
+php84-wp683: build-php84
+	$(call RUN_TESTS,$(IMAGE_PHP84),6.8.3,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
+
+php84-latest: build-php84
+	$(call RUN_TESTS,$(IMAGE_PHP84),latest,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
+
+php84-nightly: build-php84
+	$(call RUN_TESTS,$(IMAGE_PHP84),nightly,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
 
 # -------------------------------------
 # Single test wrappers (auto DB lifecycle)
 # -------------------------------------
 test-php56-wp49: start-db php56-wp49 stop-db
+
 test-php74-wp58: start-db php74-wp58 stop-db
 test-php74-wp59: start-db php74-wp59 stop-db
+
 test-php81-wp62: start-db php81-wp62 stop-db
 test-php81-wp66: start-db php81-wp66 stop-db
 test-php81-wp673: start-db php81-wp673 stop-db
 test-php81-wp683: start-db php81-wp683 stop-db
 test-php81-latest: start-db php81-latest stop-db
+
 test-php83-wp62: start-db php83-wp62 stop-db
 test-php83-wp66: start-db php83-wp66 stop-db
 test-php83-wp673: start-db php83-wp673 stop-db
 test-php83-wp683: start-db php83-wp683 stop-db
 test-php83-latest: start-db php83-latest stop-db
 test-php83-nightly: start-db php83-nightly stop-db
+
+test-php84-wp683: start-db php84-wp683 stop-db
+test-php84-latest: start-db php84-latest stop-db
+test-php84-nightly: start-db php84-nightly stop-db
+
 
 # -------------------------------------
 # PHPCS / PHPCBF — Code style checks & auto-fixes
@@ -261,7 +286,7 @@ testall: start-db \
 	php56-wp49 \
 	php74-wp58 php74-wp59 \
 	php81-wp62 php81-wp66 php81-wp673 php81-wp683 php81-latest \
-	php83-wp62 php83-wp66 php83-wp673 php83-wp683 php83-latest php83-nightly \
+	php83-wp62 php83-wp66 php83-wp673 php83-wp683 php83-latest php83-nightly php84-latest php85-latest \
 	stop-db
 	@echo "All test suites have finished."
 

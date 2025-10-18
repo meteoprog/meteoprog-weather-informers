@@ -20,7 +20,7 @@ env:
   DOCKER_BUILDKIT: 1
 
 jobs:
-  # 1️⃣ POT file — генерируем языковой шаблон
+  # 1️⃣ Generate translation template (POT file)
   i18n:
     name: 🌐 Generate POT
     runs-on: ubuntu-latest
@@ -32,7 +32,7 @@ jobs:
           name: pot-file
           path: languages/*.pot
 
-  # 2️⃣ Основные тесты PHP + WordPress
+  # 2️⃣ Main PHP + WordPress tests
   tests:
     name: ✅ Tests Matrix
     runs-on: ubuntu-latest
@@ -47,7 +47,7 @@ jobs:
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping -h localhost -prootpass"
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -prootpass"
           --health-interval=5s
           --health-timeout=3s
           --health-retries=10
@@ -60,6 +60,7 @@ jobs:
           - { php: "7.4", wp: "5.8",   target: "php74-wp58" }
           - { php: "8.1", wp: "6.8.3", target: "php81-wp683" }
           - { php: "8.3", wp: "6.8.3", target: "php83-wp683" }
+          - { php: "8.4", wp: "6.8.3", target: "php84-wp683" } 
 
     env:
       DB_HOST: 127.0.0.1
@@ -70,9 +71,30 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Enable Buildx and cache layers for Docker builds
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Cache Docker layers
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-cache
+          key: buildx-${{ matrix.php }}-${{ github.ref }}
+          restore-keys: |
+            buildx-${{ matrix.php }}-
+            buildx-
+
+      # Cache Composer dependencies (if used in Makefile)
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache
+          key: composer-${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: composer-
+
       - name: Wait for DB ready
         run: |
-          for i in {1..30}; do
+          for i in $(seq 1 30); do
             mysqladmin ping -h 127.0.0.1 -prootpass > /dev/null 2>&1 && break
             sleep 2
           done
@@ -82,27 +104,48 @@ jobs:
         run: echo "PHP_VER=$(echo '${{ matrix.php }}' | tr -d '.')" >> $GITHUB_ENV
 
       - name: Build Docker image PHP ${{ matrix.php }}
-        run: make build-php${{ env.PHP_VER }}
+        run: |
+          docker build \
+            --cache-from type=local,src=/tmp/.buildx-cache \
+            --cache-to type=local,dest=/tmp/.buildx-cache-new,mode=max \
+            -f docker/Dockerfile.php${{ env.PHP_VER }} \
+            -t custom-php${{ env.PHP_VER }} .
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Run tests (WP ${{ matrix.wp }})
         run: make ${{ matrix.target }}
 
-  # 3️⃣ Проверка стандарта кода (WordPress Coding Standards)
+  # 3️⃣ Code style check (WordPress Coding Standards)
   phpcs:
     name: 🧹 PHPCS (WordPress Coding Standards)
     runs-on: ubuntu-latest
     needs: i18n
     steps:
       - uses: actions/checkout@v4
-      - run: make phpcs-check
 
-  # 4️⃣ Nightly build — не блокирует пайплайн
+      # Cache Composer dependencies for PHPCS
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache
+          key: composer-${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: composer-
+
+      - name: Run PHPCS check
+        run: make phpcs-check
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phpcs-report
+          path: phpcs-report.xml
+          if-no-files-found: ignore
+
+  # 4️⃣ Nightly builds — non-blocking optional job
   nightly:
-    name: 🌙 PHP 8.3 Nightly (Optional)
+    name: 🌙 PHP 8.3 / 8.4 Nightly (Optional)
     runs-on: ubuntu-latest
     needs: i18n
     continue-on-error: true
-    if: github.event_name != 'pull_request'
+    if: ${{ github.event_name != 'pull_request' }}
 
     services:
       db:
@@ -113,17 +156,25 @@ jobs:
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping -h localhost -prootpass"
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -prootpass"
           --health-interval=5s
           --health-timeout=3s
           --health-retries=10
 
     steps:
       - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Cache Docker layers
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-cache
+          key: nightly-${{ github.ref }}
+          restore-keys: nightly-
 
       - name: Wait for DB ready
         run: |
-          for i in {1..30}; do
+          for i in $(seq 1 30); do
             mysql -h 127.0.0.1 -uroot -prootpass -e "SELECT 1" >/dev/null 2>&1 && break
             sleep 2
           done
@@ -131,15 +182,21 @@ jobs:
       - name: Build Docker image PHP 8.3
         run: make build-php83
 
-      - name: Run Nightly tests
+      - name: Run Nightly tests (PHP 8.3)
         run: make php83-nightly
 
-  # 5️⃣ Сборка релиза (по тегу v*)
+      - name: Build Docker image PHP 8.4
+        run: make build-php84
+
+      - name: Run Nightly tests (PHP 8.4)
+        run: make php84-nightly
+
+  # 5️⃣ Release build (triggered by tag v*)
   release:
     name: 🚀 Build & Publish Release ZIP
     runs-on: ubuntu-latest
     needs: [tests, phpcs]
-    if: startsWith(github.ref, 'refs/tags/v') && success()
+    if: startsWith(github.ref, 'refs/tags/v')
 
     steps:
       - uses: actions/checkout@v4
@@ -149,13 +206,19 @@ jobs:
 
       - name: Check version matches tag
         run: |
+          set -e
+          [ ! -f meteoprog-weather-informers.php ] && { echo "::error::File meteoprog-weather-informers.php not found"; exit 1; }
           TAG="${GITHUB_REF#refs/tags/}"
-          VER=$(grep -E '^ \* Version:' meteoprog-weather-informers.php | sed -E 's/^ \* Version:[[:space:]]*//')
-          if [ "v${VER}" != "${TAG}" ]; then
-            echo "Version mismatch: plugin=${VER}, tag=${TAG}"
+          VER=$(grep -E '^\s*\* Version:' meteoprog-weather-informers.php | sed -E 's/^\s*\* Version:[[:space:]]*//')
+          if [ -z "$VER" ]; then
+            echo "::error::Version not found in plugin header"
             exit 1
           fi
-          echo "Version OK: ${VER}"
+          if [ "v${VER}" != "${TAG}" ]; then
+            echo "::error::Version mismatch: plugin=${VER}, tag=${TAG}"
+            exit 1
+          fi
+          echo "::notice::Version OK: ${VER}"
 
       - name: Build dist ZIP
         run: make dist-docker
