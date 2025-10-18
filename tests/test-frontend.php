@@ -397,9 +397,12 @@ class FrontendTest extends WP_Compat_TestCase {
             'version' => '9.9.9',
         ], JSON_UNESCAPED_SLASHES);
 
+        // Normalize slashes for cross-version compatibility.
+        $normalized_data = str_replace('\/', '/', $data);
+
         $this->assertStringContainsString(
             $expected_json,
-            $data,
+            $normalized_data,
             'Filtered loader URL and version should appear in localized script data.'
         );
     }
