@@ -49,7 +49,12 @@ build-php83:
 # ------------------------------
 
 define RUN_TESTS
-	docker run --rm --network wordpress_proxy \
+	@if docker network inspect wordpress_proxy >/dev/null 2>&1; then \
+	  NETWORK_OPT="--network wordpress_proxy"; \
+	else \
+	  NETWORK_OPT=""; \
+	fi; \
+	docker run --rm $$NETWORK_OPT \
 	  -u $(UID):$(GID) \
 	  -e METEOPROG_DEBUG=$(METEOPROG_DEBUG) -e METEOPROG_DEBUG_API_KEY=$(METEOPROG_DEBUG_API_KEY) \
 	  -e WP_VERSION=$(2) \
