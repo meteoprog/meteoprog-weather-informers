@@ -302,6 +302,7 @@ phpcs-fix: build-php83
 plugin-check: build-php83
 	docker run --rm \
 		--network $(DB_NETWORK) \
+		--add-host=host.docker.internal:host-gateway \
 		-u $(UID):$(GID) \
 		-e DB_USER=$(DB_USER) \
 		-e DB_PASS=$(DB_PASS) \
