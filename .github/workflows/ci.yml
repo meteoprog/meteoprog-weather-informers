@@ -143,7 +143,6 @@ jobs:
           path: phpcs-report.xml
           if-no-files-found: ignore
 
-  # 🧩 Plugin Check (WordPress.org rules)
   plugin-check:
     name: 🧩 Plugin Check
     runs-on: ubuntu-latest
@@ -151,38 +150,25 @@ jobs:
     timeout-minutes: 10
     continue-on-error: true
     if: ${{ github.event_name != 'pull_request' }}
-
-    services:
-      db:
-        image: mariadb:10.6
-        env:
-          MYSQL_ROOT_PASSWORD: rootpass
-          MYSQL_DATABASE: wordpress_test_suite
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping -h 127.0.0.1 -prootpass"
-          --health-interval=5s
-          --health-timeout=3s
-          --health-retries=10
+    outputs:
+      PLUGIN_CHECK_STATUS: ${{ steps.check.outputs.status }}
 
     steps:
       - uses: actions/checkout@v4
-      - name: 🕐 Wait for DB ready
-        run: |
-          for i in $(seq 1 30); do
-            mysqladmin ping -h 127.0.0.1 -prootpass > /dev/null 2>&1 && break
-            sleep 2
-          done
-      - name: 🧩 Ensure Docker network exists
-        run: |
-          docker network inspect meteoprog-weather-informers-network >/dev/null 2>&1 || \
-          docker network create meteoprog-weather-informers-network
+
+      - name: 💾 Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache
+          key: composer-${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: composer-
+
       - name: 🛠 Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
           driver: docker-container
           driver-opts: image=moby/buildkit:latest
+
       - name: 🧱 Build PHP 8.3 image (for Plugin Check)
         uses: docker/build-push-action@v6
         with:
@@ -192,17 +178,24 @@ jobs:
           push: false
           cache-from: type=gha
           cache-to: type=gha,mode=max
-      - name: 🧩 Run Plugin Check (WP.org rules)
+
+      - id: check
+        name: 🧩 Run Plugin Check (WP.org rules)
         run: |
-          echo "::group::🧩 Plugin Check"
-          make plugin-check | tee plugin-check.log
+          echo "::group::🧩 Plugin Check (isolated DB)"
+          set -o pipefail
+          make test-plugin-check | tee plugin-check.log
+          STATUS=${PIPESTATUS[0]}
           echo "::endgroup::"
+          echo "status=$STATUS" >> $GITHUB_OUTPUT
+
       - name: 📦 Upload Plugin Check log
         uses: actions/upload-artifact@v4
         with:
           name: plugin-check-report
           path: plugin-check.log
           if-no-files-found: warn
+
 
   # 🌙 Nightly builds (non-blocking)
   nightly:
@@ -336,9 +329,11 @@ jobs:
           fi
 
           if [ "${{ needs.plugin-check.result }}" = "success" ]; then
-            echo "🧩 Plugin Check: ✅ passed" >> $GITHUB_STEP_SUMMARY
-          elif [ "${{ needs.plugin-check.result }}" = "failure" ]; then
-            echo "🧩 Plugin Check: ❌ failed (see artifact)" >> $GITHUB_STEP_SUMMARY
+            if [ "${{ needs.plugin-check.outputs.PLUGIN_CHECK_STATUS }}" = "0" ]; then
+              echo "🧩 Plugin Check: ✅ passed" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "🧩 Plugin Check: ❌ failed (see artifact)" >> $GITHUB_STEP_SUMMARY
+            fi
           else
             echo "🧩 Plugin Check: ⚙️ skipped or optional" >> $GITHUB_STEP_SUMMARY
           fi
