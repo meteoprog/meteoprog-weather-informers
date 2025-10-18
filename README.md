@@ -15,7 +15,7 @@ This repository contains the **Meteoprog Weather Widget** WordPress plugin. It p
 
 ## 🧩 Plugin Overview
 - **WordPress versions:** 4.9 → 6.8+
-- **PHP versions:** 5.6 → 8.4
+- **PHP versions:** 5.6 → 8.3
 - **Integrations:** Gutenberg, Elementor, Shortcodes Ultimate, WP-CLI, REST API
 - **Compatibility:** Works on classic and block widgets, async frontend loader, optimized for Core Web Vitals.
 - **API Requirement:** Requires a **free informer API key** from [billing.meteoprog.com/informer](https://billing.meteoprog.com/informer?utm_source=github&utm_medium=readme).

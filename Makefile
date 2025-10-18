@@ -20,7 +20,40 @@ IMAGE_PHP83=custom-php83
 METEOPROG_DEBUG=1
 METEOPROG_DEBUG_API_KEY=
 
+# -------------------------------------
+# Isolated MariaDB 10.6 for PHP tests
+# Used both locally and in CI.
+# -------------------------------------
+DB_CONTAINER_NAME := meteoprog-wp-mariadb
+DB_IMAGE := mariadb:10.6
+DB_NETWORK := meteoprog-weather-informers-network
+DB_PORT := 3306
 
+start-db:
+	@echo "[DB] Ensuring isolated test network $(DB_NETWORK)..."; \
+	docker network inspect $(DB_NETWORK) >/dev/null 2>&1 || docker network create $(DB_NETWORK) >/dev/null; \
+	if ! docker ps --format '{{.Names}}' | grep -q '^$(DB_CONTAINER_NAME)$$'; then \
+	  echo "[DB] Starting MariaDB container $(DB_CONTAINER_NAME)..."; \
+	  docker run -d --rm \
+	    --name $(DB_CONTAINER_NAME) \
+	    --network $(DB_NETWORK) \
+	    -e MARIADB_ROOT_PASSWORD=$(DB_PASS) \
+	    -e MARIADB_DATABASE=$(DB_NAME) \
+	    $(DB_IMAGE) >/dev/null; \
+	  echo "[DB] Waiting for MariaDB to become healthy..."; \
+	  until docker exec $(DB_CONTAINER_NAME) mariadb-admin ping -h localhost -p$(DB_PASS) --silent >/dev/null 2>&1; do \
+	    sleep 2; \
+	  done; \
+	  echo "[DB] ✅ MariaDB ready in network $(DB_NETWORK)"; \
+	else \
+	  echo "[DB] MariaDB already running."; \
+	fi
+
+stop-db:
+	@echo "[DB] Cleaning up MariaDB and network..."; \
+	docker ps -a --format '{{.Names}}' | grep -q '^$(DB_CONTAINER_NAME)$$' && docker rm -f $(DB_CONTAINER_NAME) >/dev/null || true; \
+	docker network inspect $(DB_NETWORK) >/dev/null 2>&1 && docker network rm $(DB_NETWORK) >/dev/null || true; \
+	echo "[DB] 🧹 Cleanup complete."
 
 # ------------------------------
 # Build containers
@@ -49,36 +82,26 @@ build-php83:
 # ------------------------------
 
 define RUN_TESTS
-	# Determine Docker network and DB host based on environment
-	@if [ "$$CI" = "true" ]; then \
-	  echo "[CI detected] Using --network host"; \
-	  NETWORK_OPT="--network host"; \
-	  DB_HOST_REAL="127.0.0.1"; \
-	else \
-	  if docker network inspect wordpress_proxy >/dev/null 2>&1; then \
-	    echo "[Local] Using network wordpress_proxy"; \
-	    NETWORK_OPT="--network wordpress_proxy"; \
-	    DB_HOST_REAL="$(DB_HOST)"; \
-	  else \
-	    echo "[Local] No network found, running isolated"; \
-	    NETWORK_OPT=""; \
-	    DB_HOST_REAL="$(DB_HOST)"; \
-	  fi; \
-	fi; \
+	# Always use the same isolated Docker network for DB + tests
+	echo "[Network] Using isolated network $(DB_NETWORK)"; \
+	NETWORK_OPT="--network $(DB_NETWORK)"; \
+	DB_HOST_REAL="$(DB_CONTAINER_NAME)"; \
+	RUN_ID=$$(date +%s%N | sha1sum | cut -c1-6); \
+	echo "[Run] WP=$(2) RUN_ID=$$RUN_ID"; \
 	docker run --rm $$NETWORK_OPT \
 	  -u $(UID):$(GID) \
 	  -e METEOPROG_DEBUG=$(METEOPROG_DEBUG) \
 	  -e METEOPROG_DEBUG_API_KEY=$(METEOPROG_DEBUG_API_KEY) \
 	  -e WP_VERSION=$(2) \
-	  -e TEST_DB_NAME=$(DB_NAME)_$(subst .,_,$(2)) \
+	  -e TEST_DB_NAME=$(DB_NAME)_$(subst .,_,$(2))_$$RUN_ID \
 	  -e DB_HOST=$$DB_HOST_REAL \
+	  -e DB_HOST_REAL=$$DB_HOST_REAL \
 	  -e DB_USER=$(DB_USER) \
 	  -e DB_PASS=$(DB_PASS) \
-	  -e DB_HOST_REAL=$$DB_HOST_REAL \
 	  -v $(SRC_PLUGIN):/src-plugin $(1) \
 	  bash -c 'set -euo pipefail; \
 	    echo "[Step 0] Priming DNS resolver..."; \
-	    if ! nslookup wordpress.org > /dev/null 2>&1; then \
+	    if ! getent hosts wordpress.org > /dev/null 2>&1; then \
 	      echo "ERROR: DNS resolution failed"; exit 1; fi; \
 	    WP_PATH="/tmp/wordpress-$${WP_VERSION}"; \
 	    DB_NAME="$${TEST_DB_NAME}"; \
@@ -109,10 +132,9 @@ define RUN_TESTS
 	    echo "[Step 7] Install WordPress test suite"; \
 	    echo -e "y\n" | bash bin/install-wp-tests.sh $$DB_NAME $(DB_USER) $(DB_PASS) $$DB_HOST_REAL $${WP_VERSION}; \
 	    echo "[Step 8] Run PHPUnit"; \
-	    phpunit --bootstrap tests/bootstrap-extra.php --configuration phpunit.xml.dist; \
+	    phpunit --colors=always --bootstrap tests/bootstrap-extra.php --configuration phpunit.xml.dist; \
 	    echo "[Step 10] Done";'
 endef
-
 
 # -------------------------------------
 # PHP 5.6 — Legacy support
@@ -170,6 +192,24 @@ php83-nightly: build-php83
 
 
 # -------------------------------------
+# Single test wrappers (auto DB lifecycle)
+# -------------------------------------
+test-php56-wp49: start-db php56-wp49 stop-db
+test-php74-wp58: start-db php74-wp58 stop-db
+test-php74-wp59: start-db php74-wp59 stop-db
+test-php81-wp62: start-db php81-wp62 stop-db
+test-php81-wp66: start-db php81-wp66 stop-db
+test-php81-wp673: start-db php81-wp673 stop-db
+test-php81-wp683: start-db php81-wp683 stop-db
+test-php81-latest: start-db php81-latest stop-db
+test-php83-wp62: start-db php83-wp62 stop-db
+test-php83-wp66: start-db php83-wp66 stop-db
+test-php83-wp673: start-db php83-wp673 stop-db
+test-php83-wp683: start-db php83-wp683 stop-db
+test-php83-latest: start-db php83-latest stop-db
+test-php83-nightly: start-db php83-nightly stop-db
+
+# -------------------------------------
 # PHPCS / PHPCBF — Code style checks & auto-fixes
 # -------------------------------------
 # Uses the PHP 8.3 container to run WordPress Coding Standards (WPCS) checks.
@@ -217,11 +257,12 @@ phpcs-fix: build-php83
 # Usage:
 #   make -j4 testall
 # This will run all PHP + WordPress version combinations concurrently.
-testall: \
+testall: start-db \
 	php56-wp49 \
 	php74-wp58 php74-wp59 \
 	php81-wp62 php81-wp66 php81-wp673 php81-wp683 php81-latest \
-	php83-wp62 php83-wp66 php83-wp673 php83-wp683 php83-latest php83-nightly
+	php83-wp62 php83-wp66 php83-wp673 php83-wp683 php83-latest php83-nightly \
+	stop-db
 	@echo "All test suites have finished."
 
 
