@@ -98,6 +98,13 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: rootpass
           MYSQL_DATABASE: wordpress_test_suite
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -prootpass"
+          --health-interval=5s
+          --health-timeout=3s
+          --health-retries=10
 
     steps:
       - uses: actions/checkout@v4
