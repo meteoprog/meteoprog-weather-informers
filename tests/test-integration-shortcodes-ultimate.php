@@ -90,7 +90,7 @@ class ShortcodesUltimateIntegrationTest extends WP_Compat_TestCase {
      */
     public function test_shortcode_renders_frontend() {
         $output = do_shortcode('[su_meteoprog_informer id="abc123"]');
-        $this->assertStringContainsString('<div>Informer HTML</div>', $output);
+        $this->assertStringContainsString('Meteoprog Weather Informer', $output);
     }
 
     /**
