@@ -71,25 +71,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Restore BuildKit cache
-      - name: Restore Docker layer cache
-        uses: actions/cache@v4
-        with:
-          path: /tmp/.buildx-cache
-          key: buildx-${{ matrix.php }}-${{ github.sha }}
-          restore-keys: |
-            buildx-${{ matrix.php }}-
-            buildx-
-
-      # Enable Buildx with BuildKit image
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-        with:
-          driver: docker-container
-          driver-opts: image=moby/buildkit:latest
-
-      # Cache Composer dependencies (if used in Makefile)
-      - name: Cache Composer packages
+      - name: Cache Composer dependencies
         uses: actions/cache@v4
         with:
           path: ~/.composer/cache
@@ -104,17 +86,23 @@ jobs:
           done
 
       - name: Prepare PHP version string
-        id: vars
         run: echo "PHP_VER=$(echo '${{ matrix.php }}' | tr -d '.')" >> $GITHUB_ENV
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver: docker-container
+          driver-opts: image=moby/buildkit:latest
+
       - name: Build Docker image PHP ${{ matrix.php }}
-        run: |
-          docker build \
-            --cache-from type=local,src=/tmp/.buildx-cache \
-            --cache-to type=local,dest=/tmp/.buildx-cache-new,mode=max \
-            -f docker/Dockerfile.php${{ env.PHP_VER }} \
-            -t custom-php${{ env.PHP_VER }} .
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/Dockerfile.php${{ env.PHP_VER }}
+          tags: custom-php${{ env.PHP_VER }}:latest
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Run tests (WP ${{ matrix.wp }})
         run: make ${{ matrix.target }}
@@ -127,8 +115,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Cache Composer dependencies for PHPCS
-      - name: Cache Composer packages
+      - name: Cache Composer dependencies
         uses: actions/cache@v4
         with:
           path: ~/.composer/cache
@@ -176,23 +163,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Restore BuildKit cache
-      - name: Restore Docker layer cache
-        uses: actions/cache@v4
-        with:
-          path: /tmp/.buildx-cache
-          key: buildx-${{ matrix.php }}-${{ github.sha }}
-          restore-keys: |
-            buildx-${{ matrix.php }}-
-            buildx-
-
-      # Enable Buildx with BuildKit image
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-        with:
-          driver: docker-container
-          driver-opts: image=moby/buildkit:latest
-
       - name: Wait for DB ready
         run: |
           for i in $(seq 1 30); do
@@ -200,19 +170,24 @@ jobs:
             sleep 2
           done
 
-      # Prepare PHP version digits for Dockerfile selection (e.g., 8.3 -> 83)
       - name: Prepare PHP version string
         run: echo "PHP_VER=$(echo '${{ matrix.php }}' | tr -d '.')" >> $GITHUB_ENV
 
-      # Build image with the same cache strategy as in "tests"
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver: docker-container
+          driver-opts: image=moby/buildkit:latest
+
       - name: Build Docker image PHP ${{ matrix.php }}
-        run: |
-          docker build \
-            --cache-from type=local,src=/tmp/.buildx-cache \
-            --cache-to type=local,dest=/tmp/.buildx-cache-new,mode=max \
-            -f docker/Dockerfile.php${{ env.PHP_VER }} \
-            -t custom-php${{ env.PHP_VER }} .
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/Dockerfile.php${{ env.PHP_VER }}
+          tags: custom-php${{ env.PHP_VER }}:latest
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Run Nightly tests (PHP ${{ matrix.php }})
         run: make ${{ matrix.target }}
@@ -227,8 +202,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Optional cache for Composer (if used during packaging)
-      - name: Cache Composer packages
+      - name: Cache Composer dependencies
         uses: actions/cache@v4
         with:
           path: ~/.composer/cache
