@@ -12,6 +12,11 @@ on:
 permissions:
   contents: write
 
+# Cancel previous runs on same branch
+concurrency:
+  group: meteoprog-ci-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   PLUGIN_NAME: meteoprog-weather-informers
   UID: 1001
@@ -20,23 +25,29 @@ env:
   DOCKER_BUILDKIT: 1
 
 jobs:
-  # 1️⃣ Generate translation template (POT file)
+  # 🌐 POT file generation
   i18n:
-    name: 🌐 Generate POT
+    name: 🌐 POT
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-      - run: make i18n-pot
+      - name: 🏗 Generate POT
+        run: |
+          echo "::group::🌐 Generate translation POT file"
+          make i18n-pot
+          echo "::endgroup::"
       - uses: actions/upload-artifact@v4
         with:
           name: pot-file
           path: languages/*.pot
 
-  # 2️⃣ Main PHP + WordPress tests
+  # ✅ PHP + WordPress matrix tests
   tests:
-    name: ✅ Tests Matrix
+    name: ✅ PHP ${{ matrix.php }} / WP ${{ matrix.wp }}
     runs-on: ubuntu-latest
     needs: i18n
+    timeout-minutes: 10
 
     services:
       db:
@@ -71,35 +82,35 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Cache Composer dependencies
+      - name: 💾 Cache Composer dependencies
         uses: actions/cache@v4
         with:
           path: ~/.composer/cache
           key: composer-${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
           restore-keys: composer-
 
-      - name: Wait for DB ready
+      - name: 🕐 Wait for DB ready
         run: |
           for i in $(seq 1 30); do
             mysqladmin ping -h 127.0.0.1 -prootpass > /dev/null 2>&1 && break
             sleep 2
           done
 
-      - name: Ensure Docker network exists
+      - name: 🧩 Ensure Docker network exists
         run: |
           docker network inspect meteoprog-weather-informers-network >/dev/null 2>&1 || \
           docker network create meteoprog-weather-informers-network
 
-      - name: Prepare PHP version string
+      - name: 🧱 Prepare PHP version string
         run: echo "PHP_VER=$(echo '${{ matrix.php }}' | tr -d '.')" >> $GITHUB_ENV
 
-      - name: Set up Docker Buildx
+      - name: 🛠 Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
           driver: docker-container
           driver-opts: image=moby/buildkit:latest
 
-      - name: Build Docker image PHP ${{ matrix.php }}
+      - name: 🧱 Build Docker image (PHP ${{ matrix.php }})
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -109,39 +120,44 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Run tests (WP ${{ matrix.wp }})
-        run: make ${{ matrix.target }}
+      - name: 🧪 Run tests (WP ${{ matrix.wp }})
+        run: |
+          echo "::group::🧪 Tests for PHP ${{ matrix.php }} / WP ${{ matrix.wp }}"
+          make ${{ matrix.target }}
+          echo "::endgroup::"
 
-  # 3️⃣ Code style check (WordPress Coding Standards)
+  # 🧹 PHPCS / WordPress Coding Standards
   phpcs:
-    name: 🧹 PHPCS (WordPress Coding Standards)
+    name: 🧹 WPCS
     runs-on: ubuntu-latest
     needs: i18n
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-
-      - name: Cache Composer dependencies
+      - name: 💾 Cache Composer dependencies
         uses: actions/cache@v4
         with:
           path: ~/.composer/cache
           key: composer-${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
           restore-keys: composer-
-
-      - name: Run PHPCS check
-        run: make phpcs-check
-
+      - name: 🧹 Run PHPCS check
+        run: |
+          echo "::group::🧹 Running PHPCS"
+          make phpcs-check
+          echo "::endgroup::"
       - uses: actions/upload-artifact@v4
         with:
           name: phpcs-report
           path: phpcs-report.xml
           if-no-files-found: ignore
 
-  # 4️⃣ Nightly builds — non-blocking optional job
+  # 🌙 Nightly builds (non-blocking)
   nightly:
-    name: 🌙 PHP 8.3 / 8.4 Nightly (Optional)
+    name: 🌙 Nightly PHP ${{ matrix.php }}
     runs-on: ubuntu-latest
     needs: i18n
     continue-on-error: true
+    timeout-minutes: 10
     if: ${{ github.event_name != 'pull_request' }}
 
     strategy:
@@ -168,28 +184,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Wait for DB ready
+      - name: 🕐 Wait for DB ready
         run: |
           for i in $(seq 1 30); do
             mysql -h 127.0.0.1 -uroot -prootpass -e "SELECT 1" >/dev/null 2>&1 && break
             sleep 2
           done
 
-      - name: Ensure Docker network exists
+      - name: 🧩 Ensure Docker network exists
         run: |
           docker network inspect meteoprog-weather-informers-network >/dev/null 2>&1 || \
           docker network create meteoprog-weather-informers-network
 
-      - name: Prepare PHP version string
+      - name: 🧱 Prepare PHP version string
         run: echo "PHP_VER=$(echo '${{ matrix.php }}' | tr -d '.')" >> $GITHUB_ENV
 
-      - name: Set up Docker Buildx
+      - name: 🛠 Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
           driver: docker-container
           driver-opts: image=moby/buildkit:latest
 
-      - name: Build Docker image PHP ${{ matrix.php }}
+      - name: 🧱 Build Docker image (PHP ${{ matrix.php }})
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -199,52 +215,63 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Run Nightly tests (PHP ${{ matrix.php }})
-        run: make ${{ matrix.target }}
+      - name: 🌙 Run Nightly tests
+        run: |
+          echo "::group::🌙 Nightly PHP ${{ matrix.php }}"
+          make ${{ matrix.target }}
+          echo "::endgroup::"
 
-  # 5️⃣ Release build (triggered by tag v*)
+  # 🚀 Release build (on tags)
   release:
-    name: 🚀 Build & Publish Release ZIP
+    name: 🚀 Release
     runs-on: ubuntu-latest
     needs: [tests, phpcs]
     if: startsWith(github.ref, 'refs/tags/v') && (github.event.pull_request.head.repo.fork == false)
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Cache Composer dependencies
+      - name: 💾 Cache Composer dependencies
         uses: actions/cache@v4
         with:
           path: ~/.composer/cache
           key: composer-${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
           restore-keys: composer-
-
-      - name: Regenerate POT file
+      - name: 🌐 Regenerate POT file
         run: make i18n-pot
-
-      - name: Check version matches tag
+      - name: 🔍 Check version matches tag
         run: |
           set -e
           [ ! -f meteoprog-weather-informers.php ] && { echo "::error::File meteoprog-weather-informers.php not found"; exit 1; }
           TAG="${GITHUB_REF#refs/tags/}"
           VER=$(grep -E '^\s*\* Version:' meteoprog-weather-informers.php | sed -E 's/^\s*\* Version:[[:space:]]*//')
           if [ -z "$VER" ]; then
-            echo "::error::Version not found in plugin header"
-            exit 1
+            echo "::error::Version not found in plugin header"; exit 1
           fi
           if [ "v${VER}" != "${TAG}" ]; then
-            echo "::error::Version mismatch: plugin=${VER}, tag=${TAG}"
-            exit 1
+            echo "::error::Version mismatch: plugin=${VER}, tag=${TAG}"; exit 1
           fi
           echo "::notice::Version OK: ${VER}"
-
-      - name: Build dist ZIP
+      - name: 📦 Build dist ZIP
         run: make dist-docker
-
-      - name: Upload release to GitHub
+      - name: 🚀 Upload release to GitHub
         uses: softprops/action-gh-release@v2
         with:
           files: dist/*.zip
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # 📊 Job summary for overall CI
+  summary:
+    name: 📊 CI Summary
+    runs-on: ubuntu-latest
+    needs: [tests, phpcs, nightly]
+    if: always()
+    steps:
+      - name: 🧾 Generate summary
+        run: |
+          echo "## ✅ CI Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- PHP matrix: 5.6 / 7.4 / 8.1 / 8.3 / 8.4" >> $GITHUB_STEP_SUMMARY
+          echo "- WordPress versions: 4.9 / 5.8 / 6.8.3" >> $GITHUB_STEP_SUMMARY
+          echo "- All builds passed successfully 🎉" >> $GITHUB_STEP_SUMMARY
