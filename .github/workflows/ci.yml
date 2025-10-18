@@ -9,6 +9,9 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 env:
   PLUGIN_NAME: meteoprog-weather-informers
   UID: 1001
