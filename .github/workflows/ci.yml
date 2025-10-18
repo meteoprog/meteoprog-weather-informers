@@ -178,6 +178,11 @@ jobs:
         run: |
           docker network inspect meteoprog-weather-informers-network >/dev/null 2>&1 || \
           docker network create meteoprog-weather-informers-network
+      - name: 🛠 Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver: docker-container
+          driver-opts: image=moby/buildkit:latest
       - name: 🧱 Build PHP 8.3 image (for Plugin Check)
         uses: docker/build-push-action@v6
         with:
