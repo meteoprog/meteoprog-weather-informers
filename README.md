@@ -46,13 +46,13 @@ Widgets will not display without a valid key linked to your website domain.
 
 All PHP × WordPress combinations are tested using Docker via the Makefile. The following environments are covered:
 
-| PHP | WordPress                |
-| --- | ------------------------ |
-| 5.6 | 4.9                      |
-| 7.4 | 5.8 – 5.9                |
-| 8.1 | 6.2 – 6.8                |
-| 8.3 | 6.2 – latest / nightly   |
-| 8.4 | 6.8.3 – latest / nightly |
+| PHP | WordPress                              |
+| --- | -------------------------------------- |
+| 5.6 | 4.9                                    |
+| 7.4 | 5.8 – 5.9                              |
+| 8.1 | 6.2 – 6.8                              |
+| 8.3 | 6.2 – latest / nightly (daily scheduled) |
+| 8.4 | 6.8.3 – latest / nightly               |
 
 Run tests locally:
 
@@ -72,7 +72,8 @@ Each suite spins up a temporary WordPress install inside Docker, installs PHPUni
 
 * **🧩 Plugin Check:** runs automatically in CI (`make test-plugin-check`) to verify plugin headers, i18n, sanitization, and GPL compliance.
 * **🧹 Static Analysis:** enforces WordPress Coding Standards (WPCS), detects deprecated APIs, and ensures proper escaping/sanitization.
-* **🌙 Nightly Tests:** run on PHP 8.3 and 8.4 (non-blocking) to ensure forward compatibility with upcoming WordPress releases.
+* **🌙 Nightly & Latest Tests:** cover PHP 8.3 (latest + nightly) and 8.4 (nightly) to ensure forward compatibility with upcoming WordPress releases and daily stability checks.
+* **📅 Daily Schedule:** all nightly and latest builds (PHP 8.3/8.4) also run automatically every day at 03:00 UTC to validate the latest published release.
 
 ---
 
@@ -121,6 +122,7 @@ GitHub Actions workflow (`.github/workflows/ci.yml`) runs tests for all supporte
 * ✅ Run unit tests for each WP version
 * ✅ Run PHPCS linting
 * ✅ Run Plugin Check validation
+* ✅ Run nightly and latest scheduled builds daily
 * ✅ Upload coverage reports (optional)
 
 ---

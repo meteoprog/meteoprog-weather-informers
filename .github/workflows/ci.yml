@@ -197,7 +197,7 @@ jobs:
           fi
 
 
-  # 🌙 Nightly builds (daily + push-triggered)
+  # 🌙 Nightly + Latest builds (daily + push-triggered)
   nightly:
     name: 🌙 Nightly PHP ${{ matrix.php }}
     runs-on: ubuntu-latest
@@ -209,8 +209,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { php: "8.3", target: "php83-nightly" }
-          - { php: "8.4", target: "php84-nightly" }
+          - { php: "8.3", target: "php83-latest" }   # ✅ latest WP build
+          - { php: "8.3", target: "php83-nightly" }  # ✅ nightly WP build
+          - { php: "8.4", target: "php84-nightly" }  # ✅ nightly WP build
 
     services:
       db:
@@ -229,7 +230,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # 🔖 Fetch the latest release tag only for scheduled runs
+      # 🔖 Fetch latest release tag for scheduled runs
       - name: 🔖 Get latest release (scheduled only)
         id: latest
         if: ${{ github.event_name == 'schedule' }}
@@ -274,9 +275,9 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: 🌙 Run Nightly tests
+      - name: 🌙 Run Nightly/Latest tests
         run: |
-          echo "::group::🌙 Nightly PHP ${{ matrix.php }} - $(date -u '+%Y-%m-%d %H:%M UTC')"
+          echo "::group::🌙 Nightly or Latest PHP ${{ matrix.php }} - $(date -u '+%Y-%m-%d %H:%M UTC')"
           make ${{ matrix.target }}
           echo "::endgroup::"
 
@@ -357,9 +358,9 @@ jobs:
           fi
 
           if [ "${{ needs.nightly.result }}" = "success" ]; then
-            echo "🌙 Nightly builds: ✅ success (non-blocking)" >> $GITHUB_STEP_SUMMARY
+            echo "🌙 Nightly & Latest builds: ✅ success (non-blocking)" >> $GITHUB_STEP_SUMMARY
           else
-            echo "🌙 Nightly builds: ⚠️ failed (non-blocking)" >> $GITHUB_STEP_SUMMARY
+            echo "🌙 Nightly & Latest builds: ⚠️ failed (non-blocking)" >> $GITHUB_STEP_SUMMARY
           fi
 
           echo "" >> $GITHUB_STEP_SUMMARY
