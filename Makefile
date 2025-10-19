@@ -350,8 +350,8 @@ plugin-check: build-php83 dist-docker
 				rm -rf "$$WP_PATH"; \
 				exit $$PLUGIN_CHECK_EXIT; \
 			} 2>&1 | tee "$$LOG_FILE"; \
-			EXIT_CODE=$${PIPESTATUS[0]}; \
-			if grep -Eiq "ERROR|❌" "$$LOG_FILE"; then \
+			EXIT_CODE=0; \
+			if grep -Eiq "(ERROR|❌)" "$$LOG_FILE" && ! grep -Eiq "No errors found" "$$LOG_FILE"; then \
 				echo "[FAIL] Plugin Check found issues — see plugin-check.log"; \
 				EXIT_CODE=1; \
 			else \
@@ -435,8 +435,14 @@ i18n-pot: build-php83
 dist-docker: build-php83
 	docker run --rm -u 0:0 \
 	  -v $(SRC_PLUGIN):/src-plugin -w /src-plugin $(IMAGE_PHP83) \
-	  sh -c 'mkdir -p dist /tmp/$(PLUGIN_NAME) \
-	    && cp -a . /tmp/$(PLUGIN_NAME)/ \
-	    && wp dist-archive /tmp/$(PLUGIN_NAME) dist/$(PLUGIN_NAME).zip --allow-root --force \
-	    && chown -R $(UID):$(GID) dist'
-	@echo "[dist] ✅ Built dist/$(PLUGIN_NAME).zip with proper root folder"
+	  sh -c '\
+	    set -euo pipefail; \
+	    echo "[dist] Cleaning previous builds..."; \
+	    rm -rf dist /tmp/$(PLUGIN_NAME); \
+	    mkdir -p dist /tmp/$(PLUGIN_NAME); \
+	    echo "[dist] Copying plugin sources to /tmp/$(PLUGIN_NAME)..."; \
+	    cp -a . /tmp/$(PLUGIN_NAME)/; \
+	    echo "[dist] Building ZIP via wp dist-archive..."; \
+	    wp dist-archive /tmp/$(PLUGIN_NAME) dist/$(PLUGIN_NAME).zip --allow-root --force; \
+	    chown -R $(UID):$(GID) dist; \
+	    echo "[dist] ✅ Built dist/$(PLUGIN_NAME).zip with correct root folder"'
