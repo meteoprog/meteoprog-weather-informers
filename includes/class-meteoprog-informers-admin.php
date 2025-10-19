@@ -153,7 +153,13 @@ class Meteoprog_Informers_Admin {
 			)
 		);
 
-		register_setting( 'meteoprog_informers_options', $this->opt_default_id );
+		register_setting(
+			'meteoprog_informers_options',
+			$this->opt_default_id,
+			array(
+				'sanitize_callback' => 'sanitize_text_field',
+			)
+		);
 	}
 
 	/**

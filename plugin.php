@@ -37,12 +37,6 @@ function meteoprog_plugin_bootstrap() {
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 	}
 
-	load_plugin_textdomain(
-		'meteoprog-weather-informers',
-		false,
-		dirname( plugin_basename( __FILE__ ) ) . '/languages'
-	);
-
 	$api      = new Meteoprog_Informers_API();
 	$frontend = new Meteoprog_Informers_Frontend( $api );
 	$admin    = new Meteoprog_Informers_Admin( $api, $frontend );
