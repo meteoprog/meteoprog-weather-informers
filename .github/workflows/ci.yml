@@ -341,7 +341,7 @@ jobs:
             if [ "${{ needs.plugin-check.outputs.PLUGIN_CHECK_STATUS }}" = "0" ]; then
               echo "🧩 Plugin Check: ✅ passed" >> $GITHUB_STEP_SUMMARY
             else
-              echo "🧩 Plugin Check: ❌ failed — [View full log](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
+              echo "🧩 Plugin Check: ❌ failed — [View plugin-check.log artifact ↗](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts)" >> $GITHUB_STEP_SUMMARY
             fi
           else
             echo "🧩 Plugin Check: ⚙️ skipped or optional" >> $GITHUB_STEP_SUMMARY

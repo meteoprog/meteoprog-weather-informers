@@ -313,7 +313,6 @@ plugin-check: build-php83 dist-docker
 		-v $(SRC_PLUGIN):/src-plugin -w /src-plugin $(IMAGE_PHP83) \
 		bash -lc 'set -euo pipefail; \
 			DB_HOST_REAL="$(DB_CONTAINER_NAME)"; \
-			echo "[DB] Using database host: $$DB_HOST_REAL"; \
 			LOG_FILE="/src-plugin/plugin-check.log"; \
 			rm -f "$$LOG_FILE"; touch "$$LOG_FILE"; \
 			WP_PATH="/tmp/wp-check"; mkdir -p "$$WP_PATH"; \
@@ -341,20 +340,26 @@ plugin-check: build-php83 dist-docker
 					echo "[INSTALL] Installing Plugin Check plugin..."; \
 					wp plugin install plugin-check --activate --allow-root; \
 				fi; \
+				set +e; \
 				wp plugin check $(PLUGIN_NAME) --allow-root; \
+				PLUGIN_CHECK_EXIT=$$?; \
+				set -e; \
 				echo "[CLEANUP] Dropping test DB $$DB_NAME ..."; \
 				mariadb --user=$(DB_USER) --password=$(DB_PASS) --host=$$DB_HOST_REAL \
 					-e "DROP DATABASE IF EXISTS $$DB_NAME;"; \
 				rm -rf "$$WP_PATH"; \
-			} | tee -a "$$LOG_FILE"; \
+				exit $$PLUGIN_CHECK_EXIT; \
+			} 2>&1 | tee "$$LOG_FILE"; \
+			EXIT_CODE=$${PIPESTATUS[0]}; \
 			if grep -Eiq "ERROR|❌" "$$LOG_FILE"; then \
 				echo "[FAIL] Plugin Check found issues — see plugin-check.log"; \
-				exit 1; \
+				EXIT_CODE=1; \
 			else \
 				echo "[PASS] Plugin Check passed cleanly!"; \
 			fi; \
 			echo "[DONE] ✅ Plugin Check finished against dist ZIP."; \
-			[ -f "$$LOG_FILE" ] || echo "[WARN] plugin-check.log was not created!" > /src-plugin/plugin-check.log'
+			exit $$EXIT_CODE'
+
 
 test-plugin-check: start-db plugin-check stop-db
 	@echo "[TEST PLUGIN CHECK] ✅ Completed full plugin check with isolated DB."
