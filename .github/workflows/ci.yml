@@ -199,7 +199,7 @@ jobs:
 
   # 🌙 Nightly + Latest builds (daily + push-triggered)
   nightly:
-    name: 🌙 Nightly PHP ${{ matrix.php }}
+    name: 🌙 PHP ${{ matrix.php }} • ${{ matrix.target }}
     runs-on: ubuntu-latest
     needs: i18n
     continue-on-error: true
