@@ -230,19 +230,29 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: 🔧 Ensure jq installed
+        run: sudo apt-get update && sudo apt-get install -y jq
+
       # 🔖 Fetch latest release tag for scheduled runs
-      - name: 🔖 Get latest release (scheduled only)
+      - name: 🔖 Get latest release tag (native GitHub API)
         id: latest
         if: ${{ github.event_name == 'schedule' }}
-        uses: pozetroninc/github-action-get-latest-release@v1
-        with:
-          repository: meteoprog/meteoprog-weather-informers
+        run: |
+          echo "::group::🔖 Fetching latest release tag"
+          TAG=$(curl -s https://api.github.com/repos/meteoprog/meteoprog-weather-informers/releases/latest | jq -r .tag_name)
+          if [ "$TAG" = "null" ] || [ -z "$TAG" ]; then
+            echo "::error::Failed to fetch latest release tag."
+            exit 1
+          fi
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "Latest release tag: $TAG"
+          echo "::endgroup::"
 
       - name: 🧩 Checkout latest release tag (scheduled only)
         if: ${{ github.event_name == 'schedule' }}
         run: |
           git fetch --tags
-          git checkout ${{ steps.latest.outputs.release }}
+          git checkout ${{ steps.latest.outputs.tag }}
 
       - name: 🕐 Wait for DB ready
         run: |
