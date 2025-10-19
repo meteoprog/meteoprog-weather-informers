@@ -1,0 +1,33 @@
+name: 💡 Feature request
+description: Suggest a new feature or improvement
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        We love new ideas! Please explain your feature below.
+
+  - type: input
+    id: title
+    attributes:
+      label: Feature title
+      placeholder: "e.g. Add support for WP-CLI auto-registration"
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the feature
+      description: "What should be added or improved?"
+      placeholder: "It would be helpful if..."
+
+  - type: textarea
+    id: usecase
+    attributes:
+      label: Use case
+      description: "Why is this important / how would it help?"
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional context
+      placeholder: "Add any other context or examples here."

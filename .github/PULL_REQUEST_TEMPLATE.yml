@@ -1,0 +1,49 @@
+name: 🔀 Pull request
+description: Submit code changes or documentation updates
+title: "[PR] "
+labels: [pull-request]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for contributing to **Meteoprog Weather Informers**!  
+        Please describe your changes below.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: "Briefly describe what this PR does and why it's needed."
+      placeholder: "e.g. Fixes issue with informer cache in PHP 8.4"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: type
+    attributes:
+      label: Type of change
+      options:
+        - label: 🐞 Bug fix
+        - label: ✨ New feature
+        - label: 🎨 Code style update (formatting)
+        - label: 🔧 Refactor
+        - label: 📖 Documentation update
+        - label: ⚙️ CI/CD improvement
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have tested this code locally
+          required: true
+        - label: I followed WordPress coding standards (WPCS)
+        - label: I updated related documentation (if applicable)
+        - label: I confirm backward compatibility (PHP 5.6+ / WP 4.9+)
+        - label: CI/CD passes on all PHP and WP versions
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional notes
+      placeholder: "Anything else reviewers should know?"
