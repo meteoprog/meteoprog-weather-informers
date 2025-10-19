@@ -147,63 +147,45 @@ jobs:
     name: 🧩 Plugin Check
     runs-on: ubuntu-latest
     needs: [i18n]
-    timeout-minutes: 10
-    continue-on-error: true
-    if: ${{ github.event_name != 'pull_request' }}
     outputs:
       PLUGIN_CHECK_STATUS: ${{ steps.check.outputs.status }}
-
     steps:
       - uses: actions/checkout@v4
 
-      - name: 💾 Cache Composer dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.composer/cache
-          key: composer-${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
-          restore-keys: composer-
-
-      - name: 🛠 Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-        with:
-          driver: docker-container
-          driver-opts: image=moby/buildkit:latest
-
-      - name: 🧱 Build PHP 8.3 image (for Plugin Check)
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: docker/Dockerfile.php83
-          tags: custom-php83:latest
-          push: false
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - id: check
-        name: 🧩 Run Plugin Check (WP.org rules)
+      - name: 🧱 Build + Run Plugin Check
+        id: check
         shell: bash
+        continue-on-error: true
         run: |
-          echo "::group::🧩 Plugin Check (isolated DB)"
           set -o pipefail
           make test-plugin-check | tee plugin-check.log
           EXIT_CODE=${PIPESTATUS[0]}
-
-          # 🔍 Detect real plugin check errors inside log
-          if grep -Eiq 'ERROR|❌' plugin-check.log; then
-            echo "Detected plugin check errors in log"
-            EXIT_CODE=1
-          fi
-
           echo "status=$EXIT_CODE" >> $GITHUB_OUTPUT
-          echo "::endgroup::"
-          exit $EXIT_CODE
+          exit 0  # не прерываем job
 
       - name: 📦 Upload Plugin Check log
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: plugin-check-report
           path: plugin-check.log
           if-no-files-found: warn
+
+  plugin-check-status:
+    name: 🧩 Plugin Check Result
+    runs-on: ubuntu-latest
+    needs: plugin-check
+    if: always()
+    steps:
+      - name: Evaluate Plugin Check outcome
+        run: |
+          STATUS=${{ needs.plugin-check.outputs.PLUGIN_CHECK_STATUS }}
+          if [ "$STATUS" = "0" ]; then
+            echo "✅ Plugin Check passed"
+          else
+            echo "::error::Plugin Check failed (status=$STATUS)"
+            exit 1
+          fi
 
 
   # 🌙 Nightly builds (non-blocking)
@@ -313,7 +295,7 @@ jobs:
   summary:
     name: 📊 CI Summary
     runs-on: ubuntu-latest
-    needs: [tests, phpcs, nightly, plugin-check]
+    needs: [tests, phpcs, nightly, plugin-check-status]
     if: always()
     steps:
       - name: 🧾 Generate summary
@@ -337,14 +319,11 @@ jobs:
             echo "🧹 WPCS: ❌ style issues detected" >> $GITHUB_STEP_SUMMARY
           fi
 
-          if [ "${{ needs.plugin-check.result }}" = "success" ]; then
-            if [ "${{ needs.plugin-check.outputs.PLUGIN_CHECK_STATUS }}" = "0" ]; then
-              echo "🧩 Plugin Check: ✅ passed" >> $GITHUB_STEP_SUMMARY
-            else
-              echo "🧩 Plugin Check: ❌ failed — [View plugin-check.log artifact ↗](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts)" >> $GITHUB_STEP_SUMMARY
-            fi
+          # 🧩 Plugin Check
+          if [ "${{ needs.plugin-check-status.result }}" = "success" ]; then
+            echo "🧩 Plugin Check: ✅ passed" >> $GITHUB_STEP_SUMMARY
           else
-            echo "🧩 Plugin Check: ⚙️ skipped or optional" >> $GITHUB_STEP_SUMMARY
+            echo "🧩 Plugin Check: ❌ failed — [View plugin-check.log artifact ↗](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts)" >> $GITHUB_STEP_SUMMARY
           fi
 
           if [ "${{ needs.nightly.result }}" = "success" ]; then
