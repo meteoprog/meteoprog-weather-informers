@@ -169,13 +169,8 @@ No personal data is collected or stored by the plugin itself.
 
 == Screenshots ==
 
-1. Settings page with API key and informer list.
-2. Copy shortcode/placeholder buttons.
-3. Gutenberg block editor (**Meteoprog Weather Widget**).
-4. Elementor widget panel.
-5. Shortcodes Ultimate insert dialog.
-6. Example weather widget on frontend.
-7. Legacy Widget (Appearance → Widgets).
+1. Main settings screen: add your API key, create and preview weather informers.
+2. Plugin interface in WordPress admin with shortcode and placeholder examples.
 
 
 == Changelog ==
