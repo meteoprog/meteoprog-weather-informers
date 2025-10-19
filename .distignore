@@ -51,9 +51,12 @@ phpunit.xml*
 assets-wp/
 
 # -----------------------------------------------------------------------------
-# Documentation
+# GitHub / Documentation files (ignored automatically, optional)
 # -----------------------------------------------------------------------------
-README.md
+/README.md
+/CONTRIBUTING.md
+/CODE_OF_CONDUCT.md
+/SECURITY.md
 
 # -----------------------------------------------------------------------------
 # Logs & temp
