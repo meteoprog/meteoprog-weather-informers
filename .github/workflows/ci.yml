@@ -187,8 +187,16 @@ jobs:
           set -o pipefail
           make test-plugin-check | tee plugin-check.log
           EXIT_CODE=${PIPESTATUS[0]}
+
+          # 🔍 Detect real plugin check errors inside log
+          if grep -Eiq 'ERROR|❌' plugin-check.log; then
+            echo "Detected plugin check errors in log"
+            EXIT_CODE=1
+          fi
+
           echo "status=$EXIT_CODE" >> $GITHUB_OUTPUT
           echo "::endgroup::"
+          exit $EXIT_CODE
 
       - name: 📦 Upload Plugin Check log
         uses: actions/upload-artifact@v4
@@ -333,7 +341,7 @@ jobs:
             if [ "${{ needs.plugin-check.outputs.PLUGIN_CHECK_STATUS }}" = "0" ]; then
               echo "🧩 Plugin Check: ✅ passed" >> $GITHUB_STEP_SUMMARY
             else
-              echo "🧩 Plugin Check: ❌ failed (see artifact)" >> $GITHUB_STEP_SUMMARY
+              echo "🧩 Plugin Check: ❌ failed — [View full log](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
             fi
           else
             echo "🧩 Plugin Check: ⚙️ skipped or optional" >> $GITHUB_STEP_SUMMARY

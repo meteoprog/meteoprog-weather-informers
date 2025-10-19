@@ -298,8 +298,11 @@ phpcs-fix: build-php83
 # -------------------------------------
 # Checks compliance with official WordPress.org plugin review guidelines.
 # Requires WordPress >=6.8 with `plugin-check` command installed.
+# Runs check against the built dist/ ZIP version of the plugin.
 # -------------------------------------
-plugin-check: build-php83
+
+plugin-check: build-php83 dist-docker
+	@echo "[CHECK] Using dist ZIP instead of source directory..."
 	docker run --rm \
 		--network $(DB_NETWORK) \
 		-u $(UID):$(GID) \
@@ -311,40 +314,47 @@ plugin-check: build-php83
 		bash -lc 'set -euo pipefail; \
 			DB_HOST_REAL="$(DB_CONTAINER_NAME)"; \
 			echo "[DB] Using database host: $$DB_HOST_REAL"; \
-			echo "[Step 0] Priming DNS resolver..."; \
-			getent hosts $$DB_HOST_REAL || { echo "ERROR: DB host not found in Docker network"; exit 1; }; \
-			WP_PATH="/tmp/wp-check"; \
-			DB_NAME="$${DB_NAME:-wordpress_plugincheck}"; \
-			echo "[WP] Downloading WordPress 6.8..."; \
-			mkdir -p "$$WP_PATH"; \
-			php -d memory_limit=-1 /usr/local/bin/wp core download \
-				--path="$$WP_PATH" --version=6.8 --allow-root; \
-			echo "[DB] Preparing database $$DB_NAME ..."; \
-			mariadb --user=$(DB_USER) --password=$(DB_PASS) --host=$$DB_HOST_REAL \
-				-e "DROP DATABASE IF EXISTS $$DB_NAME; CREATE DATABASE $$DB_NAME CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"; \
-			echo "[WP] Creating wp-config.php ..."; \
-			wp config create --path="$$WP_PATH" \
-				--dbname="$$DB_NAME" --dbuser=$(DB_USER) --dbpass=$(DB_PASS) --dbhost=$$DB_HOST_REAL \
-				--skip-check --force --allow-root; \
-			echo "[WP] Installing WordPress ..."; \
-			wp core install --path="$$WP_PATH" \
-				--url=http://localhost --title="PluginCheck" \
-				--admin_user=admin --admin_password=admin --admin_email=admin@example.com \
-				--skip-email --allow-root; \
-			echo "[COPY] Copying plugin ..."; \
-			cp -r /src-plugin "$$WP_PATH/wp-content/plugins/meteoprog-weather-informers"; \
-			cd "$$WP_PATH/wp-content/plugins/meteoprog-weather-informers"; \
-			echo "{\"exclude\": [\"tests\", \"bin\", \"docker\", \"dist\", \"node_modules\", \"vendor\", \".github\", \"assets/test\"]}" > plugin-check.json; \
-			if ! wp help plugin check >/dev/null 2>&1; then \
-				echo "[INSTALL] Installing Plugin Check plugin..."; \
-				wp plugin install plugin-check --activate --allow-root; \
+			LOG_FILE="/src-plugin/plugin-check.log"; \
+			rm -f "$$LOG_FILE"; touch "$$LOG_FILE"; \
+			WP_PATH="/tmp/wp-check"; mkdir -p "$$WP_PATH"; \
+			{ \
+				echo "[WP] Downloading WordPress 6.8..."; \
+				php -d memory_limit=-1 /usr/local/bin/wp core download --path="$$WP_PATH" --version=6.8 --allow-root; \
+				echo "[DB] Preparing database $$DB_NAME ..."; \
+				mariadb --user=$(DB_USER) --password=$(DB_PASS) --host=$$DB_HOST_REAL \
+					-e "DROP DATABASE IF EXISTS $$DB_NAME; CREATE DATABASE $$DB_NAME CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"; \
+				echo "[WP] Creating wp-config.php ..."; \
+				wp config create --path="$$WP_PATH" \
+					--dbname="$$DB_NAME" --dbuser=$(DB_USER) --dbpass=$(DB_PASS) --dbhost=$$DB_HOST_REAL \
+					--skip-check --force --allow-root; \
+				echo "[WP] Installing WordPress ..."; \
+				wp core install --path="$$WP_PATH" \
+					--url=http://localhost --title="PluginCheck" \
+					--admin_user=admin --admin_password=admin --admin_email=admin@example.com \
+					--skip-email --allow-root; \
+				echo "[UNZIP] Extracting plugin dist ZIP ..."; \
+				mkdir -p "$$WP_PATH/wp-content/plugins"; \
+				unzip -q /src-plugin/dist/$(PLUGIN_NAME).zip -d "$$WP_PATH/wp-content/plugins/"; \
+				cd "$$WP_PATH/wp-content/plugins/$(PLUGIN_NAME)"; \
+				echo "[RUN] Executing Plugin Check ..."; \
+				if ! wp help plugin check >/dev/null 2>&1; then \
+					echo "[INSTALL] Installing Plugin Check plugin..."; \
+					wp plugin install plugin-check --activate --allow-root; \
+				fi; \
+				wp plugin check $(PLUGIN_NAME) --allow-root; \
+				echo "[CLEANUP] Dropping test DB $$DB_NAME ..."; \
+				mariadb --user=$(DB_USER) --password=$(DB_PASS) --host=$$DB_HOST_REAL \
+					-e "DROP DATABASE IF EXISTS $$DB_NAME;"; \
+				rm -rf "$$WP_PATH"; \
+			} | tee -a "$$LOG_FILE"; \
+			if grep -Eiq "ERROR|❌" "$$LOG_FILE"; then \
+				echo "[FAIL] Plugin Check found issues — see plugin-check.log"; \
+				exit 1; \
+			else \
+				echo "[PASS] Plugin Check passed cleanly!"; \
 			fi; \
-			echo "[RUN] Executing Plugin Check ..."; \
-			php -d memory_limit=-1 /usr/local/bin/wp plugin check meteoprog-weather-informers --allow-root || true; \
-			echo "[CLEANUP] Dropping test DB $$DB_NAME ..."; \
-			mariadb --user=$(DB_USER) --password=$(DB_PASS) --host=$$DB_HOST_REAL \
-				-e "DROP DATABASE IF EXISTS $$DB_NAME;"; \
-			rm -rf "$$WP_PATH"'
+			echo "[DONE] ✅ Plugin Check finished against dist ZIP."; \
+			[ -f "$$LOG_FILE" ] || echo "[WARN] plugin-check.log was not created!" > /src-plugin/plugin-check.log'
 
 test-plugin-check: start-db plugin-check stop-db
 	@echo "[TEST PLUGIN CHECK] ✅ Completed full plugin check with isolated DB."
