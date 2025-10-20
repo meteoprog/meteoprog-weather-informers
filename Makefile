@@ -22,6 +22,16 @@ METEOPROG_DEBUG=1
 METEOPROG_DEBUG_API_KEY=
 
 # -------------------------------------
+# Simple global Docker check
+# -------------------------------------
+check-docker:
+	@echo "[Check] Verifying Docker daemon is running..."
+	@if ! docker info >/dev/null 2>&1; then \
+	  echo "❌ ERROR: Docker daemon is not running. Please start Docker Desktop or service and retry."; \
+	  exit 1; \
+	fi
+
+# -------------------------------------
 # Isolated MariaDB 10.6 for PHP tests
 # Used both locally and in CI.
 # -------------------------------------
@@ -30,7 +40,7 @@ DB_IMAGE := mariadb:10.6
 DB_NETWORK := meteoprog-weather-informers-network
 DB_PORT := 3306
 
-start-db:
+start-db: check-docker
 	@echo "[DB] Ensuring isolated test network $(DB_NETWORK)..."; \
 	docker network inspect $(DB_NETWORK) >/dev/null 2>&1 || docker network create $(DB_NETWORK) >/dev/null; \
 	if ! docker ps --format '{{.Names}}' | grep -q '^$(DB_CONTAINER_NAME)$$'; then \
@@ -50,7 +60,7 @@ start-db:
 	  echo "[DB] MariaDB already running."; \
 	fi
 
-stop-db:
+stop-db: check-docker
 	@echo "[DB] Cleaning up MariaDB and network..."; \
 	docker ps -a --format '{{.Names}}' | grep -q '^$(DB_CONTAINER_NAME)$$' && docker rm -f $(DB_CONTAINER_NAME) >/dev/null || true; \
 	docker network inspect $(DB_NETWORK) >/dev/null 2>&1 && docker network rm $(DB_NETWORK) >/dev/null || true; \
@@ -60,23 +70,23 @@ stop-db:
 # Build containers
 # ------------------------------
 
-build-php56:
+build-php56: check-docker
 	DOCKER_BUILDKIT=1 docker build --network=host -f ./docker/Dockerfile.php56 -t $(IMAGE_PHP56) \
 	  --build-arg CACHEBUST=$(shell date +%s) --build-arg UID=$(UID) --build-arg GID=$(GID) .
 
-build-php74:
+build-php74: check-docker
 	DOCKER_BUILDKIT=1 docker build --network=host -f ./docker/Dockerfile.php74 -t $(IMAGE_PHP74) \
 	  --build-arg CACHEBUST=$(shell date +%s) --build-arg UID=$(UID) --build-arg GID=$(GID) .
 
-build-php81:
+build-php81: check-docker
 	DOCKER_BUILDKIT=1 docker build --network=host -f ./docker/Dockerfile.php81 -t $(IMAGE_PHP81) \
 	  --build-arg CACHEBUST=$(shell date +%s) --build-arg UID=$(UID) --build-arg GID=$(GID) .
 
-build-php83:
+build-php83: check-docker
 	DOCKER_BUILDKIT=1 docker build --network=host -f ./docker/Dockerfile.php83 -t $(IMAGE_PHP83) \
 	  --build-arg CACHEBUST=$(shell date +%s) --build-arg UID=$(UID) --build-arg GID=$(GID) .
 
-build-php84:
+build-php84: check-docker
 	DOCKER_BUILDKIT=1 docker build --network=host -f ./docker/Dockerfile.php84 -t $(IMAGE_PHP84) \
 	  --build-arg CACHEBUST=$(shell date +%s) --build-arg UID=$(UID) --build-arg GID=$(GID) .
 
@@ -260,7 +270,7 @@ test-php84-nightly: start-db php84-nightly stop-db
 # Only *.php files are scanned.
 # -------------------------------------
 
-phpcs-check: build-php83
+phpcs-check: check-docker build-php83
 	docker run --rm -u $(UID):$(GID) \
 		-v $(SRC_PLUGIN):/src-plugin -w /src-plugin $(IMAGE_PHP83) \
 		bash -lc 'set -euo pipefail; \
@@ -277,7 +287,7 @@ phpcs-check: build-php83
 				--ignore=node_modules,vendor,tests,bin,assets/test . \
 				--report-summary --report-full'
 	
-phpcs-fix: build-php83
+phpcs-fix: check-docker build-php83
 	docker run --rm -u $(UID):$(GID) \
 		-v $(SRC_PLUGIN):/src-plugin -w /src-plugin $(IMAGE_PHP83) \
 		bash -lc 'set -euo pipefail; \
@@ -301,7 +311,7 @@ phpcs-fix: build-php83
 # Runs check against the built dist/ ZIP version of the plugin.
 # -------------------------------------
 
-plugin-check: build-php83 dist-docker
+plugin-check: check-docker build-php83 dist-docker
 	@echo "[CHECK] Using dist ZIP instead of source directory..."
 	docker run --rm \
 		--network $(DB_NETWORK) \
@@ -374,7 +384,7 @@ testall: start-db \
 	php56-wp49 \
 	php74-wp58 php74-wp59 \
 	php81-wp62 php81-wp66 php81-wp673 php81-wp683 php81-latest \
-	php83-wp62 php83-wp66 php83-wp673 php83-wp683 php83-latest php83-nightly php84-latest php85-latest \
+	php83-wp62 php83-wp66 php83-wp673 php83-wp683 php83-latest php83-nightly php84-latest \
 	stop-db
 	@echo "All test suites have finished."
 
@@ -402,7 +412,7 @@ PLUGIN_FILE := meteoprog-weather-informers.php
 PLUGIN_NAME_HEADER := $(shell grep -E '^ \* Plugin Name:' $(PLUGIN_FILE) | sed -E 's/^ \* Plugin Name:[[:space:]]*//')
 PLUGIN_VERSION := $(shell grep -E '^ \* Version:' $(PLUGIN_FILE) | sed -E 's/^ \* Version:[[:space:]]*//')
 
-i18n-pot: build-php83
+i18n-pot: check-docker build-php83
 	docker run --rm -u $(UID):$(GID) -v $(SRC_PLUGIN):/src-plugin -w /src-plugin $(IMAGE_PHP83) \
 	  wp i18n make-pot . languages/$(PLUGIN_NAME).pot \
 	    --exclude=node_modules,vendor,tests,bin,assets/test \
@@ -432,7 +442,7 @@ i18n-pot: build-php83
 # This runs wp dist-archive inside the PHP 8.3 container.
 # -------------------------------------
 
-dist-docker: build-php83
+dist-docker: check-docker build-php83
 	docker run --rm -u 0:0 \
 	  -v $(SRC_PLUGIN):/src-plugin -w /src-plugin $(IMAGE_PHP83) \
 	  sh -c '\

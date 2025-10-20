@@ -8,23 +8,28 @@ ARG UID=1000
 ARG GID=1000
 
 # Install basic utilities, DNS tools, and PHP extensions
-RUN apk add --no-cache \
-    bash \
-    mariadb-client \
-    git \
-    unzip \
-    zip \
-    libzip-dev \
-    subversion \
-    curl \
-    sudo \
-    tree \
-    gettext \
-    icu-dev \
-    bind-tools \
-    openssh-client \
-    $PHPIZE_DEPS \
- && docker-php-ext-install mysqli pdo_mysql zip
+RUN set -eux; \
+    echo "[Build] Installing base packages and PHP extensions..."; \
+    apk add --no-cache \
+        bash \
+        curl \
+        openssl \
+        ca-certificates \
+        git \
+        unzip \
+        zip \
+        libzip-dev \
+        subversion \
+        sudo \
+        tree \
+        gettext \
+        icu-dev \
+        bind-tools \
+        openssh-client \
+        mariadb-client \
+        $PHPIZE_DEPS && \
+        update-ca-certificates && \
+        docker-php-ext-install mysqli pdo_mysql zip
 
 # Workaround for Alpine DNS issues during build (raw.githubusercontent.com, wordpress.org, getcomposer.org, wp-cli.org repo.packagist.org)
 RUN echo "[Build] Checking DNS resolution... (cachebust=$CACHEBUST)" \
@@ -38,10 +43,31 @@ RUN echo "[Build] Checking DNS resolution... (cachebust=$CACHEBUST)" \
 
 RUN echo "date.timezone = UTC" > /usr/local/etc/php/conf.d/timezone.ini
 
-# Create a non-root user to match local UID/GID for mounted volumes
-RUN addgroup -g ${GID} user && \
-    adduser -D -u ${UID} -G user user && \
-    adduser user wheel
+# Create non-root user with matching UID/GID (safe for macOS, Linux, CI)
+RUN set -eux; \
+    # --- Check or create group ---
+    if getent group "${GID}" >/dev/null 2>&1; then \
+        groupname="$(getent group "${GID}" | cut -d: -f1)"; \
+        echo "[Docker] Using existing group ${GID} (${groupname})"; \
+    else \
+        addgroup -g "${GID}" user; \
+        groupname="user"; \
+        echo "[Docker] Created new group ${groupname} (${GID})"; \
+    fi; \
+    # --- Check or create user ---
+    if getent passwd "${UID}" >/dev/null 2>&1; then \
+        username="$(getent passwd "${UID}" | cut -d: -f1)"; \
+        echo "[Docker] Using existing user ${UID} (${username})"; \
+    else \
+        adduser -D -u "${UID}" -G "${groupname}" user; \
+        username="user"; \
+        echo "[Docker] Created new user ${username} (${UID}:${GID})"; \
+    fi; \
+    # --- Add to wheel if exists ---
+    if getent group wheel >/dev/null 2>&1; then \
+        adduser "${username}" wheel || true; \
+    fi; \
+    echo "[Docker] ✅ User ${username} (${UID}:${GID}) ready"
 
 # Install the latest stable Composer (supports PHP >= 7.2.5)
 RUN curl -sS https://getcomposer.org/installer | php \
