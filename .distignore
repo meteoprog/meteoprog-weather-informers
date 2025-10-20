@@ -49,6 +49,7 @@ phpunit.xml*
 
 # Local build assets for WP.org (screenshots, banners)
 assets-wp/
+.wordpress-org/
 
 # -----------------------------------------------------------------------------
 # GitHub / Documentation files (ignored automatically, optional)
