@@ -54,19 +54,63 @@ All PHP × WordPress combinations are tested using Docker via the Makefile. The 
 | 8.3 | 6.2 – latest / nightly (daily scheduled) |
 | 8.4 | 6.8.3 – latest / nightly                 |
 
-Run tests locally:
+Each suite spins up a temporary WordPress install inside Docker, installs PHPUnit + Yoast Polyfills, runs tests, and tears down the DB automatically.
 
+---
+
+## 🧪 Local Testing
+
+You can run individual test suites or the full test matrix locally using Docker and Makefile targets.
+
+**Run a specific test (PHP 8.3 + WordPress 6.8.3):**
 ```bash
 make test-php83-wp683
 ```
 
-Run all test suites in parallel:
-
+**Run all test suites sequentially (verbose output):**
 ```bash
-make -j4 testall
+make testall
 ```
 
-Each suite spins up a temporary WordPress install inside Docker, installs PHPUnit + Yoast Polyfills, runs tests, and tears down the DB automatically.
+---
+
+#### 🧩 Available Test Targets
+
+| PHP Version | WordPress Versions |
+|--------------|--------------------|
+| **5.6** | `wp49` |
+| **7.4** | `wp58`, `wp59` |
+| **8.1** | `wp62`, `wp66`, `wp673`, `wp683`, `latest` |
+| **8.3** | `wp62`, `wp66`, `wp673`, `wp683`, `latest`, `nightly` |
+| **8.4** | `wp683`, `latest`, `nightly` |
+
+Each test target automatically starts a dedicated MariaDB container, runs PHPUnit, and then stops the database container.  
+
+Example:  
+```bash
+make test-php81-wp683
+# Equivalent to:
+# start-db php81-wp683
+# stop-db
+```
+
+---
+
+### 🧰 Useful Makefile Commands
+
+| Command | Description |
+|----------|-------------|
+| `make i18n-pot` | Generate translation template (`.pot`) |
+| `make phpcs` | Run PHPCS / WPCS checks |
+| `make plugin-check` | Run WordPress Plugin Check tool |
+| `make testall` | Run all test suites sequentially with detailed output |
+
+---
+
+📘 **Note:**  
+For CI, tests are executed in parallel across the full matrix (PHP 5.6 → 8.4, WordPress 4.9 → 6.8+), but local runs use sequential mode (`make testall`) for clarity.
+
+---
 
 ### 🧩 Plugin Check Validation
 
