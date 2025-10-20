@@ -46,13 +46,13 @@ Widgets will not display without a valid key linked to your website domain.
 
 All PHP × WordPress combinations are tested using Docker via the Makefile. The following environments are covered:
 
-| PHP | WordPress                              |
-| --- | -------------------------------------- |
-| 5.6 | 4.9                                    |
-| 7.4 | 5.8 – 5.9                              |
-| 8.1 | 6.2 – 6.8                              |
+| PHP | WordPress                                |
+| --- | ---------------------------------------- |
+| 5.6 | 4.9                                      |
+| 7.4 | 5.8 – 5.9                                |
+| 8.1 | 6.2 – 6.8                                |
 | 8.3 | 6.2 – latest / nightly (daily scheduled) |
-| 8.4 | 6.8.3 – latest / nightly               |
+| 8.4 | 6.8.3 – latest / nightly                 |
 
 Run tests locally:
 
@@ -67,6 +67,23 @@ make -j4 testall
 ```
 
 Each suite spins up a temporary WordPress install inside Docker, installs PHPUnit + Yoast Polyfills, runs tests, and tears down the DB automatically.
+
+### 🧩 Plugin Check Validation
+
+Run the official [WordPress Plugin Check](https://github.com/WordPress/plugin-check) locally to ensure compliance with Plugin Directory guidelines:
+
+```bash
+make test-plugin-check
+```
+
+This command runs `wp plugin-check` inside Docker and verifies:
+
+* Proper plugin headers and text domain
+* Correct use of escaping and sanitization functions
+* No usage of disallowed APIs
+* GPL license and translation readiness
+
+---
 
 ### 🔍 Additional QA Checks
 
