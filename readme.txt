@@ -4,7 +4,7 @@ Tags: weather, widget, shortcode, block, forecast
 Requires at least: 4.9
 Tested up to: 6.8
 Requires PHP: 7.0
-Stable tag: 1.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -175,6 +175,12 @@ No personal data is collected or stored by the plugin itself.
 
 == Changelog ==
 
+= 1.0.1 =
+* 🧩 Removed filtered 5-star reviews link (WP.org guideline compliance)
+* ⚙️ Updated "Requires PHP" to 7.0 in plugin header and readme
+* 🗒️ Added note explaining required `su_` prefix for Shortcodes Ultimate integration
+* 🕹️ Maintains backward compatibility with PHP 5.6 (legacy mode)
+
 = 1.0 =
 * Initial release.
 * ✅ Gutenberg block (**Meteoprog Weather Widget**) with REST API integration.
@@ -188,6 +194,9 @@ No personal data is collected or stored by the plugin itself.
 * ✅ Legacy WordPress/PHP support (4.9+, PHP 5.6+; tested on PHP 8.3/8.4).
 
 == Upgrade Notice ==
+
+= 1.0.1 =
+🧩 Minor update for WordPress.org review compliance and metadata corrections.
 
 = 1.0 =
 First stable release.
