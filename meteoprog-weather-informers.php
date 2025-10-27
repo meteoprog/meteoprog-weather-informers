@@ -8,7 +8,7 @@
  * Author URI: https://profiles.wordpress.org/meteoprog/
  * Requires at least: 4.9
  * Tested up to: 6.8
- * Requires PHP: 5.6
+ * Requires PHP: 7.0
  * Text Domain: meteoprog-weather-informers
  * Domain Path: /languages
  * License: GPL-2.0-or-later
