@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<p class="meteoprog-admin-promo__text">
 		<?php esc_html_e( 'Enjoying Meteoprog Weather Widgets?', 'meteoprog-weather-informers' ); ?><br>
-		<a href="https://wordpress.org/support/plugin/meteoprog-weather-informers/reviews/?filter=5"
+		<a href="https://wordpress.org/support/plugin/meteoprog-weather-informers/reviews/"
 			target="_blank"
 			rel="noopener noreferrer"
 			class="meteoprog-admin-promo__link">
