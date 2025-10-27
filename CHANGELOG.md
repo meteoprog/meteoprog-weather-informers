@@ -5,6 +5,12 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [v1.0.1] - 2025-10-27
+* 🧩 Removed filtered 5-star reviews link (WP.org guideline compliance)
+* ⚙️ Updated "Requires PHP" to 7.0 in plugin header and readme
+* 🗒️ Added note explaining required `su_` prefix for Shortcodes Ultimate integration
+* 🕹️ Maintains backward compatibility with PHP 5.6 (legacy mode)
+
 ## [v1.0] - 2025-10-19
 ### Added
 - Initial public release.
@@ -22,4 +28,5 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+[v1.0.1]: https://github.com/meteoprog/meteoprog-weather-informers/releases/tag/v1.0.1
 [v1.0]: https://github.com/meteoprog/meteoprog-weather-informers/releases/tag/v1.0
