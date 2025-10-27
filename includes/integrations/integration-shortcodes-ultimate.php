@@ -119,6 +119,9 @@ if ( ! function_exists( 'meteoprog_su_informer_shortcode_handler' ) ) {
 
 /**
  * SU shortcode: [su_meteoprog_informer id="..."]
+ * 
+ * Required 'su_' prefix for Shortcodes Ultimate compatibility.
+ * WordPress must register [su_meteoprog_informer]
  */
 add_action(
 	'init',
