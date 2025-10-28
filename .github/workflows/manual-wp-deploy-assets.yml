@@ -61,7 +61,9 @@ jobs:
             exit 1
           fi
 
-          rsync -a .wordpress-org/ svn-assets/ --delete --quiet
+          # Preserve .svn
+          rsync -a --delete --exclude=".svn" .wordpress-org/ svn-assets/
+
           cd svn-assets
           svn add --force . > /dev/null 2>&1 || true
 
