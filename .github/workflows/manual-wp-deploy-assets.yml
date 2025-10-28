@@ -45,25 +45,34 @@ jobs:
           fi
           echo "::notice::.wordpress-org directory verified."
 
-      # 🚀 Commit .wordpress-org assets directly to SVN
+      # 🚀 Commit .wordpress-org assets directly to SVN (always up-to-date)
       - name: 🚀 Upload assets to WordPress.org SVN
         run: |
           set -e
           echo "::notice::Checking out assets SVN directory..."
-          svn checkout "https://plugins.svn.wordpress.org/meteoprog-weather-informers/assets" svn-assets --depth immediates --quiet
+          svn checkout "https://plugins.svn.wordpress.org/meteoprog-weather-informers/assets" svn-assets --quiet
+
+          echo "::notice::Updating local SVN copy to latest revision..."
+          svn update svn-assets --set-depth infinity --quiet
 
           echo "::notice::Copying new assets from .wordpress-org/..."
-          cp -R .wordpress-org/* svn-assets/
+          rsync -av --delete .wordpress-org/ svn-assets/ --quiet
 
           cd svn-assets
+          echo "::notice::Detecting changes..."
           svn add --force . > /dev/null 2>&1 || true
           svn status
 
-          echo "::notice::Committing changes to WordPress.org..."
-          svn commit -m "update plugin assets" \
-            --username "${{ secrets.SVN_USERNAME }}" \
-            --password "${{ secrets.SVN_PASSWORD }}" \
-            --non-interactive --no-auth-cache
+          if svn status | grep -q "^[AMR]"; then
+            echo "::notice::Committing changes to WordPress.org..."
+            svn commit -m "update plugin assets" \
+              --username "${{ secrets.SVN_USERNAME }}" \
+              --password "${{ secrets.SVN_PASSWORD }}" \
+              --non-interactive --no-auth-cache
+            echo "::notice::✅ Assets successfully updated!"
+          else
+            echo "::notice::No changes detected — skipping commit."
+          fi
 
       # ✅ Log success result
       - name: ✅ Assets update completed
