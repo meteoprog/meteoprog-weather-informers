@@ -299,7 +299,7 @@ jobs:
     name: 🚀 Release
     runs-on: ubuntu-latest
     needs: [tests, phpcs]
-    if: startsWith(github.ref, 'refs/tags/v') && (github.event.pull_request.head.repo.fork == false)
+    if: startsWith(github.ref, 'refs/tags/v')
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
@@ -333,6 +333,80 @@ jobs:
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # 🕊️ Deploy to WordPress.org
+  svn-deploy:
+    name: 🕊️ Deploy to WordPress.org
+    runs-on: ubuntu-latest
+    needs: release
+    # Runs automatically on tag release or manually via workflow_dispatch
+    if: (startsWith(github.ref, 'refs/tags/v') && needs.release.result == 'success') || github.event_name == 'workflow_dispatch'
+
+    steps:
+      # Checkout repository (required for both release and manual mode)
+      - uses: actions/checkout@v4
+
+      # 🧭 Fetch latest published GitHub release (manual mode only)
+      - name: 🧭 Get latest GitHub release
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        id: latest
+        uses: actions-ecosystem/action-get-latest-release@v1
+        with:
+          repo: ${{ github.repository }}
+
+      # 🪄 Log which release will be deployed
+      - name: 🪄 Log release info
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: |
+          echo "::notice::Deploying release ${{ steps.latest.outputs.tag_name }}"
+          echo "::notice::Release page: ${{ steps.latest.outputs.html_url }}"
+
+      # 📥 Download ZIP asset from the latest GitHub release (manual mode only)
+      - name: 📥 Download latest release ZIP
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        uses: dsaltares/fetch-gh-release-asset@v1
+        with:
+          repo: ${{ github.repository }}
+          version: latest
+          file: meteoprog-weather-informers.zip
+          target: dist/meteoprog-weather-informers.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 🪶 Log deploy source (manual or automatic)
+      - name: 🪶 Log deploy source
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "::notice::Deploy source: latest GitHub release (manual trigger)"
+          else
+            echo "::notice::Deploy source: tag-triggered release build"
+          fi
+
+      # 🚀 Deploy the plugin ZIP to WordPress.org via SVN
+      - name: 🕊️ Deploy ZIP to WordPress.org
+        uses: 10up/action-wordpress-plugin-deploy@stable
+        with:
+          zip-path: dist/meteoprog-weather-informers.zip
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+
+  # 🖼️ Update .wordpress-org assets
+  asset-update:
+    name: 🖼️ Update Plugin Assets
+    runs-on: ubuntu-latest
+    needs: svn-deploy
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update WordPress.org plugin assets
+        uses: 10up/action-wordpress-plugin-asset-update@stable
+        with:
+          slug: meteoprog-weather-informers
+          asset-path: .wordpress-org
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
 
   # 📊 Summary
   summary:
