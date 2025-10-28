@@ -49,33 +49,35 @@ jobs:
       - name: 🚀 Upload assets to WordPress.org SVN
         run: |
           set -e
+
           echo "::notice::Checking out assets SVN directory..."
           rm -rf svn-assets
-          svn checkout "https://plugins.svn.wordpress.org/meteoprog-weather-informers/assets" svn-assets --depth infinity --quiet
-
-          echo "::notice::Updating local SVN copy..."
-          cd svn-assets
-          svn update --set-depth infinity --quiet || true
-          cd ..
+          svn checkout "https://plugins.svn.wordpress.org/meteoprog-weather-informers/assets" svn-assets \
+            --depth infinity --quiet --non-interactive --trust-server-cert
 
           echo "::notice::Copying new assets from .wordpress-org/..."
-          rsync -a --delete .wordpress-org/ svn-assets/ --quiet
+          if [ -z "$(ls -A .wordpress-org)" ]; then
+            echo "::error::.wordpress-org directory is empty — nothing to sync."
+            exit 1
+          fi
 
+          rsync -a .wordpress-org/ svn-assets/ --delete --quiet
           cd svn-assets
-          echo "::notice::Detecting changes..."
           svn add --force . > /dev/null 2>&1 || true
+
+          echo "::group::🔍 SVN status (before commit)"
+          svn status
+          echo "::endgroup::"
 
           changes=$(svn status | grep "^[AMR]" || true)
           if [ -n "$changes" ]; then
-            echo "::notice::Committing asset updates to WordPress.org..."
+            echo "::notice::Detected changes, committing to WordPress.org assets directory..."
             svn commit -m "update plugin assets" \
               --username "${{ secrets.SVN_USERNAME }}" \
               --password "${{ secrets.SVN_PASSWORD }}" \
-              --non-interactive --no-auth-cache > /dev/null 2>&1 || {
-                echo "::error::SVN commit failed"
-                exit 1
-              }
-            echo "::notice::✅ Assets successfully updated!"
+              --non-interactive --no-auth-cache --trust-server-cert
+
+            echo "::notice::✅ Assets successfully updated at https://plugins.svn.wordpress.org/meteoprog-weather-informers/assets/"
           else
             echo "::notice::No changes detected — skipping commit."
           fi
