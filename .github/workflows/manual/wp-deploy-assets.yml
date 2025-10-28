@@ -1,0 +1,56 @@
+name: 🖼️ Manual Update WordPress.org Assets
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Type 'ASSETS' to confirm update of .wordpress-org assets"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  update-assets:
+    name: 🖼️ Update Plugin Assets on WordPress.org
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.confirm == 'ASSETS' }}
+
+    steps:
+      # Checkout repository
+      - uses: actions/checkout@v4
+
+      # 🪄 Log who triggered the update
+      - name: 🪄 Log trigger info
+        run: |
+          echo "::notice::Triggered by: ${{ github.actor }}"
+          echo "::notice::Starting asset update for plugin meteoprog-weather-informers"
+
+      # 🔍 Verify .wordpress-org directory exists
+      - name: 🔍 Verify assets directory
+        run: |
+          if [ ! -d ".wordpress-org" ]; then
+            echo "::error::.wordpress-org directory not found in repository root."
+            exit 1
+          fi
+          echo "::notice::.wordpress-org directory verified."
+
+      # 🖼️ Update .wordpress-org assets on WordPress.org
+      - name: 🖼️ Update assets via 10up action
+        uses: 10up/action-wordpress-plugin-asset-update@stable
+        with:
+          slug: meteoprog-weather-informers
+          asset-path: .wordpress-org
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+
+      # ✅ Log success result
+      - name: ✅ Assets update completed
+        if: success()
+        run: |
+          echo "::notice::✅ Assets updated successfully!"
+          echo "::notice::WordPress.org plugin page:"
+          echo "::notice::https://wordpress.org/plugins/meteoprog-weather-informers/"
+          echo "::notice::SVN assets path:"
+          echo "::notice::https://plugins.svn.wordpress.org/meteoprog-weather-informers/assets/"

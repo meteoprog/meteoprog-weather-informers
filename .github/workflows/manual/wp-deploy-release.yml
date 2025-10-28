@@ -1,0 +1,81 @@
+name: ⚙️ Manual Deploy Latest Release to WordPress.org
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Type 'DEPLOY' to confirm deployment of the latest GitHub release"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  # ⚙️ Manual Deploy Latest Release to WordPress.org
+  svn-deploy-manual:
+    name: ⚙️ Manual Deploy Latest GitHub Release
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.confirm == 'DEPLOY' }}
+
+    steps:
+      # Checkout repository
+      - uses: actions/checkout@v4
+
+      # 🧭 Fetch latest published GitHub release
+      - name: 🧭 Get latest GitHub release
+        id: latest
+        uses: actions-ecosystem/action-get-latest-release@v1
+        with:
+          repo: ${{ github.repository }}
+
+      # 🪄 Log which release will be deployed
+      - name: 🪄 Log release info
+        run: |
+          echo "::notice::Triggered by: ${{ github.actor }}"
+          echo "::notice::Deploying release ${{ steps.latest.outputs.tag_name }}"
+          echo "::notice::Release page: ${{ steps.latest.outputs.html_url }}"
+
+      # 📥 Download latest release ZIP
+      - name: 📥 Download latest release ZIP
+        id: download
+        uses: dsaltares/fetch-gh-release-asset@v1
+        with:
+          repo: ${{ github.repository }}
+          version: latest
+          file: meteoprog-weather-informers.zip
+          target: dist/meteoprog-weather-informers.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 🔍 Verify that ZIP file exists
+      - name: 🔍 Verify ZIP file
+        run: |
+          if [ ! -f "dist/meteoprog-weather-informers.zip" ]; then
+            echo "::error::ZIP file not found — check release assets or asset name mismatch."
+            exit 1
+          fi
+          echo "::notice::ZIP verified: dist/meteoprog-weather-informers.zip"
+
+      # 🪶 Log deploy source
+      - name: 🪶 Log deploy source
+        run: |
+          echo "::notice::Deploy source: latest GitHub release (manual trigger)"
+
+      # 🚀 Deploy the plugin ZIP to WordPress.org via SVN
+      - name: 🕊️ Deploy ZIP to WordPress.org
+        uses: 10up/action-wordpress-plugin-deploy@stable
+        with:
+          zip-path: dist/meteoprog-weather-informers.zip
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+
+      # ✅ Log success result
+      - name: ✅ Deployment completed
+        if: success()
+        run: |
+          echo "::notice::✅ Deployment completed successfully!"
+          echo "::notice::WordPress.org plugin page:"
+          echo "::notice::https://wordpress.org/plugins/meteoprog-weather-informers/"
+          echo "::notice::SVN trunk:"
+          echo "::notice::https://plugins.svn.wordpress.org/meteoprog-weather-informers/trunk/"

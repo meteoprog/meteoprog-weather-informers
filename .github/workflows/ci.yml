@@ -326,6 +326,11 @@ jobs:
           echo "::notice::Version OK: ${VER}"
       - name: 📦 Build dist ZIP
         run: make dist-docker
+      - name: 📦 Upload dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-zip
+          path: dist/meteoprog-weather-informers.zip
       - name: 🚀 Upload release to GitHub
         uses: softprops/action-gh-release@v2
         with:
@@ -339,49 +344,24 @@ jobs:
     name: 🕊️ Deploy to WordPress.org
     runs-on: ubuntu-latest
     needs: release
-    # Runs automatically on tag release or manually via workflow_dispatch
-    if: (startsWith(github.ref, 'refs/tags/v') && needs.release.result == 'success') || github.event_name == 'workflow_dispatch'
+    if: startsWith(github.ref, 'refs/tags/v') && needs.release.result == 'success'
 
     steps:
-      # Checkout repository (required for both release and manual mode)
+      # 📥 Download dist artifact from release job
+      - name: 📥 Download dist artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-zip
+          path: dist
+
+      # Checkout repository
       - uses: actions/checkout@v4
-
-      # 🧭 Fetch latest published GitHub release (manual mode only)
-      - name: 🧭 Get latest GitHub release
-        if: ${{ github.event_name == 'workflow_dispatch' }}
-        id: latest
-        uses: actions-ecosystem/action-get-latest-release@v1
-        with:
-          repo: ${{ github.repository }}
-
-      # 🪄 Log which release will be deployed
-      - name: 🪄 Log release info
-        if: ${{ github.event_name == 'workflow_dispatch' }}
-        run: |
-          echo "::notice::Deploying release ${{ steps.latest.outputs.tag_name }}"
-          echo "::notice::Release page: ${{ steps.latest.outputs.html_url }}"
-
-      # 📥 Download ZIP asset from the latest GitHub release (manual mode only)
-      - name: 📥 Download latest release ZIP
-        if: ${{ github.event_name == 'workflow_dispatch' }}
-        uses: dsaltares/fetch-gh-release-asset@v1
-        with:
-          repo: ${{ github.repository }}
-          version: latest
-          file: meteoprog-weather-informers.zip
-          target: dist/meteoprog-weather-informers.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # 🪶 Log deploy source (manual or automatic)
       - name: 🪶 Log deploy source
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "::notice::Deploy source: latest GitHub release (manual trigger)"
-          else
-            echo "::notice::Deploy source: tag-triggered release build"
-          fi
-
+          echo "::notice::Deploy source: tag-triggered release build"
+          
       # 🚀 Deploy the plugin ZIP to WordPress.org via SVN
       - name: 🕊️ Deploy ZIP to WordPress.org
         uses: 10up/action-wordpress-plugin-deploy@stable
