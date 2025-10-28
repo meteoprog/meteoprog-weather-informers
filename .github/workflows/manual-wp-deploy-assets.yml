@@ -53,7 +53,7 @@ jobs:
           echo "::notice::Checking out assets SVN directory..."
           rm -rf svn-assets
           svn checkout "https://plugins.svn.wordpress.org/meteoprog-weather-informers/assets" svn-assets \
-            --depth infinity --quiet --non-interactive --trust-server-cert
+            --depth infinity --non-interactive --trust-server-cert
 
           echo "::notice::Copying new assets from .wordpress-org/..."
           if [ -z "$(ls -A .wordpress-org)" ]; then
