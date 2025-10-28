@@ -30,6 +30,12 @@ jobs:
           echo "::notice::Triggered by: ${{ github.actor }}"
           echo "::notice::Starting asset update for plugin meteoprog-weather-informers"
 
+     # 🔧 Install SVN
+      - name: 🔧 Install Subversion
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y subversion
+
       # 🔍 Verify .wordpress-org directory exists
       - name: 🔍 Verify assets directory
         run: |
