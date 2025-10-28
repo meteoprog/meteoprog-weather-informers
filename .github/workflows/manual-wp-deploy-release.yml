@@ -24,7 +24,7 @@ jobs:
       # 📥 Download latest release ZIP
       - name: 📥 Download latest release ZIP
         id: download
-        uses: dsaltares/fetch-gh-release-asset@v1.1.2
+        uses: dsaltares/fetch-gh-release-asset@1.1.2
         with:
           repo: ${{ github.repository }}
           version: latest
