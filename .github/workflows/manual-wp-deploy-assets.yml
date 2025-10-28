@@ -50,25 +50,31 @@ jobs:
         run: |
           set -e
           echo "::notice::Checking out assets SVN directory..."
-          svn checkout "https://plugins.svn.wordpress.org/meteoprog-weather-informers/assets" svn-assets --quiet
+          rm -rf svn-assets
+          svn checkout "https://plugins.svn.wordpress.org/meteoprog-weather-informers/assets" svn-assets --depth infinity --quiet
 
-          echo "::notice::Updating local SVN copy to latest revision..."
-          svn update svn-assets --set-depth infinity --quiet
+          echo "::notice::Updating local SVN copy..."
+          cd svn-assets
+          svn update --set-depth infinity --quiet || true
+          cd ..
 
           echo "::notice::Copying new assets from .wordpress-org/..."
-          rsync -av --delete .wordpress-org/ svn-assets/ --quiet
+          rsync -a --delete .wordpress-org/ svn-assets/ --quiet
 
           cd svn-assets
           echo "::notice::Detecting changes..."
           svn add --force . > /dev/null 2>&1 || true
-          svn status
 
-          if svn status | grep -q "^[AMR]"; then
-            echo "::notice::Committing changes to WordPress.org..."
+          changes=$(svn status | grep "^[AMR]" || true)
+          if [ -n "$changes" ]; then
+            echo "::notice::Committing asset updates to WordPress.org..."
             svn commit -m "update plugin assets" \
               --username "${{ secrets.SVN_USERNAME }}" \
               --password "${{ secrets.SVN_PASSWORD }}" \
-              --non-interactive --no-auth-cache
+              --non-interactive --no-auth-cache > /dev/null 2>&1 || {
+                echo "::error::SVN commit failed"
+                exit 1
+              }
             echo "::notice::✅ Assets successfully updated!"
           else
             echo "::notice::No changes detected — skipping commit."
@@ -78,8 +84,4 @@ jobs:
       - name: ✅ Assets update completed
         if: success()
         run: |
-          echo "::notice::✅ Assets updated successfully!"
-          echo "::notice::WordPress.org plugin page:"
-          echo "::notice::https://wordpress.org/plugins/meteoprog-weather-informers/"
-          echo "::notice::SVN assets path:"
-          echo "::notice::https://plugins.svn.wordpress.org/meteoprog-weather-informers/assets/"
+          echo "::notice::✅ Assets updated on WordPress.org (meteoprog-weather-informers)"
