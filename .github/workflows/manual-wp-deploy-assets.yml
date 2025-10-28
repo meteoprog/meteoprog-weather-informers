@@ -61,11 +61,10 @@ jobs:
             exit 1
           fi
 
-          # Preserve .svn
-          rsync -a --delete --exclude=".svn" .wordpress-org/ svn-assets/
+          rsync -a --delete --quiet --exclude=".svn" .wordpress-org/ svn-assets/
 
           cd svn-assets
-          svn add --force . > /dev/null 2>&1 || true
+          svn add --force --quiet . > /dev/null 2>&1 || true
 
           echo "::group::🔍 SVN status (before commit)"
           svn status
