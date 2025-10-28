@@ -41,20 +41,48 @@ jobs:
           fi
           echo "::notice::ZIP verified: dist/meteoprog-weather-informers.zip"
 
+      # 🗜️ Extract ZIP to build/ (handles nested folder inside archive)
+      - name: 🗜️ Extract ZIP contents
+        run: |
+          rm -rf build
+          mkdir -p build
+          unzip -q dist/meteoprog-weather-informers.zip -d build
+          entries=$(find build -mindepth 1 -maxdepth 1)
+          if [ "$(echo "$entries" | wc -l)" -eq 1 ] && [ -d "$entries" ]; then
+            echo "::notice::Flatten nested folder: $entries"
+            shopt -s dotglob
+            mv "$entries"/* build/
+            rmdir "$entries"
+          fi
+          ls -la build
+
+      # 🧾 Extract Stable tag version from readme.txt
+      - name: 🧾 Extract version from readme.txt
+        id: version
+        run: |
+          version=$(grep -i '^Stable tag:' build/readme.txt | awk '{print $3}' | tr -d '\r')
+          if [ -z "$version" ]; then
+            echo "::error::Stable tag not found in build/readme.txt"
+            exit 1
+          fi
+          echo "VERSION=$version" >> $GITHUB_ENV
+          echo "::notice::Detected version from readme.txt: $version"
+
       # 🪶 Log deploy source
       - name: 🪶 Log deploy source
         run: |
           echo "::notice::Triggered by: ${{ github.actor }}"
           echo "::notice::Deploy source: latest GitHub release (manual trigger)"
+          echo "::notice::Version: $VERSION"
 
-      # 🚀 Deploy the plugin ZIP to WordPress.org via SVN
-      - name: 🕊️ Deploy ZIP to WordPress.org
+      # 🚀 Deploy the plugin to WordPress.org via SVN (stable expects BUILD_DIR)
+      - name: 🕊️ Deploy to WordPress.org
         uses: 10up/action-wordpress-plugin-deploy@stable
-        with:
-          zip-path: dist/meteoprog-weather-informers.zip
         env:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          BUILD_DIR: ${{ github.workspace }}/build
+          VERSION: ${{ env.VERSION }}
 
       # ✅ Log success result
       - name: ✅ Deployment completed
@@ -65,3 +93,5 @@ jobs:
           echo "::notice::https://wordpress.org/plugins/meteoprog-weather-informers/"
           echo "::notice::SVN trunk:"
           echo "::notice::https://plugins.svn.wordpress.org/meteoprog-weather-informers/trunk/"
+          echo "::notice::SVN tag:"
+          echo "::notice::https://plugins.svn.wordpress.org/meteoprog-weather-informers/tags/${VERSION}/"
