@@ -113,6 +113,11 @@ if ( ! function_exists( 'meteoprog_su_informer_shortcode_handler' ) ) {
 		// Enqueue loader exactly when widget HTML is generated.
 		$frontend->enqueue_loader();
 
+		// Warning if still empty.
+		if ( '' === $id ) {
+			return '<!-- Meteoprog Weather Widget: default ID not set -->';
+		}
+
 		return $frontend->build_html( $id );
 	}
 }

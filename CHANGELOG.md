@@ -5,6 +5,11 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [v1.0.2] - 2025-10-29
+* 🐞 Fixed issue where `[su_meteoprog_informer]` without an ID rendered an empty informer block when no default informer was set.
+* ⚙️ Improved data layer generation — prevents empty IDs in `<head>` output.
+* 🧹 Minor internal code cleanup for Shortcodes Ultimate integration.
+
 ## [v1.0.1] - 2025-10-27
 * 🧩 Removed filtered 5-star reviews link (WP.org guideline compliance)
 * ⚙️ Updated "Requires PHP" to 7.0 in plugin header and readme
@@ -28,5 +33,6 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+[v1.0.2]: https://github.com/meteoprog/meteoprog-weather-informers/releases/tag/v1.0.2
 [v1.0.1]: https://github.com/meteoprog/meteoprog-weather-informers/releases/tag/v1.0.1
 [v1.0]: https://github.com/meteoprog/meteoprog-weather-informers/releases/tag/v1.0

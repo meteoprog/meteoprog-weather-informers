@@ -184,7 +184,12 @@ class Meteoprog_Informers_Frontend {
 	 */
 	public function build_html( $id ) {
 
-		$id_js  = esc_js( $id );
+		$id_js = esc_js( $id );
+
+		if ( '' === $id_js ) {
+			return '';
+		}
+
 		$div_id = 'meteoprogData_' . $id_js;
 
 		// Register informer ID for the head data layer.

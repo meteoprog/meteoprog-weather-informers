@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Meteoprog Weather Widget plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Meteoprog Weather Widget 1.0\n"
+"Project-Id-Version: Meteoprog Weather Widget 1.0.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/meteoprog-weather-informers\n"
 "Last-Translator: meteoprog <app@meteoprog.com>\n"
 "Language-Team: English <app@meteoprog.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-10-17T20:48:50+00:00\n"
+"POT-Creation-Date: 2025-10-28T21:44:38+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: meteoprog-weather-informers\n"
@@ -53,9 +53,9 @@ msgstr ""
 msgid "Meteoprog Widgets"
 msgstr ""
 
-#: includes/class-meteoprog-informers-admin.php:166
-#: includes/class-meteoprog-informers-admin.php:216
-#: includes/class-meteoprog-informers-admin.php:237
+#: includes/class-meteoprog-informers-admin.php:172
+#: includes/class-meteoprog-informers-admin.php:222
+#: includes/class-meteoprog-informers-admin.php:243
 #: includes/functions-uninstall.php:40
 msgid "Insufficient permissions."
 msgstr ""
@@ -77,20 +77,20 @@ msgid "Meteoprog Weather Widget Settings"
 msgstr ""
 
 #: includes/elementor/class-meteoprog-informer-elementor-widget.php:123
-#: includes/integrations/integration-shortcodes-ultimate.php:144
+#: includes/integrations/integration-shortcodes-ultimate.php:152
 #: assets/block/js/block.js:159
 msgid "Default widget (from settings)"
 msgstr ""
 
 #: includes/elementor/class-meteoprog-informer-elementor-widget.php:142
-#: includes/integrations/integration-shortcodes-ultimate.php:163
+#: includes/integrations/integration-shortcodes-ultimate.php:171
 #: views/parts/default-select.php:58
 #: assets/block/js/block.js:164
 msgid "No domain"
 msgstr ""
 
 #: includes/elementor/class-meteoprog-informer-elementor-widget.php:149
-#: includes/integrations/integration-shortcodes-ultimate.php:174
+#: includes/integrations/integration-shortcodes-ultimate.php:182
 #: assets/block/js/block.js:164
 msgid "OK"
 msgstr ""
@@ -98,7 +98,7 @@ msgstr ""
 #: includes/elementor/class-meteoprog-informer-elementor-widget.php:149
 #: includes/elementor/class-meteoprog-informer-elementor-widget.php:257
 #: includes/integrations/integration-shortcodes-ultimate.php:100
-#: includes/integrations/integration-shortcodes-ultimate.php:175
+#: includes/integrations/integration-shortcodes-ultimate.php:183
 #: views/parts/default-select.php:45
 #: assets/block/js/block.js:69
 #: assets/block/js/block.js:164
@@ -223,24 +223,24 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: includes/integrations/integration-shortcodes-ultimate.php:191
-#: includes/integrations/integration-shortcodes-ultimate.php:197
+#: includes/integrations/integration-shortcodes-ultimate.php:199
+#: includes/integrations/integration-shortcodes-ultimate.php:205
 msgid "Informer ID"
 msgstr ""
 
-#: includes/integrations/integration-shortcodes-ultimate.php:192
+#: includes/integrations/integration-shortcodes-ultimate.php:200
 msgid "Select informer or use default from settings."
 msgstr ""
 
-#: includes/integrations/integration-shortcodes-ultimate.php:198
+#: includes/integrations/integration-shortcodes-ultimate.php:206
 msgid "Enter informer ID (or leave empty to use default)."
 msgstr ""
 
-#: includes/integrations/integration-shortcodes-ultimate.php:203
+#: includes/integrations/integration-shortcodes-ultimate.php:211
 msgid "Meteoprog Weather"
 msgstr ""
 
-#: includes/integrations/integration-shortcodes-ultimate.php:208
+#: includes/integrations/integration-shortcodes-ultimate.php:216
 msgid "Display Meteoprog weather informer"
 msgstr ""
 
