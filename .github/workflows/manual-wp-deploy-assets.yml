@@ -39,15 +39,25 @@ jobs:
           fi
           echo "::notice::.wordpress-org directory verified."
 
-      # 🖼️ Update .wordpress-org assets on WordPress.org
-      - name: 🖼️ Update assets via 10up action
-        uses: 10up/action-wordpress-plugin-asset-update@stable
-        with:
-          slug: meteoprog-weather-informers
-          asset-path: .wordpress-org
-        env:
-          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
-          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+      # 🚀 Commit .wordpress-org assets directly to SVN
+      - name: 🚀 Upload assets to WordPress.org SVN
+        run: |
+          set -e
+          echo "::notice::Checking out assets SVN directory..."
+          svn checkout "https://plugins.svn.wordpress.org/meteoprog-weather-informers/assets" svn-assets --depth immediates --quiet
+
+          echo "::notice::Copying new assets from .wordpress-org/..."
+          cp -R .wordpress-org/* svn-assets/
+
+          cd svn-assets
+          svn add --force . > /dev/null 2>&1 || true
+          svn status
+
+          echo "::notice::Committing changes to WordPress.org..."
+          svn commit -m "update plugin assets" \
+            --username "${{ secrets.SVN_USERNAME }}" \
+            --password "${{ secrets.SVN_PASSWORD }}" \
+            --non-interactive --no-auth-cache
 
       # ✅ Log success result
       - name: ✅ Assets update completed
