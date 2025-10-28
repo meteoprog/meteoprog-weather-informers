@@ -30,7 +30,7 @@ jobs:
           echo "::notice::Triggered by: ${{ github.actor }}"
           echo "::notice::Starting asset update for plugin meteoprog-weather-informers"
 
-     # 🔧 Install SVN
+      # 🔧 Install SVN
       - name: 🔧 Install Subversion
         run: |
           sudo apt-get update -qq
@@ -64,14 +64,26 @@ jobs:
           rsync -a --delete --quiet --exclude=".svn" .wordpress-org/ svn-assets/
 
           cd svn-assets
+
+          # 🧹 Remove obsolete files that are not present in .wordpress-org
+          echo "::notice::Removing obsolete files..."
+          find . -type f ! -path "./.svn/*" | while read -r file; do
+            rel="${file#./}"
+            if [ ! -f "../.wordpress-org/$rel" ]; then
+              echo "::notice::Removing $rel"
+              svn rm --force "$rel" > /dev/null 2>&1 || true
+            fi
+          done
+
+          # ➕ Add new and modified files
           svn add --force --quiet . > /dev/null 2>&1 || true
 
           echo "::group::🔍 SVN status (before commit)"
           svn status
           echo "::endgroup::"
 
-          changes=$(svn status | grep "^[AMR]" || true)
-          if [ -n "$changes" ]; then
+          # 💾 Commit if there are any changes
+          if svn status | grep -q "^[AMR]"; then
             echo "::notice::Detected changes, committing to WordPress.org assets directory..."
             svn commit -m "update plugin assets" \
               --username "${{ secrets.SVN_USERNAME }}" \
