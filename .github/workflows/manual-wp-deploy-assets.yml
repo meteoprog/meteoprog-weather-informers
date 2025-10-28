@@ -17,8 +17,12 @@ jobs:
     if: ${{ github.event.inputs.confirm == 'ASSETS' }}
 
     steps:
-      # Checkout repository
+      # 📦 Checkout only the .wordpress-org directory
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            .wordpress-org
+          sparse-checkout-cone-mode: false
 
       # 🪄 Log who triggered the update
       - name: 🪄 Log trigger info
