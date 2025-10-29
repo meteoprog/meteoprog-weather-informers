@@ -12,6 +12,14 @@ This repository contains the **Meteoprog Weather Widget** WordPress plugin. It p
 
 ---
 
+## 🧪 Try it now — Live Demo
+
+Experience the **Meteoprog Weather Widget** instantly in your browser — no setup required!
+
+[![Try in WordPress Playground](https://img.shields.io/badge/Try%20in%20Playground-21759B?logo=wordpress&logoColor=white&style=for-the-badge)](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/meteoprog/meteoprog-weather-informers/refs/heads/main/.wordpress-org/blueprints/blueprint.json)
+
+---
+
 ## 🧩 Plugin Overview
 
 * **WordPress versions:** 4.9 → 6.8+

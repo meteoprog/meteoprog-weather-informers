@@ -1,7 +1,6 @@
 {
   "$schema": "https://playground.wordpress.net/blueprint-schema.json",
-  "landingPage": "/wp-admin/plugins.php",
-  "phpExtensionBundles": ["kitchen-sink"],
+  "landingPage": "/?name=meteoprog-weather-widget-demo",
   "steps": [
     {
       "step": "login",
@@ -17,6 +16,16 @@
       "options": {
         "activate": true
       }
+    },
+    {
+      "step": "setSiteOptions",
+      "options": {
+        "meteoprog_api_key": "bd0b13fa-6b98-4e6a-bca7-67f0d6515c9c"
+      }
+    },
+    {
+      "step": "runPHP",
+      "code": "<?php\nrequire_once '/wordpress/wp-load.php';\n\n$content = <<<HTML\nThis page shows example weather widgets provided by the <strong>Meteoprog Weather Widget</strong> plugin.<br><br>\n<div style='background:#f6f7f7;border-left:4px solid #2271b1;padding:12px 16px;margin:15px 0;font-size:13px;color:#444;border-radius:4px;line-height:1.5;'>\n<span style=\"font-size:16px;\">ℹ️</span> By default, each widget displays weather for <strong>New York</strong>. When creating an informer, you can enable <strong>automatic location detection</strong> to show the weather for a visitor’s current city, and the <strong>widget language is automatically detected</strong> based on the user’s browser settings.<br><br>\nYou can create your own <strong>free and fully customizable weather informer</strong> here: <a href='https://billing.meteoprog.com/informer' target='_blank'>https://billing.meteoprog.com/informer</a><br><br>\n<div style='background:#fff3cd;border-left:4px solid #ffb300;padding:10px 12px;margin:10px 0;border-radius:4px;color:#444;'>⚠️ When creating a new informer, make sure to specify the correct <strong>domain name</strong> of your website. Otherwise, the informer will not be displayed.<br>For this demo, the allowed domain is <strong>https://playground.wordpress.net</strong>.</div>\n</div><br>\n\n<div style='background:#f6f7f7;border-left:4px solid #777;padding:12px 16px;margin:15px 0;font-size:13px;color:#444;border-radius:4px;line-height:1.5;'>\n<span style=\"font-size:16px;\">💡</span> On this page, widgets are inserted as simple <strong>placeholders</strong> that are automatically replaced with live weather blocks when the page is rendered.<br>\nExample: <code>&#123;meteoprog_informer_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&#125;</code><br>\nUse your own informer ID instead of the example above.\n</div><br>\n\n<strong>Maximum</strong><br>\nWeather widget with the maximum set of parameters and settings. You can create a separate weather page on your website.<br><br>\n{meteoprog_informer_4652b306-9784-43fa-8aab-641f48e89659}<br><br>\n\n<strong>Standard</strong><br>\nEmbed weather blocks in web page. Fully customizable in parameters, size and color.<br><br>\n{meteoprog_informer_2f2241ca-791d-45a5-b041-1da045d61ad5}<br><br>\n\n<strong>Simple</strong><br>\nTiny widget for your navigation bar. Can be integrated with your navigation, sidebar or content.<br><br>\n{meteoprog_informer_50874052-0750-4e57-8424-d67d170492f3}<br><br>\n\n<hr>\n<p style='font-size:13px;color:#555;'>⚙️ <a href=\"/wp-admin/admin.php?page=meteoprog_settings\" target=\"_blank\">Open Meteoprog Weather Widget settings</a> — you can adjust API key and default options here.</p>\n<hr>\n<p style='font-size:14px;color:#666'>Learn more on <a href='https://wordpress.org/plugins/meteoprog-weather-informers/' target='_blank'>WordPress.org</a> or visit the <a href='https://github.com/meteoprog/meteoprog-weather-informers' target='_blank'>GitHub repository</a>.</p>\nHTML;\n\nwp_insert_post([\n  'post_title'   => 'Meteoprog Weather Widget — Example Widgets',\n  'post_name'    => 'meteoprog-weather-widget-demo',\n  'post_status'  => 'publish',\n  'post_type'    => 'post',\n  'post_content' => $content,\n]);"
     }
   ]
 }
