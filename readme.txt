@@ -52,14 +52,14 @@ Widgets are **free, unlimited, and without API limits**.
 1. Upload plugin to `/wp-content/plugins/` or install via Plugins → Add New.
 2. Activate the plugin in the WordPress admin.
 3. Go to *Settings → Meteoprog Widgets*.
-4. Enter your **Informer API key** from [billing.meteoprog.com](https://billing.meteoprog.com/?utm_source=wp-plugin&utm_medium=readme&utm_campaign=meteoprog-weather-widgets).
+4. Enter your **Informer API key** from [https://billing.meteoprog.com](https://billing.meteoprog.com/?utm_source=wp-plugin&utm_medium=readme&utm_campaign=meteoprog-weather-widgets).
 5. Refresh the informer list.
 6. Insert widgets with Gutenberg block, Elementor, Shortcodes Ultimate, Legacy Widget, shortcodes, or placeholders.
 
 == Frequently Asked Questions ==
 
 = Where do I get the API key? =
-You can generate a **widget (informer) API key** at [billing.meteoprog.com/informer](https://billing.meteoprog.com/informer?utm_source=wp-plugin&utm_medium=readme&utm_campaign=meteoprog-weather-widgets).
+You can generate a **widget (informer) API key** at [https://billing.meteoprog.com/informer](https://billing.meteoprog.com/informer?utm_source=wp-plugin&utm_medium=readme&utm_campaign=meteoprog-weather-widgets).
 
 = Is this the same key as the Meteoprog Weather API? =
 **No.**  
@@ -92,7 +92,7 @@ On modern WordPress (5.8+) we recommend using the **Gutenberg block (Meteoprog W
 The plugin works with PHP versions from 5.6 up to 8.3 inclusive.
 
 = Can I use multiple widgets? =
-Yes. Create multiple informers at [billing.meteoprog.com/informer](https://billing.meteoprog.com/informer?utm_source=wp-plugin&utm_medium=readme&utm_campaign=meteoprog-weather-widgets), then insert them with their IDs.
+Yes. Create multiple informers at [https://billing.meteoprog.com/informer](https://billing.meteoprog.com/informer?utm_source=wp-plugin&utm_medium=readme&utm_campaign=meteoprog-weather-widgets), then insert them with their IDs.
 
 = What if I want one default widget everywhere? =
 You can set a "Default Widget" in plugin settings. Then just use `[meteoprog_informer]` or `{meteoprog_informer}` without ID.
@@ -110,7 +110,7 @@ Yes. The plugin integrates with **Shortcodes Ultimate**, adding a custom *Meteop
 For the most up-to-date troubleshooting guide (with screenshots, code examples, and plugin-specific tips),  
 please refer to the extended documentation on GitHub:
 
-👉 [https://github.com/meteoprog/meteoprog-weather-informers#the-widget-does-not-appear-on-my-site-what-should-i-do](https://github.com/meteoprog/meteoprog-weather-informers#the-widget-does-not-appear-on-my-site-what-should-i-do)
+👉 [https://github.com/meteoprog/meteoprog-weather-informers?tab=readme-ov-file#-the-widget-does-not-appear-on-my-site-what-should-i-do](https://github.com/meteoprog/meteoprog-weather-informers?tab=readme-ov-file#-the-widget-does-not-appear-on-my-site-what-should-i-do)
 
 = Does it support WP-CLI? =
 Yes. Example commands:
