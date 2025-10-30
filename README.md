@@ -8,7 +8,7 @@
 [![Release](https://img.shields.io/github/v/release/meteoprog/meteoprog-weather-informers)](https://github.com/meteoprog/meteoprog-weather-informers/releases)
 [![Last commit](https://img.shields.io/github/last-commit/meteoprog/meteoprog-weather-informers.svg)](https://github.com/meteoprog/meteoprog-weather-informers/commits/main)
 
-This repository contains the **Meteoprog Weather Widget** WordPress plugin. It provides modern and legacy weather widgets (informers) from [Meteoprog](https://meteoprog.com), fully compatible with Gutenberg, Elementor, Shortcodes Ultimate, REST API, and WP-CLI.
+This repository contains the **Meteoprog Weather Widget** WordPress plugin. It provides modern and legacy weather widgets (informers) from [Meteoprog](https://www.meteoprog.com), fully compatible with Gutenberg, Elementor, Shortcodes Ultimate, REST API, and WP-CLI.
 
 ---
 
@@ -26,7 +26,7 @@ Experience the **Meteoprog Weather Widget** instantly in your browser — no set
 * **PHP versions:** 5.6 → 8.4
 * **Integrations:** Gutenberg, Elementor, Shortcodes Ultimate, WP-CLI, REST API
 * **Compatibility:** Works on classic and block widgets, async frontend loader, optimized for Core Web Vitals.
-* **API Requirement:** Requires a **free informer API key** from [billing.meteoprog.com/informer](https://billing.meteoprog.com/informer?utm_source=github&utm_medium=readme).
+* **API Requirement:** Requires a **free informer API key** from [https://billing.meteoprog.com/informer](https://billing.meteoprog.com/informer?utm_source=github&utm_medium=readme).
 
 Widgets will not display without a valid key linked to your website domain.
 
@@ -196,10 +196,62 @@ GitHub Actions workflow (`.github/workflows/ci.yml`) runs tests for all supporte
 
 ---
 
+## 🧩 The widget does not appear on my site. What should I do?
+
+If the **Meteoprog Weather Widget** or shortcode does not appear on your site, try the following steps before opening an issue.  
+This section includes common causes and fixes for optimization plugins and caching tools.
+
+---
+
+### 1. ✅ Check your API key
+Go to **Settings → Meteoprog Widgets** and make sure your **Informer API key** is valid.  
+Create or verify it here: [https://billing.meteoprog.com/informer](https://billing.meteoprog.com/informer?utm_source=github&utm_medium=readme&utm_campaign=meteoprog-weather-widgets)
+
+### 2. 🔑 Verify informer ID and domain
+Ensure the informer ID is active and created for **the same domain** as your website.  
+Informers are domain-bound for security reasons.
+
+Example:
+```php
+[meteoprog_informer id="12345"]
+```
+
+### 3. ⚙️ Check caching or optimization plugins
+Some optimization tools (like **WP Rocket**, **Autoptimize**, or **LiteSpeed Cache**)  
+may remove inline scripts from `<head>`. You must **exclude the script** with the ID `meteoprog-data-layer`.
+
+Example of the required data layer:
+```html
+<!-- Meteoprog Weather Widget: Data Layer -->
+<script id="meteoprog-data-layer">
+window.meteoprogDataLayer = window.meteoprogDataLayer || [];
+window.meteoprogDataLayer.push({ id: "***" });
+</script>
+```
+
+Exclude selector:  
+```
+#meteoprog-data-layer
+```
+
+### 4. 🧩 Check browser console
+If you see errors related to `cdn.meteoprog.net`, the widget may be blocked by an ad blocker or script filter.
+
+### 5. 💬 Need help?
+Open an issue with your environment details:  
+👉 [https://github.com/meteoprog/meteoprog-weather-informers/issues](https://github.com/meteoprog/meteoprog-weather-informers/issues)
+
+---
+
+📘 *This section is referenced directly from the WordPress.org plugin page (`readme.txt`).  
+If you’re reading this on GitHub — you’re already viewing the full, always-up-to-date version.*
+
+---
+
 ## 📜 License
 
 GPLv2 or later — see [license.txt](license.txt)
 
 ---
 
-**© 2025 Meteoprog — [https://meteoprog.com](https://meteoprog.com)**
+**© 2025 Meteoprog — [https://www.meteoprog.com](https://www.meteoprog.com)**

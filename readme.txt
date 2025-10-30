@@ -12,7 +12,7 @@ Embed free Meteoprog weather widgets with Gutenberg, Elementor, Shortcodes Ultim
 
 == Description ==
 
-Meteoprog Weather Widgets allows you to quickly embed **free weather informers (widgets)** from [Meteoprog](https://meteoprog.com).
+Meteoprog Weather Widgets allows you to quickly embed **free weather informers (widgets)** from [Meteoprog](https://www.meteoprog.com).
 
 ⚠️ **Important:** This plugin uses a **separate API key for widgets (informers)**.  
 It is **NOT the same** as the Meteoprog Weather API key.  
@@ -106,6 +106,12 @@ Yes. The plugin includes a **native Elementor widget** that you can insert from 
 = Does it support Shortcodes Ultimate? =
 Yes. The plugin integrates with **Shortcodes Ultimate**, adding a custom *Meteoprog Weather* shortcode with a dropdown and live preview.
 
+= The widget does not appear on my site. What should I do? =
+For the most up-to-date troubleshooting guide (with screenshots, code examples, and plugin-specific tips),  
+please refer to the extended documentation on GitHub:
+
+👉 [https://github.com/meteoprog/meteoprog-weather-informers#the-widget-does-not-appear-on-my-site-what-should-i-do](https://github.com/meteoprog/meteoprog-weather-informers#the-widget-does-not-appear-on-my-site-what-should-i-do)
+
 = Does it support WP-CLI? =
 Yes. Example commands:
 
@@ -134,10 +140,10 @@ This approach is required by [WordPress.org plugin guidelines](https://developer
 
 = Development & Testing =
 
-The source code is available on [GitHub](https://github.com/meteoprog/meteoprog-weather-widgets).
+The source code is available on [GitHub](https://github.com/meteoprog/meteoprog-weather-informers).
 
-This plugin is developed in the open and tested automatically via Travis CI on GitHub.  
-The test matrix covers multiple WordPress (4.9–6.8+) and PHP (5.6–8.4) versions to ensure broad compatibility and legacy support.
+This plugin is developed in the open and tested automatically via **GitHub Actions CI**.  
+The continuous integration pipeline runs automated builds across multiple WordPress (4.9–6.8+) and PHP (5.6–8.4) versions, ensuring full backward compatibility and stable operation on both legacy and modern environments.
 
 We welcome issues and pull requests on GitHub.
 
@@ -151,9 +157,9 @@ The CDN may also set technical cookies required for content delivery or security
 This plugin adds a suggested section to WordPress's default Privacy Policy page, explaining what data is transmitted when widgets are displayed.
 
 == Links ==
-* [Meteoprog Homepage](https://meteoprog.com) — main weather portal
+* [Meteoprog Homepage](https://www.meteoprog.com) — main weather portal
 * [Meteoprog Informer Dashboard](https://billing.meteoprog.com/informer) — create and manage your free informers
-* [GitHub repository](https://github.com/meteoprog/meteoprog-weather-widgets)
+* [GitHub repository](https://github.com/meteoprog/meteoprog-weather-informers)
 
 
 == External Services ==
