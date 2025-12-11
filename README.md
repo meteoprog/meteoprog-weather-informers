@@ -22,7 +22,7 @@ Experience the **Meteoprog Weather Widget** instantly in your browser — no set
 
 ## 🧩 Plugin Overview
 
-* **WordPress versions:** 4.9 → 6.8+
+* **WordPress versions:** 4.9 → 6.9
 * **PHP versions:** 5.6 → 8.4
 * **Integrations:** Gutenberg, Elementor, Shortcodes Ultimate, WP-CLI, REST API
 * **Compatibility:** Works on classic and block widgets, async frontend loader, optimized for Core Web Vitals.
@@ -58,9 +58,9 @@ All PHP × WordPress combinations are tested using Docker via the Makefile. The 
 | --- | ---------------------------------------- |
 | 5.6 | 4.9                                      |
 | 7.4 | 5.8 – 5.9                                |
-| 8.1 | 6.2 – 6.8                                |
-| 8.3 | 6.2 – latest / nightly (daily scheduled) |
-| 8.4 | 6.8.3 – latest / nightly                 |
+| 8.1 | 6.2 – 6.9                                |
+| 8.3 | 6.2 – 6.9 / latest / nightly (daily scheduled) |
+| 8.4 | 6.8.3 – 6.9 / latest / nightly           |
 
 Each suite spins up a temporary WordPress install inside Docker, installs PHPUnit + Yoast Polyfills, runs tests, and tears down the DB automatically.
 
@@ -70,9 +70,9 @@ Each suite spins up a temporary WordPress install inside Docker, installs PHPUni
 
 You can run individual test suites or the full test matrix locally using Docker and Makefile targets.
 
-**Run a specific test (PHP 8.3 + WordPress 6.8.3):**
+**Run a specific test (PHP 8.3 + WordPress 6.9):**
 ```bash
-make test-php83-wp683
+make test-php83-wp69
 ```
 
 **Run all test suites sequentially (verbose output):**

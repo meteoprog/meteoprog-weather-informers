@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Meteoprog Weather Widget plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Meteoprog Weather Widget 1.0.2\n"
+"Project-Id-Version: Meteoprog Weather Widget 1.0.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/meteoprog-weather-informers\n"
 "Last-Translator: meteoprog <app@meteoprog.com>\n"
 "Language-Team: English <app@meteoprog.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-10-28T21:44:38+00:00\n"
+"POT-Creation-Date: 2025-12-11T23:14:31+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: meteoprog-weather-informers\n"
@@ -60,7 +60,7 @@ msgstr ""
 msgid "Insufficient permissions."
 msgstr ""
 
-#: includes/class-meteoprog-informers-block.php:155
+#: includes/class-meteoprog-informers-block.php:158
 msgid "<!-- Meteoprog Weather Widget: default ID not set -->"
 msgstr ""
 
@@ -78,20 +78,20 @@ msgstr ""
 
 #: includes/elementor/class-meteoprog-informer-elementor-widget.php:123
 #: includes/integrations/integration-shortcodes-ultimate.php:152
-#: assets/block/js/block.js:159
+#: assets/block/js/block.js:168
 msgid "Default widget (from settings)"
 msgstr ""
 
 #: includes/elementor/class-meteoprog-informer-elementor-widget.php:142
 #: includes/integrations/integration-shortcodes-ultimate.php:171
-#: views/parts/default-select.php:58
-#: assets/block/js/block.js:164
+#: views/parts/default-select.php:61
+#: assets/block/js/block.js:173
 msgid "No domain"
 msgstr ""
 
 #: includes/elementor/class-meteoprog-informer-elementor-widget.php:149
 #: includes/integrations/integration-shortcodes-ultimate.php:182
-#: assets/block/js/block.js:164
+#: assets/block/js/block.js:173
 msgid "OK"
 msgstr ""
 
@@ -99,14 +99,14 @@ msgstr ""
 #: includes/elementor/class-meteoprog-informer-elementor-widget.php:257
 #: includes/integrations/integration-shortcodes-ultimate.php:100
 #: includes/integrations/integration-shortcodes-ultimate.php:183
-#: views/parts/default-select.php:45
+#: views/parts/default-select.php:48
 #: assets/block/js/block.js:69
-#: assets/block/js/block.js:164
+#: assets/block/js/block.js:173
 msgid "Domain mismatch"
 msgstr ""
 
 #: includes/elementor/class-meteoprog-informer-elementor-widget.php:161
-#: assets/block/js/block.js:185
+#: assets/block/js/block.js:194
 msgid "Select Meteoprog Weather Informer"
 msgstr ""
 
@@ -137,7 +137,7 @@ msgstr ""
 
 #: includes/elementor/class-meteoprog-informer-elementor-widget.php:257
 #: includes/integrations/integration-shortcodes-ultimate.php:100
-#: views/parts/default-select.php:44
+#: views/parts/default-select.php:47
 #: assets/block/js/block.js:69
 msgid "Domain OK"
 msgstr ""
@@ -304,11 +304,11 @@ msgstr ""
 msgid "— None —"
 msgstr ""
 
-#: views/parts/default-select.php:68
+#: views/parts/default-select.php:71
 msgid "Save"
 msgstr ""
 
-#: views/parts/default-select.php:72
+#: views/parts/default-select.php:75
 msgid "If you insert the shortcode [meteoprog_informer] without ID, this widget will be used automatically."
 msgstr ""
 
@@ -677,63 +677,63 @@ msgid "Your Widgets (Informers)"
 msgstr ""
 
 #: views/parts/informers-table.php:46
-#: views/parts/informers-table.php:69
+#: views/parts/informers-table.php:75
 msgid "Status"
 msgstr ""
 
 #: views/parts/informers-table.php:47
-#: views/parts/informers-table.php:74
+#: views/parts/informers-table.php:80
 msgid "Informer"
 msgstr ""
 
 #: views/parts/informers-table.php:48
-#: views/parts/informers-table.php:94
+#: views/parts/informers-table.php:100
 #: assets/admin/js/admin.js:27
 msgid "Copy"
 msgstr ""
 
 #: views/parts/informers-table.php:49
-#: views/parts/informers-table.php:110
-#: views/parts/informers-table.php:114
+#: views/parts/informers-table.php:116
+#: views/parts/informers-table.php:120
 #: assets/admin/js/admin.js:76
 msgid "Preview"
 msgstr ""
 
-#: views/parts/informers-table.php:64
+#: views/parts/informers-table.php:69
 msgid "✔ Domain OK"
 msgstr ""
 
-#: views/parts/informers-table.php:65
-#: views/parts/informers-table.php:121
+#: views/parts/informers-table.php:70
+#: views/parts/informers-table.php:127
 msgid "✖ Domain mismatch"
 msgstr ""
 
-#: views/parts/informers-table.php:76
+#: views/parts/informers-table.php:82
 msgid "ID:"
 msgstr ""
 
-#: views/parts/informers-table.php:80
+#: views/parts/informers-table.php:86
 msgid "Shortcode:"
 msgstr ""
 
-#: views/parts/informers-table.php:84
+#: views/parts/informers-table.php:90
 msgid "Placeholder:"
 msgstr ""
 
-#: views/parts/informers-table.php:88
+#: views/parts/informers-table.php:94
 msgid "Domain:"
 msgstr ""
 
-#: views/parts/informers-table.php:98
+#: views/parts/informers-table.php:104
 msgid "Shortcode"
 msgstr ""
 
-#: views/parts/informers-table.php:104
+#: views/parts/informers-table.php:110
 msgid "Placeholder"
 msgstr ""
 
-#: views/parts/informers-table.php:124
-#: views/parts/informers-table.php:125
+#: views/parts/informers-table.php:130
+#: views/parts/informers-table.php:131
 msgid "This informer was created for a different domain. Please check the domain specified when generating the informer on https://billing.meteoprog.com/informer/."
 msgstr ""
 
@@ -833,6 +833,6 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: assets/block/js/block.js:143
+#: assets/block/js/block.js:147
 msgid "Failed to load informers. Check your API key."
 msgstr ""

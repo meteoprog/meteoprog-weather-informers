@@ -2,9 +2,9 @@
 Contributors: meteoprog
 Tags: weather, widget, shortcode, block, forecast
 Requires at least: 4.9
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 7.0
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -143,7 +143,7 @@ This approach is required by [WordPress.org plugin guidelines](https://developer
 The source code is available on [GitHub](https://github.com/meteoprog/meteoprog-weather-informers).
 
 This plugin is developed in the open and tested automatically via **GitHub Actions CI**.  
-The continuous integration pipeline runs automated builds across multiple WordPress (4.9–6.8+) and PHP (5.6–8.4) versions, ensuring full backward compatibility and stable operation on both legacy and modern environments.
+The continuous integration pipeline runs automated builds across multiple WordPress (4.9–6.9) and PHP (5.6–8.4) versions, ensuring full backward compatibility and stable operation on both legacy and modern environments.
 
 We welcome issues and pull requests on GitHub.
 
@@ -181,6 +181,13 @@ No personal data is collected or stored by the plugin itself.
 
 == Changelog ==
 
+= 1.0.3 =
+* 🆕 Confirmed full compatibility with WordPress 6.9.
+* 🛠 Updated "Tested up to" to 6.9.
+* 🔒 Disabled HTML editing mode in the block editor.
+* 🧹 Internal cleanup for upcoming iframe mode.
+* 🛡 Prefixed admin template variables for Plugin Check compliance.
+
 = 1.0.2 =
 * 🐞 Fixed issue where `[su_meteoprog_informer]` without an ID rendered an empty informer block when no default informer was set.
 * ⚙️ Improved data layer generation — prevents empty IDs in `<head>` output.
@@ -205,6 +212,9 @@ No personal data is collected or stored by the plugin itself.
 * ✅ Legacy WordPress/PHP support (4.9+, PHP 5.6+; tested on PHP 8.3/8.4).
 
 == Upgrade Notice ==
+
+= 1.0.3 =
+Compatibility update for WordPress 6.9. No functional changes required.
 
 = 1.0.2 =
 🐞 Fixed issue with empty `[su_meteoprog_informer]` blocks when no default informer ID is configured.
