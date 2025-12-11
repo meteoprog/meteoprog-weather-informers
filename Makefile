@@ -189,6 +189,9 @@ php81-wp673: build-php81
 php81-wp683: build-php81
 	$(call RUN_TESTS,$(IMAGE_PHP81),6.8.3,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
 
+php81-wp69: build-php81
+	$(call RUN_TESTS,$(IMAGE_PHP81),6.9,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
+
 php81-latest: build-php81
 	$(call RUN_TESTS,$(IMAGE_PHP81),latest,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
 
@@ -207,6 +210,9 @@ php83-wp673: build-php83
 php83-wp683: build-php83
 	$(call RUN_TESTS,$(IMAGE_PHP83),6.8.3,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
 
+php83-wp69: build-php83
+	$(call RUN_TESTS,$(IMAGE_PHP83),6.9,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
+
 php83-latest: build-php83
 	$(call RUN_TESTS,$(IMAGE_PHP83),latest,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
 
@@ -219,6 +225,9 @@ php83-nightly: build-php83
 
 php84-wp683: build-php84
 	$(call RUN_TESTS,$(IMAGE_PHP84),6.8.3,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
+
+php84-wp69: build-php84
+	$(call RUN_TESTS,$(IMAGE_PHP84),6.9,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
 
 php84-latest: build-php84
 	$(call RUN_TESTS,$(IMAGE_PHP84),latest,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
@@ -238,16 +247,19 @@ test-php81-wp62: start-db php81-wp62 stop-db
 test-php81-wp66: start-db php81-wp66 stop-db
 test-php81-wp673: start-db php81-wp673 stop-db
 test-php81-wp683: start-db php81-wp683 stop-db
+test-php81-wp69: start-db php81-wp69 stop-db
 test-php81-latest: start-db php81-latest stop-db
 
 test-php83-wp62: start-db php83-wp62 stop-db
 test-php83-wp66: start-db php83-wp66 stop-db
 test-php83-wp673: start-db php83-wp673 stop-db
 test-php83-wp683: start-db php83-wp683 stop-db
+test-php83-wp69: start-db php83-wp69 stop-db
 test-php83-latest: start-db php83-latest stop-db
 test-php83-nightly: start-db php83-nightly stop-db
 
 test-php84-wp683: start-db php84-wp683 stop-db
+test-php84-wp69: start-db php84-wp69 stop-db
 test-php84-latest: start-db php84-latest stop-db
 test-php84-nightly: start-db php84-nightly stop-db
 
@@ -286,7 +298,7 @@ phpcs-check: check-docker build-php83
 				--extensions=php \
 				--ignore=node_modules,vendor,tests,bin,assets/test . \
 				--report-summary --report-full'
-	
+
 phpcs-fix: check-docker build-php83
 	docker run --rm -u $(UID):$(GID) \
 		-v $(SRC_PLUGIN):/src-plugin -w /src-plugin $(IMAGE_PHP83) \
@@ -307,7 +319,7 @@ phpcs-fix: check-docker build-php83
 # Plugin Check (WordPress.org rules)
 # -------------------------------------
 # Checks compliance with official WordPress.org plugin review guidelines.
-# Requires WordPress >=6.8 with `plugin-check` command installed.
+# Requires WordPress >=6.9 with `plugin-check` command installed.
 # Runs check against the built dist/ ZIP version of the plugin.
 # -------------------------------------
 
@@ -327,8 +339,8 @@ plugin-check: check-docker build-php83 dist-docker
 			rm -f "$$LOG_FILE"; touch "$$LOG_FILE"; \
 			WP_PATH="/tmp/wp-check"; mkdir -p "$$WP_PATH"; \
 			{ \
-				echo "[WP] Downloading WordPress 6.8..."; \
-				php -d memory_limit=-1 /usr/local/bin/wp core download --path="$$WP_PATH" --version=6.8 --allow-root; \
+				echo "[WP] Downloading WordPress 6.9..."; \
+				php -d memory_limit=-1 /usr/local/bin/wp core download --path="$$WP_PATH" --version=6.9 --allow-root; \
 				echo "[DB] Preparing database $$DB_NAME ..."; \
 				mariadb --user=$(DB_USER) --password=$(DB_PASS) --host=$$DB_HOST_REAL \
 					-e "DROP DATABASE IF EXISTS $$DB_NAME; CREATE DATABASE $$DB_NAME CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"; \
@@ -383,8 +395,8 @@ test-plugin-check: start-db plugin-check stop-db
 testall: start-db \
 	php56-wp49 \
 	php74-wp58 php74-wp59 \
-	php81-wp62 php81-wp66 php81-wp673 php81-wp683 php81-latest \
-	php83-wp62 php83-wp66 php83-wp673 php83-wp683 php83-latest php83-nightly php84-latest \
+	php81-wp62 php81-wp66 php81-wp673 php81-wp683 php81-wp69 php81-latest \
+	php83-wp62 php83-wp66 php83-wp673 php83-wp683 php83-wp69 php83-latest php83-nightly php84-latest \
 	stop-db
 	@echo "All test suites have finished."
 

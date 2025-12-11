@@ -75,7 +75,9 @@ jobs:
           - { php: "8.1", wp: "6.8.3", target: "php81-wp683" }
           - { php: "8.3", wp: "6.8.3", target: "php83-wp683" }
           - { php: "8.4", wp: "6.8.3", target: "php84-wp683" }
-
+          - { php: "8.1", wp: "6.9", target: "php81-wp69" }
+          - { php: "8.3", wp: "6.9", target: "php83-wp69" }
+          - { php: "8.4", wp: "6.9", target: "php84-wp69" }
     env:
       DB_HOST: 127.0.0.1
       DB_USER: root
@@ -405,7 +407,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Plugin:** Meteoprog Weather Informers" >> $GITHUB_STEP_SUMMARY
           echo "**PHP versions:** 5.6 / 7.4 / 8.1 / 8.3 / 8.4" >> $GITHUB_STEP_SUMMARY
-          echo "**WordPress versions:** 4.9 / 5.8 / 6.8.3" >> $GITHUB_STEP_SUMMARY
+          echo "**WordPress versions:** 4.9 / 5.8 / 6.8.3 / 6.9" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
           if [ "${{ needs.tests.result }}" = "success" ]; then
