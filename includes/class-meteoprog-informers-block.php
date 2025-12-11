@@ -124,6 +124,9 @@ class Meteoprog_Informers_Block {
 						'default' => '',
 					),
 				),
+				'supports'        => array(
+					'html' => false,
+				),
 			)
 		);
 	}
@@ -244,6 +247,15 @@ class Meteoprog_Informers_Block {
 			'MeteoprogSettings',
 			array(
 				'defaultInformerId' => $this->get_default_informer_id(),
+			)
+		);
+
+		// Pass real front-end domain (crucial for Gutenberg iframe mode).
+		wp_localize_script(
+			'meteoprog-block',
+			'MeteoprogEditor',
+			array(
+				'siteHost' => wp_parse_url( home_url(), PHP_URL_HOST ),
 			)
 		);
 

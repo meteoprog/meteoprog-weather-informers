@@ -127,6 +127,10 @@
 			// Important: keep attribute default empty → select shows "Default"
 			id: { type: 'string', default: '' }
 		},
+		transforms: {
+			from: [],
+			to: []
+		},
 
 		edit: (props) => {
 			const { attributes, setAttributes } = props;
@@ -154,7 +158,12 @@
 			}
 
 			// Build select options
-			const siteHost = window.location.hostname.toLowerCase();
+			
+			const siteHost =
+				(typeof MeteoprogEditor !== 'undefined' && MeteoprogEditor.siteHost)
+					? MeteoprogEditor.siteHost.toLowerCase()
+					: window.location.hostname.toLowerCase();
+
 			const options = [
 				{ label: __('Default widget (from settings)', 'meteoprog-weather-informers'), value: '' },
 				...informers.map(i => {
@@ -185,7 +194,9 @@
 					label: __('Select Meteoprog Weather Informer', 'meteoprog-weather-informers'),
 					value: attributes.id,
 					options: options,
-					onChange: (val) => setAttributes({ id: val })
+					onChange: (val) => setAttributes({ id: val }),
+					__next40pxDefaultSize: true,
+					__nextHasNoMarginBottom: true
 				}),
 				el(PreviewBox, {
 					informerId: effectiveId,
