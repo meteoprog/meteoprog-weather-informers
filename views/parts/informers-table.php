@@ -51,42 +51,48 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</thead>
 	<tbody>
 	<?php
-	foreach ( $informers as $inf ) :
-		$iid             = isset( $inf['informer_id'] ) ? $inf['informer_id'] : '';
-		$informer_domain = ! empty( $inf['domain'] ) ? $inf['domain'] : '';
-		$active          = isset( $inf['active'] ) ? (int) $inf['active'] : 0;
-		$shortcode       = '[meteoprog_informer id="' . $iid . '"]';
-		$placeholder     = '{meteoprog_informer_' . $iid . '}';
-		$icon            = $active ? '🟢' : '🔴';
-		$domain_host     = $informer_domain ? wp_parse_url( $informer_domain, PHP_URL_HOST ) : '';
-		$match           = $domain_host && $current_host && $domain_host === $current_host;
-		$domain_label    = $match
+	foreach ( $informers as $meteoprog_inf ) :
+
+		$meteoprog_iid             = isset( $meteoprog_inf['informer_id'] ) ? $meteoprog_inf['informer_id'] : '';
+		$meteoprog_informer_domain = ! empty( $meteoprog_inf['domain'] ) ? $meteoprog_inf['domain'] : '';
+		$meteoprog_active          = isset( $meteoprog_inf['active'] ) ? (int) $meteoprog_inf['active'] : 0;
+
+		$meteoprog_short_code  = '[meteoprog_informer id="' . $meteoprog_iid . '"]';
+		$meteoprog_placeholder = '{meteoprog_informer_' . $meteoprog_iid . '}';
+
+		$meteoprog_icon = $meteoprog_active ? '🟢' : '🔴';
+
+		$meteoprog_domain_host = $meteoprog_informer_domain ? wp_parse_url( $meteoprog_informer_domain, PHP_URL_HOST ) : '';
+		$meteoprog_match       = $meteoprog_domain_host && $current_host && ( $meteoprog_domain_host === $current_host );
+
+		$meteoprog_domain_label = $meteoprog_match
 			? '<span style="color:green;font-weight:bold;">' . esc_html__( '✔ Domain OK', 'meteoprog-weather-informers' ) . '</span>'
 			: '<span style="color:red;font-weight:bold;">' . esc_html__( '✖ Domain mismatch', 'meteoprog-weather-informers' ) . '</span>';
+
 		?>
 		<tr>
 			<!-- Status -->
 			<td data-label="<?php esc_attr_e( 'Status', 'meteoprog-weather-informers' ); ?>" style="text-align:center; vertical-align:top;">
-				<?php echo esc_html( $icon ); ?>
+				<?php echo esc_html( $meteoprog_icon ); ?>
 			</td>
 
 			<!-- Informer details -->
 			<td data-label="<?php esc_attr_e( 'Informer', 'meteoprog-weather-informers' ); ?>">
 				<div class="meteoprog-id-line">
 					<strong><?php esc_html_e( 'ID:', 'meteoprog-weather-informers' ); ?></strong>
-					<code><?php echo esc_html( $iid ); ?></code>
+					<code><?php echo esc_html( $meteoprog_iid ); ?></code>
 				</div>
 				<div class="meteoprog-code-line">
 					<strong><?php esc_html_e( 'Shortcode:', 'meteoprog-weather-informers' ); ?></strong>
-					<code><?php echo esc_html( $shortcode ); ?></code>
+					<code><?php echo esc_html( $meteoprog_short_code ); ?></code>
 				</div>
 				<div class="meteoprog-code-line">
 					<strong><?php esc_html_e( 'Placeholder:', 'meteoprog-weather-informers' ); ?></strong>
-					<code><?php echo esc_html( $placeholder ); ?></code>
+					<code><?php echo esc_html( $meteoprog_placeholder ); ?></code>
 				</div>
 				<div class="meteoprog-domain">
 					<strong><?php esc_html_e( 'Domain:', 'meteoprog-weather-informers' ); ?></strong>
-					<?php echo esc_html( $informer_domain ); ?> — <?php echo wp_kses_post( $domain_label ); ?>
+					<?php echo esc_html( $meteoprog_informer_domain ); ?> — <?php echo wp_kses_post( $meteoprog_domain_label ); ?>
 				</div>
 			</td>
 
@@ -94,13 +100,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<td data-label="<?php esc_attr_e( 'Copy', 'meteoprog-weather-informers' ); ?>" class="meteoprog-copy-cell">
 				<div class="meteoprog-copy-line">
 					<a href="#" class="meteoprog-copy button button-secondary"
-						data-copy="<?php echo esc_attr( $shortcode ); ?>">
+						data-copy="<?php echo esc_attr( $meteoprog_short_code ); ?>">
 						<?php esc_html_e( 'Shortcode', 'meteoprog-weather-informers' ); ?>
 					</a>
 				</div>
 				<div class="meteoprog-copy-line">
 					<a href="#" class="meteoprog-copy button button-secondary"
-						data-copy="<?php echo esc_attr( $placeholder ); ?>">
+						data-copy="<?php echo esc_attr( $meteoprog_placeholder ); ?>">
 						<?php esc_html_e( 'Placeholder', 'meteoprog-weather-informers' ); ?>
 					</a>
 				</div>
@@ -108,12 +114,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			<!-- Preview -->
 			<td data-label="<?php esc_attr_e( 'Preview', 'meteoprog-weather-informers' ); ?>" class="meteoprog-preview-cell">
-				<?php if ( $match ) : ?>
+				<?php if ( $meteoprog_match ) : ?>
 					<a href="#" class="meteoprog-preview button button-secondary"
-						data-id="<?php echo esc_attr( $iid ); ?>">
+						data-id="<?php echo esc_attr( $meteoprog_iid ); ?>">
 						👁 <?php esc_html_e( 'Preview', 'meteoprog-weather-informers' ); ?>
 					</a>
-					<div id="meteoprog-preview-<?php echo esc_attr( $iid ); ?>"
+					<div id="meteoprog-preview-<?php echo esc_attr( $meteoprog_iid ); ?>"
 						class="meteoprog-preview-box"
 						style="display:none;margin-top:10px;"></div>
 				<?php else : ?>
@@ -124,7 +130,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						title="<?php esc_attr_e( 'This informer was created for a different domain. Please check the domain specified when generating the informer on https://billing.meteoprog.com/informer/.', 'meteoprog-weather-informers' ); ?>"
 						aria-label="<?php esc_attr_e( 'This informer was created for a different domain. Please check the domain specified when generating the informer on https://billing.meteoprog.com/informer/.', 'meteoprog-weather-informers' ); ?>">
 					</span>
-				<?php endif; ?>	
+				<?php endif; ?>
 			</td>
 		</tr>
 	<?php endforeach; ?>
