@@ -88,17 +88,17 @@ make testall
 |--------------|--------------------|
 | **5.6** | `wp49` |
 | **7.4** | `wp58`, `wp59` |
-| **8.1** | `wp62`, `wp66`, `wp673`, `wp683`, `latest` |
-| **8.3** | `wp62`, `wp66`, `wp673`, `wp683`, `latest`, `nightly` |
-| **8.4** | `wp683`, `latest`, `nightly` |
+| **8.1** | `wp62`, `wp66`, `wp673`, `wp683`, `wp69`, `latest` |
+| **8.3** | `wp62`, `wp66`, `wp673`, `wp683`, `wp69`, `latest`, `nightly` |
+| **8.4** | `wp683`, `wp69`, `latest`, `nightly` |
 
 Each test target automatically starts a dedicated MariaDB container, runs PHPUnit, and then stops the database container.  
 
 Example:  
 ```bash
-make test-php81-wp683
+make test-php81-wp69
 # Equivalent to:
-# start-db php81-wp683
+# start-db php81-wp69
 # stop-db
 ```
 
@@ -116,7 +116,7 @@ make test-php81-wp683
 ---
 
 📘 **Note:**  
-For CI, tests are executed in parallel across the full matrix (PHP 5.6 → 8.4, WordPress 4.9 → 6.8+), but local runs use sequential mode (`make testall`) for clarity.
+For CI, tests are executed in parallel across the full matrix (PHP 5.6 → 8.4, WordPress 4.9 → 6.9), but local runs use sequential mode (`make testall`) for clarity.
 
 ---
 
