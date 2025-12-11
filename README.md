@@ -3,7 +3,7 @@
 [![CI/CD](https://github.com/meteoprog/meteoprog-weather-informers/actions/workflows/ci.yml/badge.svg)](https://github.com/meteoprog/meteoprog-weather-informers/actions)
 [![License: GPL v2 or later](https://img.shields.io/badge/License-GPLv2%2B-blue.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 [![PHP](https://img.shields.io/badge/PHP-5.6%20--%208.4-777bb3.svg?logo=php)](https://www.php.net/)
-[![WordPress](https://img.shields.io/badge/WordPress-4.9%20--%206.8-blue.svg?logo=wordpress)](https://wordpress.org/)
+[![WordPress](https://img.shields.io/badge/WordPress-4.9%20--%206.9-blue.svg?logo=wordpress)](https://wordpress.org/)
 [![Dockerized](https://img.shields.io/badge/Docker-ready-blue.svg?logo=docker)](https://hub.docker.com/)
 [![Release](https://img.shields.io/github/v/release/meteoprog/meteoprog-weather-informers)](https://github.com/meteoprog/meteoprog-weather-informers/releases)
 [![Last commit](https://img.shields.io/github/last-commit/meteoprog/meteoprog-weather-informers.svg)](https://github.com/meteoprog/meteoprog-weather-informers/commits/main)
