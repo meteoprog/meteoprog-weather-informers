@@ -1,6 +1,6 @@
-=== Meteoprog Weather Widget ===
+=== Weather Widget & Forecast by Meteoprog ===
 Contributors: meteoprog
-Tags: weather, widget, shortcode, block, forecast
+Tags: weather, weather widget, weather forecast, local weather, forecast, wp weather, live weather
 Requires at least: 4.9
 Tested up to: 6.9
 Requires PHP: 7.0
@@ -8,16 +8,13 @@ Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Embed free Meteoprog weather widgets with Gutenberg, Elementor, Shortcodes Ultimate, REST API, and legacy WP/PHP compatibility.
+Add live local weather widgets and forecasts to WordPress. Gutenberg, Elementor, shortcodes. Free, unlimited, no API limits.
 
 == Description ==
 
-Meteoprog Weather Widgets allows you to quickly embed **free weather informers (widgets)** from [Meteoprog](https://www.meteoprog.com).
+Meteoprog Weather Widgets lets you add live local weather widgets and weather forecasts to your WordPress site.
 
-⚠️ **Important:** This plugin uses a **separate API key for widgets (informers)**.  
-It is **NOT the same** as the Meteoprog Weather API key.  
-Informer API keys are **always free** and have **no usage limits**.  
-You can create new informers here: [https://billing.meteoprog.com/informer](https://billing.meteoprog.com/informer?utm_source=wp-plugin&utm_medium=readme&utm_campaign=meteoprog-weather-widgets).
+Widgets are free, unlimited, and easy to embed using Gutenberg, Elementor, shortcodes, or legacy widgets.
 
 **Features:**
 * Easy setup with free informer API key.
@@ -45,8 +42,6 @@ You can create new informers here: [https://billing.meteoprog.com/informer](http
 * ✅ **WP-CLI** — manage API keys, defaults, and cache from the command line.
 * ✅ **REST API** — exposes `/wp-json/meteoprog/v1/informers` (secured by `edit_posts`) for block integration.
 
-Widgets are **free, unlimited, and without API limits**.
-
 == Installation ==
 
 1. Upload plugin to `/wp-content/plugins/` or install via Plugins → Add New.
@@ -57,6 +52,16 @@ Widgets are **free, unlimited, and without API limits**.
 6. Insert widgets with Gutenberg block, Elementor, Shortcodes Ultimate, Legacy Widget, shortcodes, or placeholders.
 
 == Frequently Asked Questions ==
+
+= Do I need an API key? =
+Yes. This plugin uses a **separate Informer API key** for widgets.
+
+It is **NOT the same** as the Meteoprog Weather API key.
+
+Informer API keys are **always free** and have **no usage limits**.
+
+You can create your free informer key here:
+[https://billing.meteoprog.com/informer](https://billing.meteoprog.com/informer?utm_source=wp-plugin&utm_medium=readme&utm_campaign=meteoprog-weather-widgets)
 
 = Where do I get the API key? =
 You can generate a **widget (informer) API key** at [https://billing.meteoprog.com/informer](https://billing.meteoprog.com/informer?utm_source=wp-plugin&utm_medium=readme&utm_campaign=meteoprog-weather-widgets).
