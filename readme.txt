@@ -1,6 +1,6 @@
 === Weather Widget & Forecast by Meteoprog ===
 Contributors: meteoprog
-Tags: weather, weather widget, weather forecast, local weather, forecast, wp weather, live weather
+Tags: weather, weather widget, weather forecast, local weather, live weather
 Requires at least: 4.9
 Tested up to: 7.0
 Requires PHP: 7.0

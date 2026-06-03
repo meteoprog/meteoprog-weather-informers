@@ -19,6 +19,10 @@
  * @license    GPL-2.0-or-later
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Technical Notes for Reviewers
  *
@@ -71,10 +75,6 @@
  *
  * This note is included for transparency during the plugin review process.
  */
-
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 
 // -----------------------------------------------------------------------------
 // Plugin Constants

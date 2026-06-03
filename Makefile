@@ -355,8 +355,8 @@ plugin-check: check-docker build-php83 dist-docker
 			rm -f "$$LOG_FILE"; touch "$$LOG_FILE"; \
 			WP_PATH="/tmp/wp-check"; mkdir -p "$$WP_PATH"; \
 			{ \
-				echo "[WP] Downloading WordPress 6.9..."; \
-				php -d memory_limit=-1 /usr/local/bin/wp core download --path="$$WP_PATH" --version=6.9 --allow-root; \
+				echo "[WP] Downloading WordPress 7.0..."; \
+				php -d memory_limit=-1 /usr/local/bin/wp core download --path="$$WP_PATH" --version=7.0 --allow-root; \
 				echo "[DB] Preparing database $$DB_NAME ..."; \
 				mariadb --user=$(DB_USER) --password=$(DB_PASS) --host=$$DB_HOST_REAL \
 					-e "DROP DATABASE IF EXISTS $$DB_NAME; CREATE DATABASE $$DB_NAME CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"; \
@@ -376,7 +376,7 @@ plugin-check: check-docker build-php83 dist-docker
 				echo "[RUN] Executing Plugin Check ..."; \
 				if ! wp help plugin check >/dev/null 2>&1; then \
 					echo "[INSTALL] Installing Plugin Check plugin..."; \
-					wp plugin install plugin-check --activate --allow-root; \
+					wp plugin install plugin-check --version=1.9.0 --activate --allow-root; \
 				fi; \
 				set +e; \
 				wp plugin check $(PLUGIN_NAME) --allow-root; \
