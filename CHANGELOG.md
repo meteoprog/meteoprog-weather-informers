@@ -5,6 +5,11 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [v1.0.4] - 2026-06-03
+
+* 🆕 Confirmed full compatibility with WordPress 7.0.
+* 🛠 Updated "Tested up to" to 7.0.
+
 ## [v1.0.3] - 2025-12-12
 
 * 🆕 Confirmed full compatibility with WordPress 6.9.
@@ -41,6 +46,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+[v1.0.4]: https://github.com/meteoprog/meteoprog-weather-informers/releases/tag/v1.0.4
 [v1.0.3]: https://github.com/meteoprog/meteoprog-weather-informers/releases/tag/v1.0.3
 [v1.0.2]: https://github.com/meteoprog/meteoprog-weather-informers/releases/tag/v1.0.2
 [v1.0.1]: https://github.com/meteoprog/meteoprog-weather-informers/releases/tag/v1.0.1

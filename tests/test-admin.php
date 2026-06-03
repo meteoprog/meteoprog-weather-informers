@@ -9,7 +9,7 @@
  *
  * Compatible with:
  *  - PHP 5.6+ and modern PHP versions
- *  - WordPress 4.9+ through 6.x
+ *  - WordPress 4.9+ through 7.x
  *  - PHPUnit 5.7 and newer (Yoast Polyfills)
  *
  * @package    MeteoprogWeatherInformers

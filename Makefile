@@ -1,5 +1,5 @@
 # Makefile — part of Meteoprog Weather Widgets
-# Copyright (c) 2025 Meteoprog
+# Copyright (c) 2026 Meteoprog
 # Licensed under GPL-2.0-or-later
 PLUGIN_NAME=meteoprog-weather-informers
 SRC_PLUGIN=$(PWD)
@@ -148,6 +148,7 @@ define RUN_TESTS
 	    cp -r /src-plugin "$$WP_PATH/wp-content/plugins/$(PLUGIN_NAME)"; \
 	    echo "[Step 5] Install PHPUnit polyfills"; \
 	    cd "$$WP_PATH/wp-content/plugins/$(PLUGIN_NAME)"; \
+	    printf "%s\n" "{\"config\":{\"policy\":{\"advisories\":{\"ignore\":{\"phpunit/phpunit\":{\"on-audit\":false,\"reason\":\"PHPUnit is used only inside temporary Docker test containers and is not shipped in the WordPress plugin distribution.\"}}}}}}" > composer.json; \
 	    composer require --dev $(3) --no-interaction; \
 	    echo "[Step 6] Scaffold plugin test files"; \
 	    wp scaffold plugin-tests $(PLUGIN_NAME) \
@@ -183,14 +184,17 @@ php81-wp62: build-php81
 php81-wp66: build-php81
 	$(call RUN_TESTS,$(IMAGE_PHP81),6.6.2,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
 
-php81-wp673: build-php81
-	$(call RUN_TESTS,$(IMAGE_PHP81),6.7.3,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
+php81-wp675: build-php81
+	$(call RUN_TESTS,$(IMAGE_PHP81),6.7.5,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
 
-php81-wp683: build-php81
-	$(call RUN_TESTS,$(IMAGE_PHP81),6.8.3,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
+php81-wp685: build-php81
+	$(call RUN_TESTS,$(IMAGE_PHP81),6.8.5,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
 
-php81-wp69: build-php81
-	$(call RUN_TESTS,$(IMAGE_PHP81),6.9,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
+php81-wp694: build-php81
+	$(call RUN_TESTS,$(IMAGE_PHP81),6.9.4,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
+
+php81-wp70: build-php81
+	$(call RUN_TESTS,$(IMAGE_PHP81),7.0,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
 
 php81-latest: build-php81
 	$(call RUN_TESTS,$(IMAGE_PHP81),latest,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
@@ -204,14 +208,17 @@ php83-wp62: build-php83
 php83-wp66: build-php83
 	$(call RUN_TESTS,$(IMAGE_PHP83),6.6.2,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
 
-php83-wp673: build-php83
-	$(call RUN_TESTS,$(IMAGE_PHP83),6.7.3,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
+php83-wp675: build-php83
+	$(call RUN_TESTS,$(IMAGE_PHP83),6.7.5,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
 
-php83-wp683: build-php83
-	$(call RUN_TESTS,$(IMAGE_PHP83),6.8.3,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
+php83-wp685: build-php83
+	$(call RUN_TESTS,$(IMAGE_PHP83),6.8.5,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
 
-php83-wp69: build-php83
-	$(call RUN_TESTS,$(IMAGE_PHP83),6.9,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
+php83-wp694: build-php83
+	$(call RUN_TESTS,$(IMAGE_PHP83),6.9.4,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
+
+php83-wp70: build-php83
+	$(call RUN_TESTS,$(IMAGE_PHP83),7.0,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
 
 php83-latest: build-php83
 	$(call RUN_TESTS,$(IMAGE_PHP83),latest,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
@@ -223,11 +230,14 @@ php83-nightly: build-php83
 # PHP 8.4 — Upcoming stable PHP support
 # -------------------------------------
 
-php84-wp683: build-php84
-	$(call RUN_TESTS,$(IMAGE_PHP84),6.8.3,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
+php84-wp685: build-php84
+	$(call RUN_TESTS,$(IMAGE_PHP84),6.8.5,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
 
-php84-wp69: build-php84
-	$(call RUN_TESTS,$(IMAGE_PHP84),6.9,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
+php84-wp694: build-php84
+	$(call RUN_TESTS,$(IMAGE_PHP84),6.9.4,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
+
+php84-wp70: build-php84
+	$(call RUN_TESTS,$(IMAGE_PHP84),7.0,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
 
 php84-latest: build-php84
 	$(call RUN_TESTS,$(IMAGE_PHP84),latest,phpunit/phpunit:9.6.29 yoast/phpunit-polyfills:^4.0)
@@ -245,21 +255,27 @@ test-php74-wp59: start-db php74-wp59 stop-db
 
 test-php81-wp62: start-db php81-wp62 stop-db
 test-php81-wp66: start-db php81-wp66 stop-db
-test-php81-wp673: start-db php81-wp673 stop-db
-test-php81-wp683: start-db php81-wp683 stop-db
-test-php81-wp69: start-db php81-wp69 stop-db
+test-php81-wp675: start-db php81-wp675 stop-db
+test-php81-wp685: start-db php81-wp685 stop-db
+test-php81-wp694: start-db php81-wp694 stop-db
+test-php81-wp70: start-db php81-wp70 stop-db
+
 test-php81-latest: start-db php81-latest stop-db
 
 test-php83-wp62: start-db php83-wp62 stop-db
 test-php83-wp66: start-db php83-wp66 stop-db
-test-php83-wp673: start-db php83-wp673 stop-db
-test-php83-wp683: start-db php83-wp683 stop-db
-test-php83-wp69: start-db php83-wp69 stop-db
+test-php83-wp675: start-db php83-wp675 stop-db
+test-php83-wp685: start-db php83-wp685 stop-db
+test-php83-wp694: start-db php83-wp694 stop-db
+test-php83-wp70: start-db php83-wp70 stop-db
+
 test-php83-latest: start-db php83-latest stop-db
 test-php83-nightly: start-db php83-nightly stop-db
 
-test-php84-wp683: start-db php84-wp683 stop-db
-test-php84-wp69: start-db php84-wp69 stop-db
+test-php84-wp685: start-db php84-wp685 stop-db
+test-php84-wp694: start-db php84-wp694 stop-db
+test-php84-wp70: start-db php84-wp70 stop-db
+
 test-php84-latest: start-db php84-latest stop-db
 test-php84-nightly: start-db php84-nightly stop-db
 
@@ -395,8 +411,8 @@ test-plugin-check: start-db plugin-check stop-db
 testall: start-db \
 	php56-wp49 \
 	php74-wp58 php74-wp59 \
-	php81-wp62 php81-wp66 php81-wp673 php81-wp683 php81-wp69 php81-latest \
-	php83-wp62 php83-wp66 php83-wp673 php83-wp683 php83-wp69 php83-latest php83-nightly php84-latest \
+	php81-wp62 php81-wp66 php81-wp675 php81-wp685 php81-wp694 php81-wp70 php81-latest \
+	php83-wp62 php83-wp66 php83-wp675 php83-wp685 php83-wp694 php83-wp70 php83-latest php83-nightly php84-latest \
 	stop-db
 	@echo "All test suites have finished."
 
@@ -432,7 +448,7 @@ i18n-pot: check-docker build-php83
 	@echo "[i18n] POT file updated: languages/$(PLUGIN_NAME).pot"
 
 	sed -i -E \
-		-e 's|^# Copyright.*|# Copyright (C) 2025 Meteoprog|' \
+		-e 's|^# Copyright.*|# Copyright (C) 2026 Meteoprog|' \
 		-e 's|^# This file is distributed.*|# This file is distributed under the same license as the $(PLUGIN_NAME_HEADER) plugin.|' \
 		-e 's|^"Project-Id-Version:.*|"Project-Id-Version: $(PLUGIN_NAME_HEADER) $(PLUGIN_VERSION)\\n"|' \
 		-e 's|^"Report-Msgid-Bugs-To:.*|"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/meteoprog-weather-informers\\n"|' \

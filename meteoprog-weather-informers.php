@@ -3,11 +3,11 @@
  * Plugin Name: Meteoprog Weather Widget
  * Plugin URI: https://billing.meteoprog.com/meteoprog-weather-widget
  * Description: Embed Meteoprog weather widgets on your WordPress site using a free API key. Supports shortcodes, placeholders, Gutenberg block, Elementor, and Shortcodes Ultimate.
- * Version: 1.0.3
+ * Version: 1.0.4
  * Author: meteoprog
  * Author URI: https://profiles.wordpress.org/meteoprog/
  * Requires at least: 4.9
- * Tested up to: 6.9
+ * Tested up to: 7.0
  * Requires PHP: 7.0
  * Text Domain: meteoprog-weather-informers
  * Domain Path: /languages
@@ -25,7 +25,7 @@
  * Compatibility:
  * - Fully compatible with PHP 5.6 – 8.4
  * - Minimum WordPress version: 4.9
- * - Tested against WordPress 4.9, 5.8, 5.9, 6.2.2, 6.6.2, 6.7.3, 6.8.3, 6.9, latest (key historical and current stable releases)
+ * - Tested against WordPress 4.9, 5.8, 5.9, 6.2.2, 6.6.2, 6.7.5, 6.8.5, 6.9.4, 7.0, latest (key historical and current stable releases)
  *
  * Coding Standards:
  * - The codebase follows the official WordPress Coding Standards (WPCS)
@@ -82,7 +82,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Used for stable cache-busting of assets in production environments.
 // Fallback for enqueue when filemtime() is not available (e.g. on CDN).
-define( 'METEOPROG_PLUGIN_VERSION', '1.0.3' );
+define( 'METEOPROG_PLUGIN_VERSION', '1.0.4' );
 
 // Absolute path to the main plugin file (used for reference in includes and hooks).
 define( 'METEOPROG_PLUGIN_FILE', __FILE__ );

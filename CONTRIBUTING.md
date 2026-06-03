@@ -17,7 +17,7 @@ We welcome pull requests for bug fixes, documentation, and new features.
 ## 🧪 Tests & CI
 All pull requests are automatically tested via GitHub Actions:
 - PHP 5.6 → 8.4
-- WordPress 4.9 → 6.8+
+- WordPress 4.9 → 7.0+
 - PHPCS (WPCS), PHPUnit, and Plugin Check
 
 ## 📜 License

@@ -2,9 +2,9 @@
 Contributors: meteoprog
 Tags: weather, weather widget, weather forecast, local weather, forecast, wp weather, live weather
 Requires at least: 4.9
-Tested up to: 6.9
+Tested up to: 7.0
 Requires PHP: 7.0
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -186,6 +186,10 @@ No personal data is collected or stored by the plugin itself.
 
 == Changelog ==
 
+= 1.0.4 =
+* 🆕 Confirmed full compatibility with WordPress 7.0.
+* 🛠 Updated "Tested up to" to 7.0.
+
 = 1.0.3 =
 * 🆕 Confirmed full compatibility with WordPress 6.9.
 * 🛠 Updated "Tested up to" to 6.9.
@@ -217,6 +221,9 @@ No personal data is collected or stored by the plugin itself.
 * ✅ Legacy WordPress/PHP support (4.9+, PHP 5.6+; tested on PHP 8.3/8.4).
 
 == Upgrade Notice ==
+
+= 1.0.4 =
+Compatibility update for WordPress 7.0. No functional changes required.
 
 = 1.0.3 =
 Compatibility update for WordPress 6.9. No functional changes required.

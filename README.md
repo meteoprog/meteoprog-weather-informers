@@ -3,7 +3,7 @@
 [![CI/CD](https://github.com/meteoprog/meteoprog-weather-informers/actions/workflows/ci.yml/badge.svg)](https://github.com/meteoprog/meteoprog-weather-informers/actions)
 [![License: GPL v2 or later](https://img.shields.io/badge/License-GPLv2%2B-blue.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 [![PHP](https://img.shields.io/badge/PHP-5.6%20--%208.4-777bb3.svg?logo=php)](https://www.php.net/)
-[![WordPress](https://img.shields.io/badge/WordPress-4.9%20--%206.9-blue.svg?logo=wordpress)](https://wordpress.org/)
+[![WordPress](https://img.shields.io/badge/WordPress-4.9%20--%207.0-blue.svg?logo=wordpress)](https://wordpress.org/)
 [![Dockerized](https://img.shields.io/badge/Docker-ready-blue.svg?logo=docker)](https://hub.docker.com/)
 [![Release](https://img.shields.io/github/v/release/meteoprog/meteoprog-weather-informers)](https://github.com/meteoprog/meteoprog-weather-informers/releases)
 [![Last commit](https://img.shields.io/github/last-commit/meteoprog/meteoprog-weather-informers.svg)](https://github.com/meteoprog/meteoprog-weather-informers/commits/main)
@@ -22,7 +22,7 @@ Experience the **Meteoprog Weather Widget** instantly in your browser — no set
 
 ## 🧩 Plugin Overview
 
-* **WordPress versions:** 4.9 → 6.9
+* **WordPress versions:** 4.9 → 7.0
 * **PHP versions:** 5.6 → 8.4
 * **Integrations:** Gutenberg, Elementor, Shortcodes Ultimate, WP-CLI, REST API
 * **Compatibility:** Works on classic and block widgets, async frontend loader, optimized for Core Web Vitals.
@@ -58,9 +58,9 @@ All PHP × WordPress combinations are tested using Docker via the Makefile. The 
 | --- | ---------------------------------------- |
 | 5.6 | 4.9                                      |
 | 7.4 | 5.8 – 5.9                                |
-| 8.1 | 6.2 – 6.9                                |
-| 8.3 | 6.2 – 6.9 / latest / nightly (daily scheduled) |
-| 8.4 | 6.8.3 – 6.9 / latest / nightly           |
+| 8.1 | 6.2 – 7.0                                |
+| 8.3 | 6.2 – 7.0 / latest / nightly (daily scheduled) |
+| 8.4 | 6.8.3 – 7.0 / latest / nightly           |
 
 Each suite spins up a temporary WordPress install inside Docker, installs PHPUnit + Yoast Polyfills, runs tests, and tears down the DB automatically.
 
@@ -70,9 +70,9 @@ Each suite spins up a temporary WordPress install inside Docker, installs PHPUni
 
 You can run individual test suites or the full test matrix locally using Docker and Makefile targets.
 
-**Run a specific test (PHP 8.3 + WordPress 6.9):**
+**Run a specific test (PHP 8.3 + WordPress 7.0):**
 ```bash
-make test-php83-wp69
+make test-php83-wp70
 ```
 
 **Run all test suites sequentially (verbose output):**
@@ -88,17 +88,17 @@ make testall
 |--------------|--------------------|
 | **5.6** | `wp49` |
 | **7.4** | `wp58`, `wp59` |
-| **8.1** | `wp62`, `wp66`, `wp673`, `wp683`, `wp69`, `latest` |
-| **8.3** | `wp62`, `wp66`, `wp673`, `wp683`, `wp69`, `latest`, `nightly` |
-| **8.4** | `wp683`, `wp69`, `latest`, `nightly` |
+| **8.1** | `wp62`, `wp66`, `wp675`, `wp685`, `wp694`, `wp70`, `latest` |
+| **8.3** | `wp62`, `wp66`, `wp675`, `wp685`, `wp694`, `wp70`, `latest`, `nightly` |
+| **8.4** | `wp685`, `wp694`, `wp70`, `latest`, `nightly` |
 
 Each test target automatically starts a dedicated MariaDB container, runs PHPUnit, and then stops the database container.  
 
 Example:  
 ```bash
-make test-php81-wp69
+make test-php81-wp70
 # Equivalent to:
-# start-db php81-wp69
+# start-db php81-wp70
 # stop-db
 ```
 
@@ -116,7 +116,7 @@ make test-php81-wp69
 ---
 
 📘 **Note:**  
-For CI, tests are executed in parallel across the full matrix (PHP 5.6 → 8.4, WordPress 4.9 → 6.9), but local runs use sequential mode (`make testall`) for clarity.
+For CI, tests are executed in parallel across the full matrix (PHP 5.6 → 8.4, WordPress 4.9 → 7.0), but local runs use sequential mode (`make testall`) for clarity.
 
 ---
 
@@ -254,4 +254,4 @@ GPLv2 or later — see [license.txt](license.txt)
 
 ---
 
-**© 2025 Meteoprog — [https://www.meteoprog.com](https://www.meteoprog.com)**
+**© 2026 Meteoprog — [https://www.meteoprog.com](https://www.meteoprog.com)**
